@@ -5,6 +5,7 @@ public class Departure {
     private String departureTime;
     private String vehicleType;
     private String lineNumber;
+
     public Departure(String destination, String departureTime, String vehicleType, String lineNumber) {
         this.destination = destination;
         this.departureTime = departureTime;

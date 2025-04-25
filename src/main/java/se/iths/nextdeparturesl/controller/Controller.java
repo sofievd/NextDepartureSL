@@ -6,9 +6,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import se.iths.nextdeparturesl.service.SearchService;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 @RestController
 public class Controller {
     private final SearchService searchService = new SearchService();
+    public Controller(){
+searchService.setUp();
+    }
 
     @GetMapping("/stationList")
     public ResponseEntity<?> stationList() {
@@ -19,6 +25,7 @@ public class Controller {
     @GetMapping("/searchStation/Barkarby")
     public ResponseEntity<?> searchStation(@RequestParam String stationName) {
         System.out.println("söker station: " + stationName);
-        return ResponseEntity.ok().body(searchService.departures(stationName));
+        LocalDateTime now = LocalDateTime.now();
+        return ResponseEntity.ok().body(searchService.getDeparturesFromStopName(stationName,now.format(DateTimeFormatter.ofPattern("yyyyMMdd-HH:mm:ss"))));
     }
 }

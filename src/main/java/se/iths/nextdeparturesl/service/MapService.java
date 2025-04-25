@@ -1,9 +1,6 @@
 package se.iths.nextdeparturesl.service;
 
-import se.iths.nextdeparturesl.model.CalendarDate;
-import se.iths.nextdeparturesl.model.Route;
-import se.iths.nextdeparturesl.model.StopTime;
-import se.iths.nextdeparturesl.model.Trip;
+import se.iths.nextdeparturesl.model.*;
 import se.iths.nextdeparturesl.util.FileUtil;
 
 import java.math.BigInteger;
@@ -17,7 +14,7 @@ public class MapService {
     private Map<BigInteger, List<StopTime>> StopIdTostopTimes;
     private Map<BigInteger, Trip> TripIdTotrips;
     private Map<String, Route> routes;
-    // private Map<BigInteger, CalendarGtfs> calendars;
+    private Map<BigInteger, CalendarGtfs> calendars;
     private Map<BigInteger, List<CalendarDate>> calendarDates;
     private Map<String, List<BigInteger>> stopNameToStopId;
     private Map<BigInteger, List<BigInteger>> serviceIdToTripId;
@@ -37,8 +34,8 @@ public class MapService {
     //TODO: adding exit for when a file does not exist or mapping fails
     //TODO: remove maps that are not used.
     public MapService() {
+        //createMaps();
     }
-
 
     public void createMaps() {
         //adding the making of the maps
@@ -47,14 +44,23 @@ public class MapService {
         StopIdTostopTimes = createStopTimeMapWithStopId(STOP_TIMES_FILE_PATH);
         TripIdTotrips = createTripMapWithTripId(TRIP_FILE_PATH);
         routes = createRouteMapWithRouteId(ROUTE_FILE_PATH);
-        // calendars = fileUtil.createCalenderMapWithServiceId(CALENDAR_FILE_PATH);
+        calendars = fileUtil.createCalenderMapWithServiceId(CALENDAR_FILE_PATH);
         calendarDates = createCalendarDateMapWithServiceId(CALENDAR_DATE_FILE_PATH);
         stopNameToStopId = createStopIdMapWithStopName(STOP_FILE_PATH);
         serviceIdToTripId = createTripIdListMapWithServiceId(TRIP_FILE_PATH);
         stationList = fileUtil.getStopNameList(STOP_FILE_PATH);
         //tripIdToStopTimes = fileUtil.createStopTimeMapWithTripId();
-
         System.out.println("finshed making maps");
+    }
+
+    public void createTestMaps(){
+        StopIdTostopTimes = createStopTimeMapWithStopId("src/test/resources/GTFS_SL_TEST/stop-times.txt");
+        TripIdTotrips = createTripMapWithTripId("src/test/resources/GTFS_SL_TEST/trips.txt");
+        routes = createRouteMapWithRouteId("src/test/resources/GTFS_SL_TEST/routes.txt");
+        calendarDates = createCalendarDateMapWithServiceId("src/test/resources/GTFS_SL_TEST/calendar_dates.txt");
+        stopNameToStopId = createStopIdMapWithStopName("src/test/resources/GTFS_SL_TEST/stops.txt");
+        serviceIdToTripId = createTripIdListMapWithServiceId("src/test/resources/GTFS_SL_TEST/trips.txt");
+
     }
 
     public Map<BigInteger, List<StopTime>> createStopTimeMapWithStopId(String path) {
