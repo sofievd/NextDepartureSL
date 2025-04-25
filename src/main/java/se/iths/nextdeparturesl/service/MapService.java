@@ -19,6 +19,13 @@ public class MapService {
     //  private Map<BigInteger, List<StopTime>> tripIdToStopTimes;
     private List<String> stationList;
     private final FileUtil fileUtil = new FileUtil();
+    private final String STOP_FILE_PATH = "src/main/resources/static/GTFS_SL/stops.txt";
+    private final String STOP_TIMES_FILE_PATH = "src/main/resources/static/GTFS_SL/stop_times.txt";
+    private final String TRIP_FILE_PATH = "src/main/resources/static/GTFS_SL/trips.txt";
+    private final String ROUTE_FILE_PATH = "src/main/resources/static/GTFS_SL/routes.txt";
+    private final String CALENDAR_FILE_PATH = "src/main/resources/static/GTFS_SL/calendar.txt";
+    private final String CALENDAR_DATE_FILE_PATH = "src/main/resources/static/GTFS_SL/calendar_dates.txt";
+
 
 
     //TODO: adding logging
@@ -28,13 +35,13 @@ public class MapService {
         //adding the making of the maps
         System.out.println("starting making maps");
         // stops = fileUtil.createStopMapWithStopId();
-        StopIdTostopTimes = fileUtil.createStopTimeMapWithStopId();
-        TripIdTotrips = fileUtil.createTripMapWithTripId();
-        routes = fileUtil.createRouteMapWithRouteId();
-        //calendars = fileUtil.createCalenderMapWithServiceId();
-        calendarDates = fileUtil.createCalendarDateMapWithServiceId();
-        stopNameToStopId = fileUtil.createStopIdMapWithStopName();
-        serviceIdToTripId = fileUtil.createTripIdListMapWithServiceId();
+        StopIdTostopTimes = fileUtil.createStopTimeMapWithStopId(STOP_TIMES_FILE_PATH);
+        TripIdTotrips = fileUtil.createTripMapWithTripId(TRIP_FILE_PATH);
+        routes = fileUtil.createRouteMapWithRouteId(ROUTE_FILE_PATH);
+       // calendars = fileUtil.createCalenderMapWithServiceId(CALENDAR_FILE_PATH);
+        calendarDates = fileUtil.createCalendarDateMapWithServiceId(CALENDAR_DATE_FILE_PATH);
+        stopNameToStopId = fileUtil.createStopIdMapWithStopName(STOP_FILE_PATH);
+        serviceIdToTripId = fileUtil.createTripIdListMapWithServiceId(TRIP_FILE_PATH);
         stationList = fileUtil.getStationList();
         //tripIdToStopTimes = fileUtil.createStopTimeMapWithTripId();
 
