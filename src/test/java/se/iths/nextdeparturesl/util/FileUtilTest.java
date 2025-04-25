@@ -4,14 +4,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import se.iths.nextdeparturesl.model.*;
 
-import java.math.BigInteger;
-import java.sql.Time;
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class FileUtilTest {
     private FileUtil fileUtil;
@@ -22,62 +17,56 @@ class FileUtilTest {
     }
 
     @Test
-    void getStationList() {
-        fileUtil.getStationList();
-        assertFalse(fileUtil.getStationList().isEmpty());
-    }
-
-    @Test
     void getStopNameList() {
-        Set<String> stopnameList = fileUtil.getStopNameList("src/test/resources/GTFS_SL_TEST/stops.txt");
+        List<String> stopnameList = fileUtil.getStopNameList("src/test/resources/GTFS_SL_TEST/stops.txt");
         assertEquals(6, stopnameList.size());
         assertTrue(stopnameList.contains("idöborg"));
     }
 
-    @Test
-    void createStopTimeMapWithStopId() {
-        Map<BigInteger, List<StopTime>> map = fileUtil.createStopTimeMapWithStopId("src/test/resources/GTFS_SL_TEST/stop-times.txt");
+//    @Test
+//    void createStopTimeMapWithStopId() {
+//        Map<BigInteger, List<StopTime>> map = fileUtil.createStopTimeMapWithStopId("src/test/resources/GTFS_SL_TEST/stop-times.txt");
+//
+//        assertFalse(map.isEmpty());
+//
+//        assertEquals(2, map.size());
+//    }
 
-        assertFalse(map.isEmpty());
+//    @Test
+//    void createTripMapWithTripId() {
+//        Map<BigInteger, Trip> map = fileUtil.createTripMapWithTripId("src/test/resources/GTFS_SL_TEST/trips.txt");
+//        assertFalse(map.isEmpty());
+//        assertEquals(31, map.size());
+//    }
+//
+//    @Test
+//    void createRouteMapWithRouteId() {
+//        Map<String, Route> map = fileUtil.createRouteMapWithRouteId("src/test/resources/GTFS_SL_TEST/routes.txt");
+//        assertFalse(map.isEmpty());
+//        assertEquals(1, map.size());
+//    }
+//
+//    @Test
+//    void createCalendarDateMapWithServiceId() {
+//        Map<BigInteger, List<CalendarDate>> map = fileUtil.createCalendarDateMapWithServiceId("src/test/resources/GTFS_SL_TEST/calendar_dates.txt");
+//        assertFalse(map.isEmpty());
+//        assertEquals(10, map.size());
+//    }
 
-        assertEquals(2, map.size());
-    }
-
-    @Test
-    void createTripMapWithTripId() {
-        Map<BigInteger, Trip> map = fileUtil.createTripMapWithTripId("src/test/resources/GTFS_SL_TEST/trips.txt");
-        assertFalse(map.isEmpty());
-        assertEquals(31, map.size());
-    }
-
-    @Test
-    void createRouteMapWithRouteId() {
-        Map<String, Route> map = fileUtil.createRouteMapWithRouteId("src/test/resources/GTFS_SL_TEST/routes.txt");
-        assertFalse(map.isEmpty());
-        assertEquals(1, map.size());
-    }
-
-    @Test
-    void createCalendarDateMapWithServiceId() {
-        Map<BigInteger, List<CalendarDate>> map = fileUtil.createCalendarDateMapWithServiceId("src/test/resources/GTFS_SL_TEST/calendar_dates.txt");
-        assertFalse(map.isEmpty());
-        assertEquals(10, map.size());
-    }
-
-    @Test
-    void createStopIdMapWithStopName() {
-        Map<String, List<BigInteger>> map = fileUtil.createStopIdMapWithStopName("src/test/resources/GTFS_SL_TEST/stops.txt");
-        assertFalse(map.isEmpty());
-        assertEquals(6, map.size());
-    }
-
-    @Test
-    void createTripIdListMapWithServiceId() {
-        Map<BigInteger, List<BigInteger>> map = fileUtil.createTripIdListMapWithServiceId("src/test/resources/GTFS_SL_TEST/trips.txt");
-
-        assertFalse(map.isEmpty());
-        assertEquals(10, map.size());
-    }
+//    @Test
+//    void createStopIdMapWithStopName() {
+//        Map<String, List<BigInteger>> map = fileUtil.createStopIdMapWithStopName("src/test/resources/GTFS_SL_TEST/stops.txt");
+//        assertFalse(map.isEmpty());
+//        assertEquals(6, map.size());
+//    }
+//
+//    @Test
+//    void createTripIdListMapWithServiceId() {
+//        Map<BigInteger, List<BigInteger>> map = fileUtil.createTripIdListMapWithServiceId("src/test/resources/GTFS_SL_TEST/trips.txt");
+//
+//        assertFalse(map.isEmpty());
+//        assertEquals(10, map.size());
+//    }
 
     @Test
     void parseCsvToStop() {

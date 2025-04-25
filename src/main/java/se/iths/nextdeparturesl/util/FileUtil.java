@@ -16,28 +16,17 @@ import java.util.zip.ZipInputStream;
  * @author Sofie Van Dingenen
  */
 //TODO: adding error handling for when file reading fails
-//TODO: adding tests,
-//      1. creating test files
 // TODO: refactoring,
 //      1. moving creating maps to Mapservice,
 //      2. having methods where you put in your files as parameter for testing,
 //      3.returing list of objects for calling in map service
 public class FileUtil {
-    private final String STOP_FILE_PATH = "src/main/resources/static/GTFS_SL/stops.txt";
-    private final String STOP_TIMES_FILE_PATH = "src/main/resources/static/GTFS_SL/stop_times.txt";
-    private final String TRIP_FILE_PATH = "src/main/resources/static/GTFS_SL/trips.txt";
-    private final String ROUTE_FILE_PATH = "src/main/resources/static/GTFS_SL/routes.txt";
-    private final String CALENDAR_FILE_PATH = "src/main/resources/static/GTFS_SL/calendar.txt";
-    private final String CALENDAR_DATE_FILE_PATH = "src/main/resources/static/GTFS_SL/calendar_dates.txt";
+
 
     public FileUtil() {
     }
 
-    public List<String> getStationList() {
-        return getStopNameList(STOP_FILE_PATH).stream().toList();
-    }
-
-    public Set<String> getStopNameList(String filePath) {
+    public List<String> getStopNameList(String filePath) {
         Set<String> stopNameList = new HashSet<>();
         try {
             BufferedReader bufferedReader = new BufferedReader(new FileReader(filePath));
@@ -49,7 +38,7 @@ public class FileUtil {
         } catch (IOException e) {
             System.out.println("file could not be found:" + filePath);
         }
-        return stopNameList;
+        return stopNameList.stream().toList();
     }
 
     public Map<BigInteger, List<StopTime>> createStopTimeMapWithStopId(String path) {
@@ -109,7 +98,7 @@ public class FileUtil {
         Map<String, List<BigInteger>> map = new HashMap<>();
         List<String> nameList = getStopNameList(path).stream().toList();
         for (String name : nameList) {
-            List<BigInteger> stopIdList = getStopIdListWithStopName(name);
+            List<BigInteger> stopIdList = getStopIdListWithStopName(name, path);
             map.put(name, stopIdList);
         }
         return map;
@@ -129,7 +118,7 @@ public class FileUtil {
     }
 
 
-    private List<BigInteger> getServiceIDListFromTripList(List<Trip> tripList) {
+    public List<BigInteger> getServiceIDListFromTripList(List<Trip> tripList) {
         List<BigInteger> serviceIdList = new ArrayList<>();
         for (Trip trip : tripList) {
             BigInteger serviceId = new BigInteger(trip.getService_id());
@@ -140,11 +129,11 @@ public class FileUtil {
         return serviceIdList;
     }
 
-    private List<BigInteger> getStopIdListWithStopName(String searchString) {
+    public List<BigInteger> getStopIdListWithStopName(String searchString, String path) {
         ArrayList<BigInteger> resultList = new ArrayList<>();
 
         try {
-            BufferedReader bufferedReader = new BufferedReader(new FileReader(STOP_FILE_PATH));
+            BufferedReader bufferedReader = new BufferedReader(new FileReader(path));
             String line;
             while ((line = bufferedReader.readLine()) != null) {
                 String[] values = line.split(",");
@@ -159,7 +148,7 @@ public class FileUtil {
         return resultList;
     }
 
-    private Set<BigInteger> getTripListWithServiceId(BigInteger serviceId, List<Trip> tripList,String path) {
+    public Set<BigInteger> getTripListWithServiceId(BigInteger serviceId, List<Trip> tripList, String path) {
         Set<BigInteger> resultList = new HashSet<>();
         for(Trip trip : tripList) {
             if (new BigInteger(trip.getService_id()).equals(serviceId)) {
@@ -191,9 +180,6 @@ public class FileUtil {
         }
     }
 
-    public List<Stop> getStopList() {
-        return parseCsvToStop(STOP_FILE_PATH);
-    }
 
     public List<StopTime> parseCsvToStopTime(String path) {
         try {
@@ -211,10 +197,6 @@ public class FileUtil {
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
-    }
-
-    public List<Trip> getTripList() {
-        return parseCsvToTrip(TRIP_FILE_PATH);
     }
 
     public List<Route> parseCsvToRoute(String path) {
