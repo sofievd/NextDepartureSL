@@ -31,10 +31,7 @@ public class MapService {
 
 
     //TODO: adding logging
-    //TODO: adding exit for when a file does not exist or mapping fails
-    //TODO: remove maps that are not used.
     public MapService() {
-        //createMaps();
     }
 
     public void createMaps() {

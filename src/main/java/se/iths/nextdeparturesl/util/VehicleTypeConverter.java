@@ -1,4 +1,4 @@
-package se.iths.nextdeparturesl;
+package se.iths.nextdeparturesl.util;
 
 import java.util.HashMap;
 import java.util.Map;

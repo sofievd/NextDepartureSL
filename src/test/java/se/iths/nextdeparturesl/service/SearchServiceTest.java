@@ -9,9 +9,9 @@ import se.iths.nextdeparturesl.model.Trip;
 import se.iths.nextdeparturesl.view.Departure;
 
 import java.math.BigInteger;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -90,9 +90,8 @@ class SearchServiceTest {
     void getStopTimeWithTrip() {
         Set<Trip> trips = searchService.getTripsWithServiceId(new BigInteger("19"));
 
-        Map<String, List<StopTime>> map = searchService.makeMap(searchService.getStopTimesWithStationId(new BigInteger("9022001000101001")));
-       // list.add(new StopTime("14010000670499113","19:40:00","19:40:00","9022001000101001","1","Hagede via Styrsvik Långvik Sandhamn","3","1","0","1"));
-        Set<StopTime> stopTimes = searchService.getStopTimeWithTrip(trips, map);
+        Map<String, List<StopTime>> map = searchService.makeMap(searchService.getStopTimesWithStationId(new BigInteger("9022001000101001")).stream().toList());
+        Set<StopTime> stopTimes = searchService.getStopTimeWithTrip(trips.stream().toList(), map);
         assertNotNull(stopTimes);
         assertEquals(7, stopTimes.size());
     }
@@ -100,10 +99,13 @@ class SearchServiceTest {
     @Test
     void getGetDeparturesFromStopNameWithStopTime() {
         Set<Trip> trips = searchService.getTripsWithServiceId(new BigInteger("19"));
-        Map<String, List<StopTime>> map = searchService.makeMap(searchService.getStopTimesWithStationId(new BigInteger("9022001000101001")));
-        Set<StopTime> stopTimes = searchService.getStopTimeWithTrip(trips, map);
+        Map<String, List<StopTime>> map = searchService.makeMap(searchService.getStopTimesWithStationId(new BigInteger("9022001000101001")).stream().toList());
+        Set<StopTime> stopTimes = searchService.getStopTimeWithTrip(trips.stream().toList(), map);
 
-        List<Departure> departures = searchService.getDeparturesWithStopTime("19:30:00", stopTimes);
+        List<Departure> departures = searchService.getDeparturesWithStopTime("19:30:00", stopTimes.stream().toList());
+        for (Departure departure : departures) {
+            System.out.println(departure);
+        }
         assertNotNull(departures);
         assertEquals(1, departures.size());
 
@@ -113,6 +115,9 @@ class SearchServiceTest {
     void getDeparturesFromStopName() {
         List<Departure> departures = searchService.getDeparturesFromStopName("Stavsnäs", "20250202-19:30:00");
         assertNotNull(departures);
+        for (Departure departure : departures) {
+            System.out.println(departure);
+        }
         assertEquals(1, departures.size());
         assertEquals("Hagede via Styrsvik Långvik Sandhamn", departures.get(0).getDestination());
         assertEquals("Water Transport", departures.get(0).getVehicleType());

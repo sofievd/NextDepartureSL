@@ -2,6 +2,7 @@ package se.iths.nextdeparturesl;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import se.iths.nextdeparturesl.util.VehicleTypeConverter;
 
 import static org.junit.jupiter.api.Assertions.*;
 

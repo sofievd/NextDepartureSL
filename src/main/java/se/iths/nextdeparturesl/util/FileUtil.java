@@ -16,10 +16,6 @@ import java.util.zip.ZipInputStream;
  * @author Sofie Van Dingenen
  */
 //TODO: adding error handling for when file reading fails
-// TODO: refactoring,
-//      1. moving creating maps to Mapservice,
-//      2. having methods where you put in your files as parameter for testing,
-//      3.returing list of objects for calling in map service
 public class FileUtil {
 
 
@@ -230,17 +226,11 @@ public class FileUtil {
 
     public Map<BigInteger, Stop> createStopMapWithStopId(String path) {
         Map<BigInteger, Stop> map = new HashMap<>();
-
         List<Stop> stopList = parseCsvToStop(path);
         for (Stop stop : stopList) {
             BigInteger stopId = new BigInteger(stop.getStop_id());
             map.put(stopId, stop);
         }
-//        }{
-//
-//            throw new RuntimeException("File could not be found" + STOP_FILE_PATH);
-//            //System.out.println("file could not be found:" + STOP_FILE_PATH);
-//        }
         return map;
     }
 
