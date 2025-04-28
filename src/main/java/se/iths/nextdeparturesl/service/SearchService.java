@@ -1,5 +1,6 @@
 package se.iths.nextdeparturesl.service;
 
+import se.iths.nextdeparturesl.VehicleTypeConverter;
 import se.iths.nextdeparturesl.model.CalendarDate;
 import se.iths.nextdeparturesl.model.Route;
 import se.iths.nextdeparturesl.model.StopTime;
@@ -16,6 +17,7 @@ import java.util.*;
 public class SearchService {
 
     private MapService mapService = new MapService();
+    private final VehicleTypeConverter vehicleTypeConverter = new VehicleTypeConverter();
 
     private Map<BigInteger, List<StopTime>> stopIdTostopTimes; //= mapService.getStopIdTostopTimes();
     private Map<BigInteger, Trip> TripIdTotrips;// = mapService.getTripIdTotrips();
@@ -267,9 +269,13 @@ public class SearchService {
             if (parseTime.compareTo(timeNow) > 0) {
                 String destination = stopTime.getStop_headsign();
                 String departureTime = stopTime.getDeparture_time();
-                String vehicleType = route.getRoute_type();
-                String linenumber = route.getRoute_short_name();
-                Departure departure = new Departure(destination, departureTime, vehicleType, linenumber);
+                String arrivalTime = stopTime.getArrival_time();
+                String vehicleType = vehicleTypeConverter.convert(route.getRoute_type());
+                String routeLongName = route.getRoute_long_name();
+                String routDescription = route.getRoute_desc();
+                String lineNumber = route.getRoute_short_name();
+
+                Departure departure = new Departure(destination, departureTime, arrivalTime, vehicleType, routeLongName,routDescription ,lineNumber);
                 departures.add(departure);
             }
 
