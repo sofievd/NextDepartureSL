@@ -7,11 +7,9 @@ import se.iths.nextdeparturesl.model.Trip;
 import se.iths.nextdeparturesl.view.Departure;
 
 import java.math.BigInteger;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 
-// TODO: adding logging
+//TODO: adding logging
 //TODO: error handling
 //TODO: refactoring
 

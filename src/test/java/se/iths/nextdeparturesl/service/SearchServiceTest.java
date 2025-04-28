@@ -106,6 +106,7 @@ class SearchServiceTest {
         List<Departure> departures = searchService.getDeparturesWithStopTime("19:30:00", stopTimes);
         assertNotNull(departures);
         assertEquals(1, departures.size());
+
     }
 
     @Test
@@ -113,5 +114,6 @@ class SearchServiceTest {
         List<Departure> departures = searchService.getDeparturesFromStopName("Stavsnäs", "20250202-19:30:00");
         assertNotNull(departures);
         assertEquals(1, departures.size());
+        assertEquals("Hagede via Styrsvik Långvik Sandhamn", departures.get(0).getDestination());
     }
 }
