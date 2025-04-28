@@ -115,5 +115,6 @@ class SearchServiceTest {
         assertNotNull(departures);
         assertEquals(1, departures.size());
         assertEquals("Hagede via Styrsvik Långvik Sandhamn", departures.get(0).getDestination());
+        assertEquals("Water Transport", departures.get(0).getVehicleType());
     }
 }
