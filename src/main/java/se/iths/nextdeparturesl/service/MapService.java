@@ -114,7 +114,7 @@ public class MapService {
 
     public Map<String, List<BigInteger>> createStopIdMapWithStopName(String path) {
         Map<String, List<BigInteger>> map = new HashMap<>();
-        List<String> nameList = fileUtil.getStopNameList(path).stream().toList();
+        List<String> nameList = fileUtil.getStopNameList(path);
         for (String name : nameList) {
             List<BigInteger> stopIdList = fileUtil.getStopIdListWithStopName(name, path);
             map.put(name, stopIdList);
@@ -128,7 +128,7 @@ public class MapService {
         List<BigInteger> serviceIdList = fileUtil.getServiceIDListFromTripList(tripList);
         for (BigInteger serviceId : serviceIdList) {
             if (!map.containsKey(serviceId)) {
-                List<BigInteger> tripIdList = fileUtil.getTripListWithServiceId(serviceId, tripList, path).stream().toList();
+                List<BigInteger> tripIdList = fileUtil.getTripListWithServiceId(serviceId, tripList).stream().toList();
                 map.put(serviceId, tripIdList);
             }
         }

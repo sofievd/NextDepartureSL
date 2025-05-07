@@ -15,7 +15,6 @@ import java.util.zip.ZipInputStream;
  *
  * @author Sofie Van Dingenen
  */
-//TODO: adding error handling for when file reading fails
 public class FileUtil {
 
 
@@ -23,94 +22,12 @@ public class FileUtil {
     }
 
     public List<String> getStopNameList(String filePath) {
-        Set<String> stopNameList = new HashSet<>();
-        try {
-            BufferedReader bufferedReader = new BufferedReader(new FileReader(filePath));
-            String line;
-            while ((line = bufferedReader.readLine()) != null) {
-                String[] values = line.split(",");
-                stopNameList.add(values[1].toLowerCase());
-            }
-        } catch (IOException e) {
-            System.out.println("file could not be found:" + filePath);
+        Set<String> stopNameSet = new HashSet<>();
+        List<Stop> stopList = parseCsvToStop(filePath);
+        for (Stop stop : stopList) {
+            stopNameSet.add(stop.getStop_name());
         }
-        return stopNameList.stream().toList();
-    }
-
-    public Map<BigInteger, List<StopTime>> createStopTimeMapWithStopId(String path) {
-        Map<BigInteger, List<StopTime>> map = new HashMap<>();
-        List<StopTime> stopTimeList = parseCsvToStopTime(path);
-        for (StopTime stopTime : stopTimeList) {
-            BigInteger stopId = new BigInteger(stopTime.getStop_id());
-            if (map.containsKey(stopId)) {
-                map.get(stopId).add(stopTime);
-            } else {
-                List<StopTime> stopTimes = new ArrayList<>();
-                stopTimes.add(stopTime);
-                map.put(stopId, stopTimes);
-            }
-        }
-        return map;
-    }
-
-    public Map<BigInteger, Trip> createTripMapWithTripId(String path) {
-        Map<BigInteger, Trip> map = new HashMap<>();
-        List<Trip> tripList = parseCsvToTrip(path); //getTripList();
-        for (Trip trip : tripList) {
-            BigInteger tripId = new BigInteger(trip.getTrip_id());
-            map.put(tripId, trip);
-        }
-        return map;
-    }
-
-    public Map<String, Route> createRouteMapWithRouteId(String path) {
-        Map<String, Route> map = new HashMap<>();
-        List<Route> routeList = parseCsvToRoute(path);
-        for (Route route : routeList) {
-            String routeId = route.getRoute_id();
-            map.put(routeId, route);
-        }
-        return map;
-    }
-
-    public Map<BigInteger, List<CalendarDate>> createCalendarDateMapWithServiceId(String path) {
-        Map<BigInteger, List<CalendarDate>> map = new HashMap<>();
-        List<CalendarDate> calendarDateList = parseCsvToCalendarDate(path);
-        for (CalendarDate calendar : calendarDateList) {
-            BigInteger calendarDateId = new BigInteger(calendar.getService_id());
-            if (map.containsKey(calendarDateId)) {
-                map.get(calendarDateId).add(calendar);
-            } else {
-                List<CalendarDate> calendarDates = new ArrayList<>();
-                calendarDates.add(calendar);
-                map.put(calendarDateId, calendarDates);
-            }
-        }
-
-        return map;
-    }
-
-    public Map<String, List<BigInteger>> createStopIdMapWithStopName(String path) {
-        Map<String, List<BigInteger>> map = new HashMap<>();
-        List<String> nameList = getStopNameList(path).stream().toList();
-        for (String name : nameList) {
-            List<BigInteger> stopIdList = getStopIdListWithStopName(name, path);
-            map.put(name, stopIdList);
-        }
-        return map;
-    }
-
-    public Map<BigInteger, List<BigInteger>> createTripIdListMapWithServiceId(String path) {
-        Map<BigInteger, List<BigInteger>> map = new HashMap<>();
-        List<Trip> tripList = parseCsvToTrip(path); //getTripList();
-        List<BigInteger> serviceIdList = getServiceIDListFromTripList(tripList);
-        for (BigInteger serviceId : serviceIdList) {
-            if (!map.containsKey(serviceId)) {
-                List<BigInteger> tripIdList = getTripListWithServiceId(serviceId, tripList, path).stream().toList();
-                map.put(serviceId, tripIdList);
-            }
-        }
-        return map;
+        return stopNameSet.stream().toList();
     }
 
 
@@ -127,24 +44,29 @@ public class FileUtil {
 
     public List<BigInteger> getStopIdListWithStopName(String searchString, String path) {
         ArrayList<BigInteger> resultList = new ArrayList<>();
-
-        try {
-            BufferedReader bufferedReader = new BufferedReader(new FileReader(path));
-            String line;
-            while ((line = bufferedReader.readLine()) != null) {
-                String[] values = line.split(",");
-                if (values[1].toLowerCase().contains(searchString.toLowerCase()) && values[4].equals("0")) {
-                    resultList.add(new BigInteger(values[0]));
-                }
+        List<Stop> stopList = parseCsvToStop(path);
+        for (Stop stop : stopList) {
+            if (stop.getStop_name().contains(searchString) && stop.getLocation_type().equals("0") ) {
+                resultList.add(new BigInteger(stop.getStop_id()));
             }
-        } catch (IOException e) {
-            System.out.println("file could not be found:" + "src/main/resources/GTFS_SL/stops.txt");
         }
+//        try {
+//            BufferedReader bufferedReader = new BufferedReader(new FileReader(path));
+//            String line;
+//            while ((line = bufferedReader.readLine()) != null) {
+//                String[] values = line.split(",");
+//                if (values[1].toLowerCase().contains(searchString.toLowerCase()) && values[4].equals("0")) {
+//                    resultList.add(new BigInteger(values[0]));
+//                }
+//            }
+//        } catch (IOException e) {
+//            System.out.println("file could not be found:" + "src/main/resources/GTFS_SL/stops.txt");
+//        }
 
         return resultList;
     }
 
-    public Set<BigInteger> getTripListWithServiceId(BigInteger serviceId, List<Trip> tripList, String path) {
+    public Set<BigInteger> getTripListWithServiceId(BigInteger serviceId, List<Trip> tripList) {
         Set<BigInteger> resultList = new HashSet<>();
         for(Trip trip : tripList) {
             if (new BigInteger(trip.getService_id()).equals(serviceId)) {
@@ -152,19 +74,6 @@ public class FileUtil {
             }
         }
         return resultList;
-//        try {
-//            BufferedReader bufferedReader = new BufferedReader(new FileReader(path));
-//            String line;
-//            while ((line = bufferedReader.readLine()) != null) {
-//                String[] values = line.split(",");
-//                if (values[1].contains(serviceId.toString())) {
-//                    resultList.add(new BigInteger(values[2]));
-//                }
-//            }
-//        } catch (IOException e) {
-//            System.out.println("file could not be found:" + "src/main/resources/GTFS_SL/stops.txt");
-//        }
-//        return resultList;
     }
 
     public List<Stop> parseCsvToStop(String filePath) {

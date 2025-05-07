@@ -54,7 +54,8 @@ class MapServiceTest {
     void createStopIdMapWithStopName() {
         Map<String, List<BigInteger>> map = mapService.createStopIdMapWithStopName("src/test/resources/GTFS_SL_TEST/stops.txt");
         assertFalse(map.isEmpty());
-        assertEquals(6, map.size());
+        assertEquals(5, map.size());
+        assertEquals(map.get("Stavsnäs"), List.of(new BigInteger("9022001000101001")));
     }
 
     @Test
