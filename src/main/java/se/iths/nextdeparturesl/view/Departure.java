@@ -83,6 +83,8 @@ public class Departure {
                 ", departureTime='" + departureTime + '\'' +
                 ", arrivalTime='" + arrivalTime + '\'' +
                 ", vehicleType='" + vehicleType + '\'' +
+                ", routeName='" + routeName + '\'' +
+                ", routeDescription='" + routeDescription + '\'' +
                 ", lineNumber='" + lineNumber + '\'' +
                 '}';
     }

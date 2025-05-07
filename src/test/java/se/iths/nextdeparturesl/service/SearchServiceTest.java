@@ -102,12 +102,14 @@ class SearchServiceTest {
         Map<String, List<StopTime>> map = searchService.makeMap(searchService.getStopTimesWithStationId(new BigInteger("9022001000101001")).stream().toList());
         Set<StopTime> stopTimes = searchService.getStopTimeWithTrip(trips.stream().toList(), map);
 
-        List<Departure> departures = searchService.getDeparturesWithStopTime("19:30:00", stopTimes.stream().toList());
+        List<Departure> departures = searchService.getDeparturesWithStopTimeToday("19:30:00", stopTimes.stream().toList(), "20250202");
         for (Departure departure : departures) {
             System.out.println(departure);
         }
         assertNotNull(departures);
         assertEquals(1, departures.size());
+
+
 
     }
 
