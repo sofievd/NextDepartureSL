@@ -37,6 +37,7 @@ public class MapService {
     public void createMaps() {
         //adding the making of the maps
         System.out.println("starting making maps");
+        stationList = fileUtil.getStopNameList(STOP_FILE_PATH);
         // stops = fileUtil.createStopMapWithStopId();
         StopIdTostopTimes = createStopTimeMapWithStopId(STOP_TIMES_FILE_PATH);
         TripIdTotrips = createTripMapWithTripId(TRIP_FILE_PATH);
@@ -45,7 +46,6 @@ public class MapService {
         calendarDates = createCalendarDateMapWithServiceId(CALENDAR_DATE_FILE_PATH);
         stopNameToStopId = createStopIdMapWithStopName(STOP_FILE_PATH);
         serviceIdToTripId = createTripIdListMapWithServiceId(TRIP_FILE_PATH);
-        stationList = fileUtil.getStopNameList(STOP_FILE_PATH);
         //tripIdToStopTimes = fileUtil.createStopTimeMapWithTripId();
         System.out.println("finshed making maps");
     }
@@ -57,7 +57,6 @@ public class MapService {
         calendarDates = createCalendarDateMapWithServiceId("src/test/resources/GTFS_SL_TEST/calendar_dates.txt");
         stopNameToStopId = createStopIdMapWithStopName("src/test/resources/GTFS_SL_TEST/stops.txt");
         serviceIdToTripId = createTripIdListMapWithServiceId("src/test/resources/GTFS_SL_TEST/trips.txt");
-
     }
 
     public Map<BigInteger, List<StopTime>> createStopTimeMapWithStopId(String path) {

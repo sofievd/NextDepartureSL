@@ -1,6 +1,8 @@
 package se.iths.nextdeparturesl.util;
 
 import com.opencsv.bean.CsvToBeanBuilder;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import se.iths.nextdeparturesl.model.*;
 
 import java.io.*;
@@ -17,11 +19,12 @@ import java.util.zip.ZipInputStream;
  */
 public class FileUtil {
 
-
+private static final Logger logger = LogManager.getLogger();
     public FileUtil() {
     }
 
     public List<String> getStopNameList(String filePath) {
+        logger.info("creating list of stop names");
         Set<String> stopNameSet = new HashSet<>();
         List<Stop> stopList = parseCsvToStop(filePath);
         for (Stop stop : stopList) {
