@@ -1,5 +1,7 @@
 package se.iths.nextdeparturesl.service;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import se.iths.nextdeparturesl.model.*;
 import se.iths.nextdeparturesl.util.FileUtil;
 
@@ -10,7 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 public class MapService {
-    //private Map<BigInteger, Stop> stops;
+    private static final Logger log = LogManager.getLogger(MapService.class);
     private Map<BigInteger, List<StopTime>> StopIdTostopTimes;
     private Map<BigInteger, Trip> TripIdTotrips;
     private Map<String, Route> routes;
@@ -18,7 +20,6 @@ public class MapService {
     private Map<BigInteger, List<CalendarDate>> calendarDates;
     private Map<String, List<BigInteger>> stopNameToStopId;
     private Map<BigInteger, List<BigInteger>> serviceIdToTripId;
-    //  private Map<BigInteger, List<StopTime>> tripIdToStopTimes;
     private List<String> stationList;
 
     private final FileUtil fileUtil = new FileUtil();
@@ -29,25 +30,20 @@ public class MapService {
     private final String CALENDAR_FILE_PATH = "src/main/resources/static/GTFS_SL/calendar.txt";
     private final String CALENDAR_DATE_FILE_PATH = "src/main/resources/static/GTFS_SL/calendar_dates.txt";
 
-
-    //TODO: adding logging
     public MapService() {
     }
 
     public void createMaps() {
-        //adding the making of the maps
-        System.out.println("starting making maps");
+        log.info("Starting making maps");
         stationList = fileUtil.getStopNameList(STOP_FILE_PATH);
-        // stops = fileUtil.createStopMapWithStopId();
         StopIdTostopTimes = createStopTimeMapWithStopId(STOP_TIMES_FILE_PATH);
         TripIdTotrips = createTripMapWithTripId(TRIP_FILE_PATH);
         routes = createRouteMapWithRouteId(ROUTE_FILE_PATH);
-        calendars = fileUtil.createCalenderMapWithServiceId(CALENDAR_FILE_PATH);
+        calendars = createCalenderMapWithServiceId(CALENDAR_FILE_PATH);
         calendarDates = createCalendarDateMapWithServiceId(CALENDAR_DATE_FILE_PATH);
         stopNameToStopId = createStopIdMapWithStopName(STOP_FILE_PATH);
         serviceIdToTripId = createTripIdListMapWithServiceId(TRIP_FILE_PATH);
-        //tripIdToStopTimes = fileUtil.createStopTimeMapWithTripId();
-        System.out.println("finshed making maps");
+        log.info("Finished making maps");
     }
 
     public void createTestMaps(){
@@ -60,6 +56,7 @@ public class MapService {
     }
 
     public Map<BigInteger, List<StopTime>> createStopTimeMapWithStopId(String path) {
+        log.info("creating StopTime map with StopId");
         Map<BigInteger, List<StopTime>> map = new HashMap<>();
         List<StopTime> stopTimeList = fileUtil.parseCsvToStopTime(path);
         for (StopTime stopTime : stopTimeList) {
@@ -74,7 +71,9 @@ public class MapService {
         }
         return map;
     }
+
     public Map<BigInteger, Trip> createTripMapWithTripId(String path) {
+        log.info("creating Trip map with TripId");
         Map<BigInteger, Trip> map = new HashMap<>();
         List<Trip> tripList = fileUtil.parseCsvToTrip(path); //getTripList();
         for (Trip trip : tripList) {
@@ -85,6 +84,7 @@ public class MapService {
     }
 
     public Map<String, Route> createRouteMapWithRouteId(String path) {
+        log.info("creating Route map with RouteId");
         Map<String, Route> map = new HashMap<>();
         List<Route> routeList = fileUtil.parseCsvToRoute(path);
         for (Route route : routeList) {
@@ -95,6 +95,7 @@ public class MapService {
     }
 
     public Map<BigInteger, List<CalendarDate>> createCalendarDateMapWithServiceId(String path) {
+        log.info("creating CalendarDate map with ServiceId");
         Map<BigInteger, List<CalendarDate>> map = new HashMap<>();
         List<CalendarDate> calendarDateList = fileUtil.parseCsvToCalendarDate(path);
         for (CalendarDate calendar : calendarDateList) {
@@ -112,6 +113,7 @@ public class MapService {
     }
 
     public Map<String, List<BigInteger>> createStopIdMapWithStopName(String path) {
+        log.info("creating StopId map with StopName");
         Map<String, List<BigInteger>> map = new HashMap<>();
         List<String> nameList = fileUtil.getStopNameList(path);
         for (String name : nameList) {
@@ -122,6 +124,7 @@ public class MapService {
     }
 
     public Map<BigInteger, List<BigInteger>> createTripIdListMapWithServiceId(String path) {
+        log.info("creating TripIdList map with ServiceId");
         Map<BigInteger, List<BigInteger>> map = new HashMap<>();
         List<Trip> tripList = fileUtil.parseCsvToTrip(path); //getTripList();
         List<BigInteger> serviceIdList = fileUtil.getServiceIDListFromTripList(tripList);
@@ -129,6 +132,45 @@ public class MapService {
             if (!map.containsKey(serviceId)) {
                 List<BigInteger> tripIdList = fileUtil.getTripListWithServiceId(serviceId, tripList).stream().toList();
                 map.put(serviceId, tripIdList);
+            }
+        }
+        return map;
+    }
+
+    public Map<BigInteger, CalendarGtfs> createCalenderMapWithServiceId(String path) {
+        log.info("creating Calender map with ServiceId");
+        Map<BigInteger, CalendarGtfs> map = new HashMap<>();
+        List<CalendarGtfs> calendarList = fileUtil.parseCsvToCalendar(path);
+        for (CalendarGtfs calendar : calendarList) {
+            BigInteger calendarId = new BigInteger(calendar.getService_id());
+            map.put(calendarId, calendar);
+        }
+        return map;
+    }
+
+    public Map<BigInteger, Stop> createStopMapWithStopId(String path) {
+        log.info("creating Stop map with StopId");
+        Map<BigInteger, Stop> map = new HashMap<>();
+        List<Stop> stopList = fileUtil.parseCsvToStop(path);
+        for (Stop stop : stopList) {
+            BigInteger stopId = new BigInteger(stop.getStop_id());
+            map.put(stopId, stop);
+        }
+        return map;
+    }
+
+    public Map<BigInteger, List<StopTime>> createStopTimeMapWithTripId(String path) {
+        log.info("creating StopTime map with TripId");
+        Map<BigInteger, List<StopTime>> map = new HashMap<>();
+        List<StopTime> stopTimeList = fileUtil.parseCsvToStopTime(path); // getStopTimeList();
+        for (StopTime stopTime : stopTimeList) {
+            BigInteger tripId = new BigInteger(stopTime.getTrip_id());
+            if (map.containsKey(tripId)) {
+                map.get(tripId).add(stopTime);
+            } else {
+                List<StopTime> stopTimes = new ArrayList<>();
+                stopTimes.add(stopTime);
+                map.put(tripId, stopTimes);
             }
         }
         return map;

@@ -24,7 +24,7 @@ private static final Logger logger = LogManager.getLogger();
     }
 
     public List<String> getStopNameList(String filePath) {
-        logger.info("creating list of stop names");
+         logger.info("creating list of stop names");
         Set<String> stopNameSet = new HashSet<>();
         List<Stop> stopList = parseCsvToStop(filePath);
         for (Stop stop : stopList) {
@@ -35,6 +35,7 @@ private static final Logger logger = LogManager.getLogger();
 
 
     public List<BigInteger> getServiceIDListFromTripList(List<Trip> tripList) {
+        logger.info("creating list of service Ids from a list of trips");
         List<BigInteger> serviceIdList = new ArrayList<>();
         for (Trip trip : tripList) {
             BigInteger serviceId = new BigInteger(trip.getService_id());
@@ -46,6 +47,7 @@ private static final Logger logger = LogManager.getLogger();
     }
 
     public List<BigInteger> getStopIdListWithStopName(String searchString, String path) {
+        logger.info("creating list of stop ids with stop name");
         ArrayList<BigInteger> resultList = new ArrayList<>();
         List<Stop> stopList = parseCsvToStop(path);
         for (Stop stop : stopList) {
@@ -53,23 +55,11 @@ private static final Logger logger = LogManager.getLogger();
                 resultList.add(new BigInteger(stop.getStop_id()));
             }
         }
-//        try {
-//            BufferedReader bufferedReader = new BufferedReader(new FileReader(path));
-//            String line;
-//            while ((line = bufferedReader.readLine()) != null) {
-//                String[] values = line.split(",");
-//                if (values[1].toLowerCase().contains(searchString.toLowerCase()) && values[4].equals("0")) {
-//                    resultList.add(new BigInteger(values[0]));
-//                }
-//            }
-//        } catch (IOException e) {
-//            System.out.println("file could not be found:" + "src/main/resources/GTFS_SL/stops.txt");
-//        }
-
         return resultList;
     }
 
     public Set<BigInteger> getTripListWithServiceId(BigInteger serviceId, List<Trip> tripList) {
+        logger.info("creating list of trips id with service Id and trips");
         Set<BigInteger> resultList = new HashSet<>();
         for(Trip trip : tripList) {
             if (new BigInteger(trip.getService_id()).equals(serviceId)) {
@@ -80,96 +70,77 @@ private static final Logger logger = LogManager.getLogger();
     }
 
     public List<Stop> parseCsvToStop(String filePath) {
+        logger.info("Starting parsing CSV file");
         try {
             return new CsvToBeanBuilder<Stop>(new FileReader(filePath))
                     .withType(Stop.class).build().parse();
         } catch (FileNotFoundException e) {
+            logger.error("Could not find file {}", filePath);
+            logger.error(e.getMessage());
             throw new RuntimeException(e);
         }
     }
 
 
     public List<StopTime> parseCsvToStopTime(String path) {
+        logger.info("Starting parsing CSV file");
         try {
             return new CsvToBeanBuilder<StopTime>(new FileReader(path))
                     .withType(StopTime.class).build().parse();
         } catch (FileNotFoundException e) {
+            logger.error("Could not find file {}", path);
+            logger.error(e.getMessage());
             throw new RuntimeException(e);
         }
     }
 
     public List<Trip> parseCsvToTrip(String path) {
+        logger.info("Starting parsing CSV file");
         try {
             return new CsvToBeanBuilder<Trip>(new FileReader(path))
                     .withType(Trip.class).build().parse();
         } catch (FileNotFoundException e) {
+            logger.error("Could not find file {}", path);
+            logger.error(e.getMessage());
             throw new RuntimeException(e);
         }
     }
 
     public List<Route> parseCsvToRoute(String path) {
+        logger.info("Starting parsing CSV file");
         try {
             return new CsvToBeanBuilder<Route>(new FileReader(path))
                     .withType(Route.class).build().parse();
         } catch (FileNotFoundException e) {
+            logger.error("Could not find file {}", path);
+            logger.error(e.getMessage());
             throw new RuntimeException(e);
         }
     }
 
 
     public List<CalendarGtfs> parseCsvToCalendar(String path) {
+        logger.info("Starting parsing CSV file");
         try {
             return new CsvToBeanBuilder<CalendarGtfs>(new FileReader(path))
                     .withType(CalendarGtfs.class).build().parse();
         } catch (FileNotFoundException e) {
+            logger.error("Could not find file {}", path);
+            logger.error(e.getMessage());
             throw new RuntimeException(e);
         }
     }
 
     public List<CalendarDate> parseCsvToCalendarDate(String path) {
+        logger.info("Starting parsing CSV file");
         try {
             return new CsvToBeanBuilder<CalendarDate>(new FileReader(path))
                     .withType(CalendarDate.class).build().parse();
         } catch (FileNotFoundException e) {
+            logger.error("Could not find file {}", path);
+            logger.error(e.getMessage());
             throw new RuntimeException(e);
         }
-    }
-
-
-    public Map<BigInteger, Stop> createStopMapWithStopId(String path) {
-        Map<BigInteger, Stop> map = new HashMap<>();
-        List<Stop> stopList = parseCsvToStop(path);
-        for (Stop stop : stopList) {
-            BigInteger stopId = new BigInteger(stop.getStop_id());
-            map.put(stopId, stop);
-        }
-        return map;
-    }
-
-    public Map<BigInteger, List<StopTime>> createStopTimeMapWithTripId(String path) {
-        Map<BigInteger, List<StopTime>> map = new HashMap<>();
-        List<StopTime> stopTimeList = parseCsvToStopTime(path); // getStopTimeList();
-        for (StopTime stopTime : stopTimeList) {
-            BigInteger tripId = new BigInteger(stopTime.getTrip_id());
-            if (map.containsKey(tripId)) {
-                map.get(tripId).add(stopTime);
-            } else {
-                List<StopTime> stopTimes = new ArrayList<>();
-                stopTimes.add(stopTime);
-                map.put(tripId, stopTimes);
-            }
-        }
-        return map;
-    }
-
-    public Map<BigInteger, CalendarGtfs> createCalenderMapWithServiceId(String path) {
-        Map<BigInteger, CalendarGtfs> map = new HashMap<>();
-        List<CalendarGtfs> calendarList = parseCsvToCalendar(path);
-        for (CalendarGtfs calendar : calendarList) {
-            BigInteger calendarId = new BigInteger(calendar.getService_id());
-            map.put(calendarId, calendar);
-        }
-        return map;
     }
 
     public void unzip(String zipPath) throws IOException {
