@@ -46,10 +46,8 @@ private static final Logger logger = LogManager.getLogger();
         return serviceIdList;
     }
 
-    public List<BigInteger> getStopIdListWithStopName(String searchString, String path) {
-        logger.info("creating list of stop ids with stop name");
+    public List<BigInteger> getStopIdListWithStopName(String searchString, List<Stop> stopList) {
         ArrayList<BigInteger> resultList = new ArrayList<>();
-        List<Stop> stopList = parseCsvToStop(path);
         for (Stop stop : stopList) {
             if (stop.getStop_name().contains(searchString) && stop.getLocation_type().equals("0") ) {
                 resultList.add(new BigInteger(stop.getStop_id()));
@@ -59,7 +57,6 @@ private static final Logger logger = LogManager.getLogger();
     }
 
     public Set<BigInteger> getTripListWithServiceId(BigInteger serviceId, List<Trip> tripList) {
-        logger.info("creating list of trips id with service Id and trips");
         Set<BigInteger> resultList = new HashSet<>();
         for(Trip trip : tripList) {
             if (new BigInteger(trip.getService_id()).equals(serviceId)) {
@@ -70,7 +67,7 @@ private static final Logger logger = LogManager.getLogger();
     }
 
     public List<Stop> parseCsvToStop(String filePath) {
-        logger.info("Starting parsing CSV file");
+        logger.info("Starting parsing CSV Stop file");
         try {
             return new CsvToBeanBuilder<Stop>(new FileReader(filePath))
                     .withType(Stop.class).build().parse();
@@ -83,7 +80,7 @@ private static final Logger logger = LogManager.getLogger();
 
 
     public List<StopTime> parseCsvToStopTime(String path) {
-        logger.info("Starting parsing CSV file");
+        logger.info("Starting parsing CSV StopTime file");
         try {
             return new CsvToBeanBuilder<StopTime>(new FileReader(path))
                     .withType(StopTime.class).build().parse();
@@ -95,7 +92,7 @@ private static final Logger logger = LogManager.getLogger();
     }
 
     public List<Trip> parseCsvToTrip(String path) {
-        logger.info("Starting parsing CSV file");
+        logger.info("Starting parsing CSV Trip file");
         try {
             return new CsvToBeanBuilder<Trip>(new FileReader(path))
                     .withType(Trip.class).build().parse();
@@ -107,7 +104,7 @@ private static final Logger logger = LogManager.getLogger();
     }
 
     public List<Route> parseCsvToRoute(String path) {
-        logger.info("Starting parsing CSV file");
+        logger.info("Starting parsing CSV Route file");
         try {
             return new CsvToBeanBuilder<Route>(new FileReader(path))
                     .withType(Route.class).build().parse();
@@ -120,7 +117,7 @@ private static final Logger logger = LogManager.getLogger();
 
 
     public List<CalendarGtfs> parseCsvToCalendar(String path) {
-        logger.info("Starting parsing CSV file");
+        logger.info("Starting parsing CSV Calendar file");
         try {
             return new CsvToBeanBuilder<CalendarGtfs>(new FileReader(path))
                     .withType(CalendarGtfs.class).build().parse();
@@ -132,7 +129,7 @@ private static final Logger logger = LogManager.getLogger();
     }
 
     public List<CalendarDate> parseCsvToCalendarDate(String path) {
-        logger.info("Starting parsing CSV file");
+        logger.info("Starting parsing CSV CalendarDate file");
         try {
             return new CsvToBeanBuilder<CalendarDate>(new FileReader(path))
                     .withType(CalendarDate.class).build().parse();

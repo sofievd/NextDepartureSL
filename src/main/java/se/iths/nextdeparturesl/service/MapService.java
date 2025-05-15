@@ -12,11 +12,10 @@ import java.util.List;
 import java.util.Map;
 
 public class MapService {
-    private static final Logger log = LogManager.getLogger(MapService.class);
+    private static final Logger log = LogManager.getLogger();
     private Map<BigInteger, List<StopTime>> StopIdTostopTimes;
     private Map<BigInteger, Trip> TripIdTotrips;
     private Map<String, Route> routes;
-    private Map<BigInteger, CalendarGtfs> calendars;
     private Map<BigInteger, List<CalendarDate>> calendarDates;
     private Map<String, List<BigInteger>> stopNameToStopId;
     private Map<BigInteger, List<BigInteger>> serviceIdToTripId;
@@ -39,7 +38,6 @@ public class MapService {
         StopIdTostopTimes = createStopTimeMapWithStopId(STOP_TIMES_FILE_PATH);
         TripIdTotrips = createTripMapWithTripId(TRIP_FILE_PATH);
         routes = createRouteMapWithRouteId(ROUTE_FILE_PATH);
-        calendars = createCalenderMapWithServiceId(CALENDAR_FILE_PATH);
         calendarDates = createCalendarDateMapWithServiceId(CALENDAR_DATE_FILE_PATH);
         stopNameToStopId = createStopIdMapWithStopName(STOP_FILE_PATH);
         serviceIdToTripId = createTripIdListMapWithServiceId(TRIP_FILE_PATH);
@@ -116,8 +114,9 @@ public class MapService {
         log.info("creating StopId map with StopName");
         Map<String, List<BigInteger>> map = new HashMap<>();
         List<String> nameList = fileUtil.getStopNameList(path);
+        List<Stop> stopList = fileUtil.parseCsvToStop(path);
         for (String name : nameList) {
-            List<BigInteger> stopIdList = fileUtil.getStopIdListWithStopName(name, path);
+            List<BigInteger> stopIdList = fileUtil.getStopIdListWithStopName(name, stopList);
             map.put(name, stopIdList);
         }
         return map;
