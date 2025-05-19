@@ -259,7 +259,6 @@ public class SearchService {
             return departuresList;
         }
         Set<BigInteger> StationIdList = getStationIdWithName(stopName);
-        //List<BigInteger> stationIdList= StationIdList.stream().sorted().toList();
 
         if (StationIdList.isEmpty()) {
             log.warn("no stationIdList is null/ empty, no departures found");
@@ -288,13 +287,10 @@ public class SearchService {
         } else {
             serviceIdListNow = getServiceIdForTodayFromServiceIds(serviceIdList, date);
         }
-
         List<Trip> tripsFromService = getTripsFromTodaysServiceIds(serviceIdListNow);
         tripList.retainAll(tripsFromService);
-
         Set<StopTime> stopTimesFromService = getStopTimeWithTrip(tripList, stopTimeMap);
         List<StopTime> stopTimeList = stopTimesFromService.stream().sorted(Comparator.comparing(StopTime::getDeparture_time)).toList();
-
         departuresList.addAll(getDeparturesWithStopTimeToday(time, stopTimeList, date));
         List<Departure> departures = new ArrayList<>();
         for(int i= 0; i <20 ; i++){
