@@ -22,6 +22,19 @@ public class Departure {
         this.lineNumber = lineNumber;
     }
 
+    @Override
+    public String toString() {
+        return "Departure{" +
+                "destination='" + destination + '\'' +
+                ", departureTime='" + departureTime + '\'' +
+                ", arrivalTime='" + arrivalTime + '\'' +
+                ", vehicleType='" + vehicleType + '\'' +
+                ", vehicleTypeCode='" + vehicleTypeCode + '\'' +
+                ", routeName='" + routeName + '\'' +
+                ", routeDescription='" + routeDescription + '\'' +
+                ", lineNumber='" + lineNumber + '\'' +
+                '}';
+    }
     public String getDestination() {
         return destination;
     }
@@ -86,17 +99,4 @@ public class Departure {
         this.vehicleTypeCode = vehicleTypeCode;
     }
 
-    @Override
-    public String toString() {
-        return "Departure{" +
-                "destination='" + destination + '\'' +
-                ", departureTime='" + departureTime + '\'' +
-                ", arrivalTime='" + arrivalTime + '\'' +
-                ", vehicleType='" + vehicleType + '\'' +
-                ", vehicleTypeCode='" + vehicleTypeCode + '\'' +
-                ", routeName='" + routeName + '\'' +
-                ", routeDescription='" + routeDescription + '\'' +
-                ", lineNumber='" + lineNumber + '\'' +
-                '}';
-    }
 }
