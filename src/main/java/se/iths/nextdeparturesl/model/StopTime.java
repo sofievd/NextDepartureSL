@@ -2,6 +2,12 @@ package se.iths.nextdeparturesl.model;
 
 import com.opencsv.bean.CsvBindByName;
 
+/**
+ * StopTime represents stop times for a trip in a GTFS feed.
+ * Contains timing and sequencing information for stops along a trip.
+ *
+ * @author Sofie Van Dingenen
+ */
 public class StopTime {
 
     @CsvBindByName

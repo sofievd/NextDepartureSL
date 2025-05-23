@@ -2,6 +2,12 @@ package se.iths.nextdeparturesl.model;
 
 import com.opencsv.bean.CsvBindByName;
 
+/**
+ * Route represents a transit route in a GTFS feed.
+ * Includes identifiers, names, and descriptive details.
+ *
+ * @author Sofie Van Dingenen
+ */
 public class Route {
     @CsvBindByName
     private String route_id;

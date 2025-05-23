@@ -2,6 +2,12 @@ package se.iths.nextdeparturesl.model;
 
 import com.opencsv.bean.CsvBindByName;
 
+/**
+ * CalendarGtfs represents regular weekly service schedule in a GTFS feed.
+ * Defines the days of the week when service is available and the date range.
+ *
+ * @author Sofie Van Dingenen
+ */
 public class CalendarGtfs {
     @CsvBindByName
     private String service_id;

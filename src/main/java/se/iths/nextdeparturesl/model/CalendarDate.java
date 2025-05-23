@@ -2,6 +2,12 @@ package se.iths.nextdeparturesl.model;
 
 import com.opencsv.bean.CsvBindByName;
 
+/**
+ * CalendarDate represents a single calendar exception date in a GTFS feed.
+ * Used to add or remove service for specific dates.
+ *
+ * @author Sofie Van Dingenen
+ */
 public class CalendarDate {
     @CsvBindByName
     private String service_id;

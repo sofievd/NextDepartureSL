@@ -2,6 +2,10 @@ package se.iths.nextdeparturesl.model;
 
 import com.opencsv.bean.CsvBindByName;
 
+/**
+ * Trip represents a specific trip (instance of a route) in a GTFS feed.
+ * Ties together a route and service schedule with unique trip identifiers.
+ */
 public class Trip {
     @CsvBindByName
     private String route_id;
@@ -40,5 +44,22 @@ public class Trip {
         this.trip_id = trip_id;
     }
 
-
+    public String getTrip_headsign() {
+        return trip_headsign;
+    }
+    public void setTrip_headsign(String trip_headsign) {
+        this.trip_headsign = trip_headsign;
+    }
+    public String getDirection_id() {
+        return direction_id;
+    }
+    public void setDirection_id(String direction_id) {
+        this.direction_id = direction_id;
+    }
+    public String getShape_id() {
+        return shape_id;
+    }
+    public void setShape_id(String shape_id) {
+        this.shape_id = shape_id;
+    }
 }

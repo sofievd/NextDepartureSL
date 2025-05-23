@@ -2,6 +2,12 @@ package se.iths.nextdeparturesl.model;
 
 import com.opencsv.bean.CsvBindByName;
 
+/**
+ * Stop Represents a transit stop in a transportation system.
+ * This class is used for mapping data from a CSV file using OpenCSV annotations.
+ *
+ * @author Sofie Van Dingenen
+ */
 public class Stop {
     @CsvBindByName
     private String stop_id;
