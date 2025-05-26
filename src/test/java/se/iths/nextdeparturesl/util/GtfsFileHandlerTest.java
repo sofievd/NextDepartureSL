@@ -8,24 +8,24 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-class FileUtilTest {
-    private FileUtil fileUtil;
+class GtfsFileHandlerTest {
+    private GtfsFileHandler gtfsFileHandler;
 
     @BeforeEach
     void setUp() {
-        fileUtil = new FileUtil();
+        gtfsFileHandler = new GtfsFileHandler();
     }
 
     @Test
     void getStopNameList() {
-        List<String> stopnameList = fileUtil.getStopNameList("src/test/resources/GTFS_SL_TEST/stops.txt");
+        List<String> stopnameList = gtfsFileHandler.getStopNameList("src/test/resources/GTFS_SL_TEST/stops.txt");
         assertEquals(6, stopnameList.size());
         assertTrue(stopnameList.contains("idöborg"));
     }
 
 //    @Test
 //    void createStopTimeMapWithStopId() {
-//        Map<BigInteger, List<StopTime>> map = fileUtil.createStopTimeMapWithStopId("src/test/resources/GTFS_SL_TEST/stop-times.txt");
+//        Map<BigInteger, List<StopTime>> map = fileUtil.createStopTimeMapWithStopId("src/test/resources/GTFS_SL_TEST/stop_times.txt");
 //
 //        assertFalse(map.isEmpty());
 //
@@ -70,7 +70,7 @@ class FileUtilTest {
 
     @Test
     void parseCsvToStop() {
-        List<Stop> stopList = fileUtil.parseCsvToStop("src/test/resources/GTFS_SL_TEST/stops.txt");
+        List<Stop> stopList = gtfsFileHandler.parseCsvToStop("src/test/resources/GTFS_SL_TEST/stops.txt");
 
         assertEquals(5, stopList.size());
         assertEquals("Stavsnäs", stopList.get(0).getStop_name());
@@ -78,35 +78,35 @@ class FileUtilTest {
 
     @Test
     void parseCsvToStopTime() {
-        List<StopTime> stopTimeList = fileUtil.parseCsvToStopTime("src/test/resources/GTFS_SL_TEST/stop-times.txt");
+        List<StopTime> stopTimeList = gtfsFileHandler.parseCsvToStopTime("src/test/resources/GTFS_SL_TEST/stop_times.txt");
         assertEquals(32, stopTimeList.size());
         assertEquals("Hagede via Styrsvik Långvik Sandhamn", stopTimeList.get(0).getStop_headsign());
     }
 
     @Test
     void parseCsvToTrip() {
-        List<Trip> tripList = fileUtil.parseCsvToTrip("src/test/resources/GTFS_SL_TEST/trips.txt");
+        List<Trip> tripList = gtfsFileHandler.parseCsvToTrip("src/test/resources/GTFS_SL_TEST/trips.txt");
         assertEquals(31, tripList.size());
         assertEquals("19", tripList.get(0).getService_id());
     }
 
     @Test
     void parseCsvToRoute() {
-        List<Route> routeList = fileUtil.parseCsvToRoute("src/test/resources/GTFS_SL_TEST/routes.txt");
+        List<Route> routeList = gtfsFileHandler.parseCsvToRoute("src/test/resources/GTFS_SL_TEST/routes.txt");
         assertEquals(1, routeList.size());
         assertEquals("Waxholmsbolaget", routeList.get(0).getRoute_desc());
     }
 
     @Test
     void parseCsvToCalendar() {
-        List<CalendarGtfs> calendarGtfsList = fileUtil.parseCsvToCalendar("src/test/resources/GTFS_SL_TEST/calendar.txt");
-        assertEquals(10, calendarGtfsList.size());
-        assertEquals("228", calendarGtfsList.get(1).getService_id());
+        List<Calendar> calendarList = gtfsFileHandler.parseCsvToCalendar("src/test/resources/GTFS_SL_TEST/calendar.txt");
+        assertEquals(10, calendarList.size());
+        assertEquals("228", calendarList.get(1).getService_id());
     }
 
     @Test
     void parseCsvToCalendarDate() {
-        List<CalendarDate> calendarDateList = fileUtil.parseCsvToCalendarDate("src/test/resources/GTFS_SL_TEST/calendar_dates.txt");
+        List<CalendarDate> calendarDateList = gtfsFileHandler.parseCsvToCalendarDate("src/test/resources/GTFS_SL_TEST/calendar_dates.txt");
         assertEquals(221, calendarDateList.size());
         assertEquals("20250202", calendarDateList.get(0).getDate());
     }

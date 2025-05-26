@@ -3,7 +3,7 @@ package se.iths.nextdeparturesl.service;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import se.iths.nextdeparturesl.model.*;
-import se.iths.nextdeparturesl.util.FileUtil;
+import se.iths.nextdeparturesl.util.GtfsFileHandler;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -17,7 +17,7 @@ import java.util.Map;
  *
  * @author Sofie Van Dingenen
  */
-public class MapService {
+public class GtfsDataHolder {
     private static final Logger log = LogManager.getLogger();
     private Map<BigInteger, List<StopTime>> StopIdTostopTimes;
     private Map<BigInteger, Trip> TripIdTotrips;
@@ -26,16 +26,18 @@ public class MapService {
     private Map<String, List<BigInteger>> stopNameToStopId;
     private Map<BigInteger, List<BigInteger>> serviceIdToTripId;
     private List<String> stationList;
+    private String path;
 
-    private final FileUtil fileUtil = new FileUtil();
-    private final String STOP_FILE_PATH = "src/main/resources/static/GTFS_SL/stops.txt";
-    private final String STOP_TIMES_FILE_PATH = "src/main/resources/static/GTFS_SL/stop_times.txt";
-    private final String TRIP_FILE_PATH = "src/main/resources/static/GTFS_SL/trips.txt";
-    private final String ROUTE_FILE_PATH = "src/main/resources/static/GTFS_SL/routes.txt";
-    private final String CALENDAR_FILE_PATH = "src/main/resources/static/GTFS_SL/calendar.txt";
-    private final String CALENDAR_DATE_FILE_PATH = "src/main/resources/static/GTFS_SL/calendar_dates.txt";
+    private final GtfsFileHandler gtfsFileHandler = new GtfsFileHandler();
+    private final String STOP_FILE_PATH = "stops.txt";
+    private final String STOP_TIMES_FILE_PATH = "stop_times.txt";
+    private final String TRIP_FILE_PATH = "trips.txt";
+    private final String ROUTE_FILE_PATH = "routes.txt";
+    private final String CALENDAR_FILE_PATH = "calendar.txt";
+    private final String CALENDAR_DATE_FILE_PATH = "calendar_dates.txt";
 
-    public MapService() {
+    public GtfsDataHolder(String path) {
+        this.path = path;
     }
 
     /**
@@ -43,26 +45,14 @@ public class MapService {
      */
     public void createMaps() {
         log.info("Starting making maps");
-        stationList = fileUtil.getStopNameList(STOP_FILE_PATH);
-        StopIdTostopTimes = createStopTimeMapWithStopId(STOP_TIMES_FILE_PATH);
-        TripIdTotrips = createTripMapWithTripId(TRIP_FILE_PATH);
-        routes = createRouteMapWithRouteId(ROUTE_FILE_PATH);
-        calendarDates = createCalendarDateMapWithServiceId(CALENDAR_DATE_FILE_PATH);
-        stopNameToStopId = createStopIdMapWithStopName(STOP_FILE_PATH);
-        serviceIdToTripId = createTripIdListMapWithServiceId(TRIP_FILE_PATH);
+        stationList = gtfsFileHandler.getStopNameList(path+STOP_FILE_PATH);
+        StopIdTostopTimes = createStopTimeMapWithStopId(path+STOP_TIMES_FILE_PATH);
+        TripIdTotrips = createTripMapWithTripId(path+TRIP_FILE_PATH);
+        routes = createRouteMapWithRouteId(path+ROUTE_FILE_PATH);
+        calendarDates = createCalendarDateMapWithServiceId(path+CALENDAR_DATE_FILE_PATH);
+        stopNameToStopId = createStopIdMapWithStopName(path+STOP_FILE_PATH);
+        serviceIdToTripId = createTripIdListMapWithServiceId(path+TRIP_FILE_PATH);
         log.info("Finished making maps");
-    }
-
-    /**
-     * Creates all the necessary maps for testing, using a different files.
-     */
-    public void createTestMaps(){
-        StopIdTostopTimes = createStopTimeMapWithStopId("src/test/resources/GTFS_SL_TEST/stop-times.txt");
-        TripIdTotrips = createTripMapWithTripId("src/test/resources/GTFS_SL_TEST/trips.txt");
-        routes = createRouteMapWithRouteId("src/test/resources/GTFS_SL_TEST/routes.txt");
-        calendarDates = createCalendarDateMapWithServiceId("src/test/resources/GTFS_SL_TEST/calendar_dates.txt");
-        stopNameToStopId = createStopIdMapWithStopName("src/test/resources/GTFS_SL_TEST/stops.txt");
-        serviceIdToTripId = createTripIdListMapWithServiceId("src/test/resources/GTFS_SL_TEST/trips.txt");
     }
 
     /**
@@ -73,7 +63,7 @@ public class MapService {
     public Map<BigInteger, List<StopTime>> createStopTimeMapWithStopId(String path) {
         log.info("creating StopTime map with StopId");
         Map<BigInteger, List<StopTime>> map = new HashMap<>();
-        List<StopTime> stopTimeList = fileUtil.parseCsvToStopTime(path);
+        List<StopTime> stopTimeList = gtfsFileHandler.parseCsvToStopTime(path);
         for (StopTime stopTime : stopTimeList) {
             BigInteger stopId = new BigInteger(stopTime.getStop_id());
             if (map.containsKey(stopId)) {
@@ -95,7 +85,7 @@ public class MapService {
     public Map<BigInteger, Trip> createTripMapWithTripId(String path) {
         log.info("creating Trip map with TripId");
         Map<BigInteger, Trip> map = new HashMap<>();
-        List<Trip> tripList = fileUtil.parseCsvToTrip(path); //getTripList();
+        List<Trip> tripList = gtfsFileHandler.parseCsvToTrip(path); //getTripList();
         for (Trip trip : tripList) {
             BigInteger tripId = new BigInteger(trip.getTrip_id());
             map.put(tripId, trip);
@@ -111,7 +101,7 @@ public class MapService {
     public Map<String, Route> createRouteMapWithRouteId(String path) {
         log.info("creating Route map with RouteId");
         Map<String, Route> map = new HashMap<>();
-        List<Route> routeList = fileUtil.parseCsvToRoute(path);
+        List<Route> routeList = gtfsFileHandler.parseCsvToRoute(path);
         for (Route route : routeList) {
             String routeId = route.getRoute_id();
             map.put(routeId, route);
@@ -127,7 +117,7 @@ public class MapService {
     public Map<BigInteger, List<CalendarDate>> createCalendarDateMapWithServiceId(String path) {
         log.info("creating CalendarDate map with ServiceId");
         Map<BigInteger, List<CalendarDate>> map = new HashMap<>();
-        List<CalendarDate> calendarDateList = fileUtil.parseCsvToCalendarDate(path);
+        List<CalendarDate> calendarDateList = gtfsFileHandler.parseCsvToCalendarDate(path);
         for (CalendarDate calendar : calendarDateList) {
             BigInteger calendarDateId = new BigInteger(calendar.getService_id());
             if (map.containsKey(calendarDateId)) {
@@ -150,10 +140,10 @@ public class MapService {
     public Map<String, List<BigInteger>> createStopIdMapWithStopName(String path) {
         log.info("creating StopId map with StopName");
         Map<String, List<BigInteger>> map = new HashMap<>();
-        List<String> nameList = fileUtil.getStopNameList(path);
-        List<Stop> stopList = fileUtil.parseCsvToStop(path);
+        List<String> nameList = gtfsFileHandler.getStopNameList(path);
+        List<Stop> stopList = gtfsFileHandler.parseCsvToStop(path);
         for (String name : nameList) {
-            List<BigInteger> stopIdList = fileUtil.getStopIdListWithStopName(name, stopList);
+            List<BigInteger> stopIdList = gtfsFileHandler.getStopIdListWithStopName(name, stopList);
             map.put(name, stopIdList);
         }
         return map;
@@ -162,11 +152,11 @@ public class MapService {
     public Map<BigInteger, List<BigInteger>> createTripIdListMapWithServiceId(String path) {
         log.info("creating TripIdList map with ServiceId");
         Map<BigInteger, List<BigInteger>> map = new HashMap<>();
-        List<Trip> tripList = fileUtil.parseCsvToTrip(path); //getTripList();
-        List<BigInteger> serviceIdList = fileUtil.getServiceIDListFromTripList(tripList);
+        List<Trip> tripList = gtfsFileHandler.parseCsvToTrip(path); //getTripList();
+        List<BigInteger> serviceIdList = gtfsFileHandler.getServiceIDListFromTripList(tripList);
         for (BigInteger serviceId : serviceIdList) {
             if (!map.containsKey(serviceId)) {
-                List<BigInteger> tripIdList = fileUtil.getTripListWithServiceId(serviceId, tripList).stream().toList();
+                List<BigInteger> tripIdList = gtfsFileHandler.getTripListWithServiceId(serviceId, tripList).stream().toList();
                 map.put(serviceId, tripIdList);
             }
         }

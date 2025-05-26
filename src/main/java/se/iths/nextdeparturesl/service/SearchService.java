@@ -2,7 +2,6 @@ package se.iths.nextdeparturesl.service;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.slf4j.LoggerFactory;
 import se.iths.nextdeparturesl.model.CalendarDate;
 import se.iths.nextdeparturesl.model.Route;
 import se.iths.nextdeparturesl.model.StopTime;
@@ -14,13 +13,12 @@ import java.math.BigInteger;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class SearchService {
 
     private static final Logger log = LogManager.getLogger();
 
-    private MapService mapService = new MapService();
+    private GtfsDataHolder gtfsDataHolder = new GtfsDataHolder("src/main/resources/static/GTFS_SL/");
     private final VehicleTypeConverter vehicleTypeConverter = new VehicleTypeConverter();
 
     private Map<BigInteger, List<StopTime>> stopIdTostopTimes; //= mapService.getStopIdTostopTimes();
@@ -35,32 +33,20 @@ public class SearchService {
     public SearchService() {
     }
 
-    public SearchService(MapService mapService) {
-        this.mapService = mapService;
+    public SearchService(GtfsDataHolder gtfsDataHolder) {
+        this.gtfsDataHolder = gtfsDataHolder;
     }
 
     public void setUp() {
         log.info("Setting up search service");
-        mapService.createMaps();
-        stopIdTostopTimes = mapService.getStopIdTostopTimes();
-        TripIdTotrips = mapService.getTripIdTotrips();
-        routes = mapService.getRoutes();
-        calendarDates = mapService.getCalendarDates();
-        stopNameToStopId = mapService.getStopNameToStopId();
-        serviceIdToTripId = mapService.getServiceIdToTripId();
-        stationList = mapService.getStationList();
-    }
-
-    public void testSetUp() {
-        log.trace("Setting up search service");
-        mapService.createTestMaps();
-        stopIdTostopTimes = mapService.getStopIdTostopTimes();
-        TripIdTotrips = mapService.getTripIdTotrips();
-        routes = mapService.getRoutes();
-        calendarDates = mapService.getCalendarDates();
-        stopNameToStopId = mapService.getStopNameToStopId();
-        serviceIdToTripId = mapService.getServiceIdToTripId();
-        stationList = mapService.getStationList();
+        gtfsDataHolder.createMaps();
+        stopIdTostopTimes = gtfsDataHolder.getStopIdTostopTimes();
+        TripIdTotrips = gtfsDataHolder.getTripIdTotrips();
+        routes = gtfsDataHolder.getRoutes();
+        calendarDates = gtfsDataHolder.getCalendarDates();
+        stopNameToStopId = gtfsDataHolder.getStopNameToStopId();
+        serviceIdToTripId = gtfsDataHolder.getServiceIdToTripId();
+        stationList = gtfsDataHolder.getStationList();
     }
 
     public List<String> getStationList() {
@@ -267,9 +253,9 @@ public class SearchService {
 
         stopTimesList = getStopTimesFromStationId(StationIdList);
         List<StopTime> tempList = new ArrayList<>();
-        for(StopTime stopTime : stopTimesList) {
-            if(stopTime.getStop_headsign().equalsIgnoreCase(stopName) ||
-                    stopTime.getStop_headsign().equalsIgnoreCase(stopName +" station")){
+        for (StopTime stopTime : stopTimesList) {
+            if (stopTime.getStop_headsign().equalsIgnoreCase(stopName) ||
+                    stopTime.getStop_headsign().equalsIgnoreCase(stopName + " station")) {
                 tempList.add(stopTime);
             }
         }
@@ -293,7 +279,7 @@ public class SearchService {
         List<StopTime> stopTimeList = stopTimesFromService.stream().sorted(Comparator.comparing(StopTime::getDeparture_time)).toList();
         departuresList.addAll(getDeparturesWithStopTimeToday(time, stopTimeList, date));
         List<Departure> departures = new ArrayList<>();
-        for(int i= 0; i <20 ; i++){
+        for (int i = 0; i < 20; i++) {
             departures.add(departuresList.get(i));
         }
         return departures;
@@ -354,7 +340,7 @@ public class SearchService {
         for (Trip tripId : tripList) {
             serviceIdSet.addAll(getServiceIdWithTripId(new BigInteger(tripId.getTrip_id())));
         }
-        List<BigInteger> serviceIdList = new ArrayList<>( serviceIdSet);
+        List<BigInteger> serviceIdList = new ArrayList<>(serviceIdSet);
         serviceIdList.sort(Comparator.comparing(BigInteger::intValue));
         return serviceIdList;
     }

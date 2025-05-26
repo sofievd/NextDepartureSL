@@ -14,15 +14,16 @@ import java.util.Map;
 import static org.junit.jupiter.api.Assertions.*;
 
 class MapServiceTest {
-    private MapService mapService;
+    private GtfsDataHolder gtfsDataHolder;
+
     @BeforeEach
     void setUp() {
-        mapService = new MapService();
+        gtfsDataHolder = new GtfsDataHolder("src/test/resources/GTFS_SL_TEST/");
     }
 
     @Test
-    void createStopTimeMapWithStopId() {
-        Map<BigInteger, List<StopTime>> map = mapService.createStopTimeMapWithStopId("src/test/resources/GTFS_SL_TEST/stop-times.txt");
+    void createStopTimeMapWithStopId_notEmpty_shouldReturnStopTimes() {
+        Map<BigInteger, List<StopTime>> map = gtfsDataHolder.createStopTimeMapWithStopId("stop_times.txt");
 
         assertFalse(map.isEmpty());
 
@@ -31,28 +32,28 @@ class MapServiceTest {
 
     @Test
     void createTripMapWithTripId() {
-        Map<BigInteger, Trip> map = mapService.createTripMapWithTripId("src/test/resources/GTFS_SL_TEST/trips.txt");
+        Map<BigInteger, Trip> map = gtfsDataHolder.createTripMapWithTripId("GTFS_SL_TEST/trips.txt");
         assertFalse(map.isEmpty());
         assertEquals(31, map.size());
     }
 
     @Test
     void createRouteMapWithRouteId() {
-        Map<String, Route> map = mapService.createRouteMapWithRouteId("src/test/resources/GTFS_SL_TEST/routes.txt");
+        Map<String, Route> map = gtfsDataHolder.createRouteMapWithRouteId("GTFS_SL_TEST/routes.txt");
         assertFalse(map.isEmpty());
         assertEquals(1, map.size());
     }
 
     @Test
     void createCalendarDateMapWithServiceId() {
-        Map<BigInteger, List<CalendarDate>> map = mapService.createCalendarDateMapWithServiceId("src/test/resources/GTFS_SL_TEST/calendar_dates.txt");
+        Map<BigInteger, List<CalendarDate>> map = gtfsDataHolder.createCalendarDateMapWithServiceId("calendar_dates.txt");
         assertFalse(map.isEmpty());
         assertEquals(10, map.size());
     }
 
     @Test
     void createStopIdMapWithStopName() {
-        Map<String, List<BigInteger>> map = mapService.createStopIdMapWithStopName("src/test/resources/GTFS_SL_TEST/stops.txt");
+        Map<String, List<BigInteger>> map = gtfsDataHolder.createStopIdMapWithStopName("stops.txt");
         assertFalse(map.isEmpty());
         assertEquals(5, map.size());
         assertEquals(map.get("Stavsnäs"), List.of(new BigInteger("9022001000101001")));
@@ -60,7 +61,7 @@ class MapServiceTest {
 
     @Test
     void createTripIdListMapWithServiceId() {
-        Map<BigInteger, List<BigInteger>> map = mapService.createTripIdListMapWithServiceId("src/test/resources/GTFS_SL_TEST/trips.txt");
+        Map<BigInteger, List<BigInteger>> map = gtfsDataHolder.createTripIdListMapWithServiceId("trips.txt");
 
         assertFalse(map.isEmpty());
         assertEquals(10, map.size());
@@ -68,36 +69,36 @@ class MapServiceTest {
 
     @Test
     void getStationList() {
-        assertNull(mapService.getStationList());
+        assertNull(gtfsDataHolder.getStationList());
     }
 
     @Test
     void getStopIdTostopTimes() {
-        assertNull(mapService.getStopIdTostopTimes());
+        assertNull(gtfsDataHolder.getStopIdTostopTimes());
     }
 
     @Test
     void getStopNameToStopId() {
-        assertNull(mapService.getStopNameToStopId());
+        assertNull(gtfsDataHolder.getStopNameToStopId());
     }
 
     @Test
     void getServiceIdToTripId() {
-        assertNull(mapService.getServiceIdToTripId());
+        assertNull(gtfsDataHolder.getServiceIdToTripId());
     }
 
     @Test
     void getCalendarDates() {
-        assertNull(mapService.getCalendarDates());
+        assertNull(gtfsDataHolder.getCalendarDates());
     }
 
     @Test
     void getRoutes() {
-        assertNull(mapService.getRoutes());
+        assertNull(gtfsDataHolder.getRoutes());
     }
 
     @Test
     void getTripIdTotrips() {
-        assertNull(mapService.getTripIdTotrips());
+        assertNull(gtfsDataHolder.getTripIdTotrips());
     }
 }

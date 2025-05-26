@@ -8,7 +8,7 @@ import com.opencsv.bean.CsvBindByName;
  *
  * @author Sofie Van Dingenen
  */
-public class CalendarGtfs {
+public class Calendar {
     @CsvBindByName
     private String service_id;
     @CsvBindByName

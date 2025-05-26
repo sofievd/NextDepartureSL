@@ -4,6 +4,7 @@ import com.opencsv.bean.CsvToBeanBuilder;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import se.iths.nextdeparturesl.model.*;
+import se.iths.nextdeparturesl.model.Calendar;
 
 import java.io.*;
 import java.math.BigInteger;
@@ -17,14 +18,15 @@ import java.util.zip.ZipInputStream;
  *
  * @author Sofie Van Dingenen
  */
-public class FileUtil {
+public class GtfsFileHandler {
 
-private static final Logger logger = LogManager.getLogger();
-    public FileUtil() {
+    private static final Logger logger = LogManager.getLogger();
+
+    public GtfsFileHandler() {
     }
 
     public List<String> getStopNameList(String filePath) {
-         logger.info("creating list of stop names");
+        logger.info("creating list of stop names");
         Set<String> stopNameSet = new HashSet<>();
         List<Stop> stopList = parseCsvToStop(filePath);
         for (Stop stop : stopList) {
@@ -32,7 +34,6 @@ private static final Logger logger = LogManager.getLogger();
         }
         return stopNameSet.stream().toList();
     }
-
 
     public List<BigInteger> getServiceIDListFromTripList(List<Trip> tripList) {
         logger.info("creating list of service Ids from a list of trips");
@@ -49,8 +50,8 @@ private static final Logger logger = LogManager.getLogger();
     public List<BigInteger> getStopIdListWithStopName(String searchString, List<Stop> stopList) {
         ArrayList<BigInteger> resultList = new ArrayList<>();
         for (Stop stop : stopList) {
-            if (stop.getStop_name().contains(searchString) && stop.getLocation_type().equals("0") ) {
-                resultList.add(new BigInteger(stop.getStop_id()));
+            if (stop.getStop_name().contains(searchString) && stop.getLocation_type().equals("0")) {
+                resultList.add(new BigInteger(stop.getStopId()));
             }
         }
         return resultList;
@@ -58,7 +59,7 @@ private static final Logger logger = LogManager.getLogger();
 
     public Set<BigInteger> getTripListWithServiceId(BigInteger serviceId, List<Trip> tripList) {
         Set<BigInteger> resultList = new HashSet<>();
-        for(Trip trip : tripList) {
+        for (Trip trip : tripList) {
             if (new BigInteger(trip.getService_id()).equals(serviceId)) {
                 resultList.add(new BigInteger(trip.getTrip_id()));
             }
@@ -78,12 +79,11 @@ private static final Logger logger = LogManager.getLogger();
         }
     }
 
-
     public List<StopTime> parseCsvToStopTime(String path) {
         logger.info("Starting parsing CSV StopTime file");
         try {
-            return new CsvToBeanBuilder<StopTime>(new FileReader(path))
-                    .withType(StopTime.class).build().parse();
+            CsvToBeanBuilder<StopTime> stopTimeCsvToBeanBuilder = new CsvToBeanBuilder<>(new FileReader(path));
+            return stopTimeCsvToBeanBuilder.withType(StopTime.class).build().parse();
         } catch (FileNotFoundException e) {
             logger.error("Could not find file {}", path);
             logger.error(e.getMessage());
@@ -115,12 +115,11 @@ private static final Logger logger = LogManager.getLogger();
         }
     }
 
-
-    public List<CalendarGtfs> parseCsvToCalendar(String path) {
+    public List<Calendar> parseCsvToCalendar(String path) {
         logger.info("Starting parsing CSV Calendar file");
         try {
-            return new CsvToBeanBuilder<CalendarGtfs>(new FileReader(path))
-                    .withType(CalendarGtfs.class).build().parse();
+            return new CsvToBeanBuilder<Calendar>(new FileReader(path))
+                    .withType(Calendar.class).build().parse();
         } catch (FileNotFoundException e) {
             logger.error("Could not find file {}", path);
             logger.error(e.getMessage());

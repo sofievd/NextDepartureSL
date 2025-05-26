@@ -19,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 class SearchServiceTest {
     private SearchService searchService;
 
-    private MapService mapService;
+    private GtfsDataHolder gtfsDataHolder;
     private Map<BigInteger, List<StopTime>> StopIdTostopTimes;
     private Map<BigInteger, Trip> TripIdTotrips;
     private Map<String, Route> routes;
@@ -29,16 +29,16 @@ class SearchServiceTest {
 
     @BeforeEach
     void setUp() {
-        mapService = new MapService();
-        searchService = new SearchService(mapService);
-        searchService.testSetUp();
+        gtfsDataHolder = new GtfsDataHolder("src/test/resources/GTFS_SL_TEST/");
+        searchService = new SearchService(gtfsDataHolder);
+        searchService.setUp();
     }
 
     @Test
     void getStationList() {
         List<String> stations = searchService.getStationList();
         assertNotNull(stations);
-        assertEquals(0, stations.size());
+        assertEquals(5, stations.size());
     }
 
     @Test
