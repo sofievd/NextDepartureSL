@@ -22,51 +22,51 @@ public class Route {
     @CsvBindByName
     private String route_desc;
 
-    public String getRoute_id() {
+    public String getRouteId() {
         return route_id;
     }
 
-    public void setRoute_id(String route_id) {
+    public void setRouteId(String route_id) {
         this.route_id = route_id;
     }
 
-    public String getAgency_id() {
+    public String getAgencyId() {
         return agency_id;
     }
 
-    public void setAgency_id(String agency_id) {
+    public void setAgencyId(String agency_id) {
         this.agency_id = agency_id;
     }
 
-    public String getRoute_short_name() {
+    public String getRouteShortName() {
         return route_short_name;
     }
 
-    public void setRoute_short_name(String route_short_name) {
+    public void setRouteShortName(String route_short_name) {
         this.route_short_name = route_short_name;
     }
 
-    public String getRoute_long_name() {
+    public String getRouteLongName() {
         return route_long_name;
     }
 
-    public void setRoute_long_name(String route_long_name) {
+    public void setRouteLongName(String route_long_name) {
         this.route_long_name = route_long_name;
     }
 
-    public String getRoute_type() {
+    public String getRouteType() {
         return route_type;
     }
 
-    public void setRoute_type(String route_type) {
+    public void setRouteType(String route_type) {
         this.route_type = route_type;
     }
 
-    public String getRoute_desc() {
+    public String getRouteDesc() {
         return route_desc;
     }
 
-    public void setRoute_desc(String route_desc) {
+    public void setRouteDesc(String route_desc) {
         this.route_desc = route_desc;
     }
 

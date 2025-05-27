@@ -88,12 +88,12 @@ public class SearchService {
         log.info("making stop times map from StopTimes List");
         Map<String, List<StopTime>> stopTimesMap = new HashMap<>();
         for (StopTime stopTime : stopTimeslist) {
-            if (stopTimesMap.containsKey(stopTime.getTrip_id())) {
-                stopTimesMap.get(stopTime.getTrip_id()).add(stopTime);
+            if (stopTimesMap.containsKey(stopTime.getTripId())) {
+                stopTimesMap.get(stopTime.getTripId()).add(stopTime);
             } else {
                 List<StopTime> stopTimes = new ArrayList<>();
                 stopTimes.add(stopTime);
-                stopTimesMap.put(stopTime.getTrip_id(), stopTimes);
+                stopTimesMap.put(stopTime.getTripId(), stopTimes);
             }
         }
         return stopTimesMap;
@@ -117,7 +117,7 @@ public class SearchService {
         Set<BigInteger> calendarId = new HashSet<>();
         Trip trip = TripIdTotrips.get(tripId);
         if (TripIdTotrips.containsKey(tripId)) {
-            calendarId.add(new BigInteger(trip.getService_id()));
+            calendarId.add(new BigInteger(trip.getServiceId()));
         } else {
             log.warn("no trip found with id {}", tripId);
             return calendarId;
@@ -132,7 +132,7 @@ public class SearchService {
             List<CalendarDate> calendarDateList = calendarDates.get(serviceID);
             for (CalendarDate calendarDate : calendarDateList) {
                 if (calendarDate.getDate().equals(date)) {
-                    calendarDateId.add(new BigInteger(calendarDate.getService_id()));
+                    calendarDateId.add(new BigInteger(calendarDate.getServiceId()));
                 }
             }
         } else {
@@ -150,7 +150,7 @@ public class SearchService {
             List<CalendarDate> calendarDateList = calendarDates.get(serviceID);
             for (CalendarDate calendarDate : calendarDateList) {
                 if (calendarDate.getDate().equals(tomorrow)) {
-                    calendarDateId.add(new BigInteger(calendarDate.getService_id()));
+                    calendarDateId.add(new BigInteger(calendarDate.getServiceId()));
                 }
             }
         } else {
@@ -178,8 +178,8 @@ public class SearchService {
         log.debug("getting stop times with trip {}", trips);
         Set<StopTime> stopTimeList = new HashSet<>();
         for (Trip trip : trips) {
-            if (map.containsKey(trip.getTrip_id())) {
-                stopTimeList.addAll(map.get(trip.getTrip_id()));
+            if (map.containsKey(trip.getTripId())) {
+                stopTimeList.addAll(map.get(trip.getTripId()));
             }
         }
         return stopTimeList;
@@ -189,9 +189,9 @@ public class SearchService {
         log.info("getting departures with stopTime for day {} and time {}", date, timeNow);
         List<Departure> departures = new ArrayList<>();
         for (StopTime stopTime : stopTimes) {
-            Trip trip = TripIdTotrips.get(new BigInteger(stopTime.getTrip_id()));
-            Route route = routes.get(trip.getRoute_id());
-            String parseTime = stopTime.getDeparture_time();
+            Trip trip = TripIdTotrips.get(new BigInteger(stopTime.getTripId()));
+            Route route = routes.get(trip.getRouteId());
+            String parseTime = stopTime.getDepartureTime();
 
             if (parseTime.compareTo(timeNow) > 0) {
                 createDeparture(stopTime, route, departures, date);
@@ -203,14 +203,14 @@ public class SearchService {
 
     private void createDeparture(StopTime stopTime, Route route, List<Departure> departures, String date) {
         log.info("Creating a departure from stopTime {}, route {} and date {}", stopTime, route, date);
-        String destination = stopTime.getStop_headsign();
-        String departureTime = date + "-" + stopTime.getDeparture_time();
-        String arrivalTime = date + "-" + stopTime.getArrival_time();
-        String vehicleType = vehicleTypeConverter.convert(route.getRoute_type());
-        String vehicleTypeCode = route.getRoute_type();
-        String routeLongName = route.getRoute_long_name();
-        String routeDescription = route.getRoute_desc();
-        String lineNumber = route.getRoute_short_name();
+        String destination = stopTime.getStopHeadsign();
+        String departureTime = date + "-" + stopTime.getDepartureTime();
+        String arrivalTime = date + "-" + stopTime.getArrivalTime();
+        String vehicleType = vehicleTypeConverter.convert(route.getRouteType());
+        String vehicleTypeCode = route.getRouteType();
+        String routeLongName = route.getRouteLongName();
+        String routeDescription = route.getRouteDesc();
+        String lineNumber = route.getRouteShortName();
 
         Departure departure = new Departure(destination, departureTime, arrivalTime, vehicleType, vehicleTypeCode, routeLongName, routeDescription, lineNumber);
         departures.add(departure);
@@ -220,8 +220,8 @@ public class SearchService {
         log.info("getting departures with stopTime {} and date {}", stopTimes, date);
         List<Departure> departures = new ArrayList<>();
         for (StopTime stopTime : stopTimes) {
-            Trip trip = TripIdTotrips.get(new BigInteger(stopTime.getTrip_id()));
-            Route route = routes.get(trip.getRoute_id());
+            Trip trip = TripIdTotrips.get(new BigInteger(stopTime.getTripId()));
+            Route route = routes.get(trip.getRouteId());
 
             createDeparture(stopTime, route, departures, date);
         }
@@ -254,8 +254,8 @@ public class SearchService {
         stopTimesList = getStopTimesFromStationId(StationIdList);
         List<StopTime> tempList = new ArrayList<>();
         for (StopTime stopTime : stopTimesList) {
-            if (stopTime.getStop_headsign().equalsIgnoreCase(stopName) ||
-                    stopTime.getStop_headsign().equalsIgnoreCase(stopName + " station")) {
+            if (stopTime.getStopHeadsign().equalsIgnoreCase(stopName) ||
+                    stopTime.getStopHeadsign().equalsIgnoreCase(stopName + " station")) {
                 tempList.add(stopTime);
             }
         }
@@ -276,7 +276,7 @@ public class SearchService {
         List<Trip> tripsFromService = getTripsFromTodaysServiceIds(serviceIdListNow);
         tripList.retainAll(tripsFromService);
         Set<StopTime> stopTimesFromService = getStopTimeWithTrip(tripList, stopTimeMap);
-        List<StopTime> stopTimeList = stopTimesFromService.stream().sorted(Comparator.comparing(StopTime::getDeparture_time)).toList();
+        List<StopTime> stopTimeList = stopTimesFromService.stream().sorted(Comparator.comparing(StopTime::getDepartureTime)).toList();
         departuresList.addAll(getDeparturesWithStopTimeToday(time, stopTimeList, date));
 
         List<Departure> departures = new ArrayList<>();
@@ -299,7 +299,7 @@ public class SearchService {
         String tomorrow = LocalDateTime.now().plusDays(1).format(DateTimeFormatter.ofPattern("yyyyMMdd"));
 
         Set<StopTime> stopTimesFromService = getStopTimeWithTrip(tripList, stopTimeMap);
-        List<StopTime> stopTimeList = stopTimesFromService.stream().sorted(Comparator.comparing(StopTime::getDeparture_time)).toList();
+        List<StopTime> stopTimeList = stopTimesFromService.stream().sorted(Comparator.comparing(StopTime::getDepartureTime)).toList();
         departuresList = getDeparturesWithStopTimeTomorow(stopTimeList, tomorrow);
         return departuresList;
     }
@@ -311,7 +311,7 @@ public class SearchService {
             tripFromServiceSet.addAll(getTripsWithServiceId(serviceId));
         }
         List<Trip> tripFromService = new ArrayList<>(tripFromServiceSet);
-        tripFromService.sort(Comparator.comparing(Trip::getTrip_id));
+        tripFromService.sort(Comparator.comparing(Trip::getTripId));
         return tripFromService;
     }
 
@@ -344,7 +344,7 @@ public class SearchService {
         Set<BigInteger> serviceIdSet = new HashSet<>();
 
         for (Trip tripId : tripList) {
-            serviceIdSet.addAll(getServiceIdWithTripId(new BigInteger(tripId.getTrip_id())));
+            serviceIdSet.addAll(getServiceIdWithTripId(new BigInteger(tripId.getTripId())));
         }
         List<BigInteger> serviceIdList = new ArrayList<>(serviceIdSet);
         serviceIdList.sort(Comparator.comparing(BigInteger::intValue));
@@ -355,10 +355,10 @@ public class SearchService {
         log.info("getting trips from stop times");
         Set<Trip> tripSet = new HashSet<>();
         for (StopTime stopTime : stopTimesList) {
-            tripSet.addAll(getTripWithTripId(new BigInteger(stopTime.getTrip_id())));
+            tripSet.addAll(getTripWithTripId(new BigInteger(stopTime.getTripId())));
         }
         List<Trip> tripList = new ArrayList<>(tripSet);
-        tripList.sort(Comparator.comparing(Trip::getTrip_id));
+        tripList.sort(Comparator.comparing(Trip::getTripId));
         return tripList;
     }
 
@@ -369,7 +369,7 @@ public class SearchService {
             stopTimeSet.addAll(getStopTimesWithStationId(stationId));
         }
         List<StopTime> stopTimes = new ArrayList<>(stopTimeSet);
-        stopTimes.sort(Comparator.comparing(StopTime::getDeparture_time));
+        stopTimes.sort(Comparator.comparing(StopTime::getDepartureTime));
         return stopTimes;
     }
 }

@@ -65,7 +65,7 @@ public class GtfsDataHolder {
         Map<BigInteger, List<StopTime>> map = new HashMap<>();
         List<StopTime> stopTimeList = gtfsFileHandler.parseCsvToStopTime(path);
         for (StopTime stopTime : stopTimeList) {
-            BigInteger stopId = new BigInteger(stopTime.getStop_id());
+            BigInteger stopId = new BigInteger(stopTime.getStopId());
             if (map.containsKey(stopId)) {
                 map.get(stopId).add(stopTime);
             } else {
@@ -87,7 +87,7 @@ public class GtfsDataHolder {
         Map<BigInteger, Trip> map = new HashMap<>();
         List<Trip> tripList = gtfsFileHandler.parseCsvToTrip(path); //getTripList();
         for (Trip trip : tripList) {
-            BigInteger tripId = new BigInteger(trip.getTrip_id());
+            BigInteger tripId = new BigInteger(trip.getTripId());
             map.put(tripId, trip);
         }
         return map;
@@ -103,7 +103,7 @@ public class GtfsDataHolder {
         Map<String, Route> map = new HashMap<>();
         List<Route> routeList = gtfsFileHandler.parseCsvToRoute(path);
         for (Route route : routeList) {
-            String routeId = route.getRoute_id();
+            String routeId = route.getRouteId();
             map.put(routeId, route);
         }
         return map;
@@ -119,7 +119,7 @@ public class GtfsDataHolder {
         Map<BigInteger, List<CalendarDate>> map = new HashMap<>();
         List<CalendarDate> calendarDateList = gtfsFileHandler.parseCsvToCalendarDate(path);
         for (CalendarDate calendar : calendarDateList) {
-            BigInteger calendarDateId = new BigInteger(calendar.getService_id());
+            BigInteger calendarDateId = new BigInteger(calendar.getServiceId());
             if (map.containsKey(calendarDateId)) {
                 map.get(calendarDateId).add(calendar);
             } else {

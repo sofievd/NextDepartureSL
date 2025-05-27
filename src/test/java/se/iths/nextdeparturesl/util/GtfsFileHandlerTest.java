@@ -73,35 +73,35 @@ class GtfsFileHandlerTest {
         List<Stop> stopList = gtfsFileHandler.parseCsvToStop("src/test/resources/GTFS_SL_TEST/stops.txt");
 
         assertEquals(5, stopList.size());
-        assertEquals("Stavsnäs", stopList.get(0).getStop_name());
+        assertEquals("Stavsnäs", stopList.get(0).getStopName());
     }
 
     @Test
     void parseCsvToStopTime() {
         List<StopTime> stopTimeList = gtfsFileHandler.parseCsvToStopTime("src/test/resources/GTFS_SL_TEST/stop-times.txt");
         assertEquals(32, stopTimeList.size());
-        assertEquals("Hagede via Styrsvik Långvik Sandhamn", stopTimeList.get(0).getStop_headsign());
+        assertEquals("Hagede via Styrsvik Långvik Sandhamn", stopTimeList.get(0).getStopHeadsign());
     }
 
     @Test
     void parseCsvToTrip() {
         List<Trip> tripList = gtfsFileHandler.parseCsvToTrip("src/test/resources/GTFS_SL_TEST/trips.txt");
         assertEquals(31, tripList.size());
-        assertEquals("19", tripList.get(0).getService_id());
+        assertEquals("19", tripList.get(0).getServiceId());
     }
 
     @Test
     void parseCsvToRoute() {
         List<Route> routeList = gtfsFileHandler.parseCsvToRoute("src/test/resources/GTFS_SL_TEST/routes.txt");
         assertEquals(1, routeList.size());
-        assertEquals("Waxholmsbolaget", routeList.get(0).getRoute_desc());
+        assertEquals("Waxholmsbolaget", routeList.get(0).getRouteDesc());
     }
 
     @Test
     void parseCsvToCalendar() {
         List<Calendar> calendarList = gtfsFileHandler.parseCsvToCalendar("src/test/resources/GTFS_SL_TEST/calendar.txt");
         assertEquals(10, calendarList.size());
-        assertEquals("228", calendarList.get(1).getService_id());
+        assertEquals("228", calendarList.get(1).getServiceId());
     }
 
     @Test

@@ -16,11 +16,11 @@ public class CalendarDate {
     @CsvBindByName
     private String exception_type;
 
-    public String getService_id() {
+    public String getServiceId() {
         return service_id;
     }
 
-    public void setService_id(String service_id) {
+    public void setServiceId(String service_id) {
         this.service_id = service_id;
     }
 
@@ -32,11 +32,11 @@ public class CalendarDate {
         this.date = date;
     }
 
-    public String getException_type() {
+    public String getExceptionType() {
         return exception_type;
     }
 
-    public void setException_type(String exception_type) {
+    public void setExceptionType(String exception_type) {
         this.exception_type = exception_type;
     }
 }

@@ -30,11 +30,11 @@ public class Calendar {
     @CsvBindByName
     private String end_date;
 
-    public String getService_id() {
+    public String getServiceId() {
         return service_id;
     }
 
-    public void setService_id(String service_id) {
+    public void setServiceId(String service_id) {
         this.service_id = service_id;
     }
 

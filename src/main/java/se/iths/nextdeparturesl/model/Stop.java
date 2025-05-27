@@ -25,59 +25,59 @@ public class Stop {
     private String platform_code;
 
 
-    public String getStop_id() {
+    public String getStopId() {
         return stop_id;
     }
 
-    public void setStop_id(String stop_id) {
+    public void setStopId(String stop_id) {
         this.stop_id = stop_id;
     }
 
-    public String getStop_name() {
+    public String getStopName() {
         return stop_name;
     }
 
-    public void setStop_name(String stop_name) {
+    public void setStopName(String stop_name) {
         this.stop_name = stop_name;
     }
 
-    public String getStop_lat() {
+    public String getStopLat() {
         return stop_lat;
     }
 
-    public void setStop_lat(String stop_lat) {
+    public void setStopLat(String stop_lat) {
         this.stop_lat = stop_lat;
     }
 
-    public String getStop_lon() {
+    public String getStopLon() {
         return stop_lon;
     }
 
-    public void setStop_lon(String stop_lon) {
+    public void setStopLon(String stop_lon) {
         this.stop_lon = stop_lon;
     }
 
-    public String getLocation_type() {
+    public String getLocationType() {
         return location_type;
     }
 
-    public void setLocation_type(String location_type) {
+    public void setLocationType(String location_type) {
         this.location_type = location_type;
     }
 
-    public String getParent_station() {
+    public String getParentStation() {
         return parent_station;
     }
 
-    public void setParent_station(String parent_station) {
+    public void setParentStation(String parent_station) {
         this.parent_station = parent_station;
     }
 
-    public String getPlatform_code() {
+    public String getPlatformCode() {
         return platform_code;
     }
 
-    public void setPlatform_code(String platform_code) {
+    public void setPlatformCode(String platform_code) {
         this.platform_code = platform_code;
     }
 }

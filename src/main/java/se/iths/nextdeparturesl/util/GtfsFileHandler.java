@@ -30,7 +30,7 @@ public class GtfsFileHandler {
         Set<String> stopNameSet = new HashSet<>();
         List<Stop> stopList = parseCsvToStop(filePath);
         for (Stop stop : stopList) {
-            stopNameSet.add(stop.getStop_name());
+            stopNameSet.add(stop.getStopName());
         }
         return stopNameSet.stream().toList();
     }
@@ -39,7 +39,7 @@ public class GtfsFileHandler {
         logger.info("creating list of service Ids from a list of trips");
         List<BigInteger> serviceIdList = new ArrayList<>();
         for (Trip trip : tripList) {
-            BigInteger serviceId = new BigInteger(trip.getService_id());
+            BigInteger serviceId = new BigInteger(trip.getServiceId());
             if (!serviceIdList.contains(serviceId)) {
                 serviceIdList.add(serviceId);
             }
@@ -50,8 +50,8 @@ public class GtfsFileHandler {
     public List<BigInteger> getStopIdListWithStopName(String searchString, List<Stop> stopList) {
         ArrayList<BigInteger> resultList = new ArrayList<>();
         for (Stop stop : stopList) {
-            if (stop.getStop_name().contains(searchString) && stop.getLocation_type().equals("0")) {
-                resultList.add(new BigInteger(stop.getStop_id()));
+            if (stop.getStopName().contains(searchString) && stop.getLocationType().equals("0")) {
+                resultList.add(new BigInteger(stop.getStopId()));
             }
         }
         return resultList;
@@ -60,8 +60,8 @@ public class GtfsFileHandler {
     public Set<BigInteger> getTripListWithServiceId(BigInteger serviceId, List<Trip> tripList) {
         Set<BigInteger> resultList = new HashSet<>();
         for (Trip trip : tripList) {
-            if (new BigInteger(trip.getService_id()).equals(serviceId)) {
-                resultList.add(new BigInteger(trip.getTrip_id()));
+            if (new BigInteger(trip.getServiceId()).equals(serviceId)) {
+                resultList.add(new BigInteger(trip.getTripId()));
             }
         }
         return resultList;
