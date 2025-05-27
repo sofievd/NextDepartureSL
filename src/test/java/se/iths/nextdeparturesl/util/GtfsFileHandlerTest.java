@@ -25,7 +25,7 @@ class GtfsFileHandlerTest {
 
 //    @Test
 //    void createStopTimeMapWithStopId() {
-//        Map<BigInteger, List<StopTime>> map = fileUtil.createStopTimeMapWithStopId("src/test/resources/GTFS_SL_TEST/stop_times.txt");
+//        Map<BigInteger, List<StopTime>> map = fileUtil.createStopTimeMapWithStopId("src/test/resources/GTFS_SL_TEST/stop-times.txt");
 //
 //        assertFalse(map.isEmpty());
 //
@@ -78,7 +78,7 @@ class GtfsFileHandlerTest {
 
     @Test
     void parseCsvToStopTime() {
-        List<StopTime> stopTimeList = gtfsFileHandler.parseCsvToStopTime("src/test/resources/GTFS_SL_TEST/stop_times.txt");
+        List<StopTime> stopTimeList = gtfsFileHandler.parseCsvToStopTime("src/test/resources/GTFS_SL_TEST/stop-times.txt");
         assertEquals(32, stopTimeList.size());
         assertEquals("Hagede via Styrsvik Långvik Sandhamn", stopTimeList.get(0).getStop_headsign());
     }

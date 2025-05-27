@@ -51,7 +51,7 @@ public class GtfsFileHandler {
         ArrayList<BigInteger> resultList = new ArrayList<>();
         for (Stop stop : stopList) {
             if (stop.getStop_name().contains(searchString) && stop.getLocation_type().equals("0")) {
-                resultList.add(new BigInteger(stop.getStopId()));
+                resultList.add(new BigInteger(stop.getStop_id()));
             }
         }
         return resultList;

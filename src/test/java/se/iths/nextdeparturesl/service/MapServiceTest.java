@@ -23,7 +23,7 @@ class MapServiceTest {
 
     @Test
     void createStopTimeMapWithStopId_notEmpty_shouldReturnStopTimes() {
-        Map<BigInteger, List<StopTime>> map = gtfsDataHolder.createStopTimeMapWithStopId("stop_times.txt");
+        Map<BigInteger, List<StopTime>> map = gtfsDataHolder.createStopTimeMapWithStopId("stop-times.txt");
 
         assertFalse(map.isEmpty());
 

@@ -43,4 +43,27 @@ public class Departure {
         return vehicleType;
     }
 
+    public String getDepartureTime() {
+        return departureTime;
+    }
+
+    public String getArrivalTime() {
+        return arrivalTime;
+    }
+
+    public String getVehicleTypeCode() {
+        return vehicleTypeCode;
+    }
+
+    public String getRouteName() {
+        return routeName;
+    }
+
+    public String getRouteDescription() {
+        return routeDescription;
+    }
+
+    public String getLineNumber() {
+        return lineNumber;
+    }
 }

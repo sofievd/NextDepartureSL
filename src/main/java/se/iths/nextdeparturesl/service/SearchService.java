@@ -278,11 +278,17 @@ public class SearchService {
         Set<StopTime> stopTimesFromService = getStopTimeWithTrip(tripList, stopTimeMap);
         List<StopTime> stopTimeList = stopTimesFromService.stream().sorted(Comparator.comparing(StopTime::getDeparture_time)).toList();
         departuresList.addAll(getDeparturesWithStopTimeToday(time, stopTimeList, date));
+
         List<Departure> departures = new ArrayList<>();
-        for (int i = 0; i < 20; i++) {
-            departures.add(departuresList.get(i));
+
+        if(departuresList.isEmpty()){
+            return departuresList;
+        }else{
+            for (int i = 0; i < 20; i++) {
+                departures.add(departuresList.get(i));
+            }
+            return departures;
         }
-        return departures;
     }
 
     public List<Departure> getDeparturesTomorow(List<Trip> tripList, List<BigInteger> serviceIdList, Map<String, List<StopTime>> stopTimeMap) {
