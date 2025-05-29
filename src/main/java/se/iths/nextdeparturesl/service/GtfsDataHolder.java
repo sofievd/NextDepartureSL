@@ -28,11 +28,11 @@ public class GtfsDataHolder {
     private final String path;
 
     private final GtfsFileHandler gtfsFileHandler = new GtfsFileHandler();
-    private final String STOP_FILE_NAME = "stops.txt";
-    private final String STOP_TIMES_FILE_NAME = "stop_times.txt";
-    private final String TRIP_FILE_NAME = "trips.txt";
-    private final String ROUTE_FILE_NAME = "routes.txt";
-    private final String CALENDAR_DATE_FILE_NAME = "calendar_dates.txt";
+    private static final String STOP_FILE_NAME = "stops.txt";
+    private static final String STOP_TIMES_FILE_NAME = "stop_times.txt";
+    private static final String TRIP_FILE_NAME = "trips.txt";
+    private static final String ROUTE_FILE_NAME = "routes.txt";
+    private static final String CALENDAR_DATE_FILE_NAME = "calendar_dates.txt";
 
     public GtfsDataHolder(String path) {
         this.path = path;

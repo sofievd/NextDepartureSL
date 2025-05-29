@@ -8,6 +8,7 @@ import se.iths.nextdeparturesl.model.StopTime;
 import se.iths.nextdeparturesl.model.Trip;
 import se.iths.nextdeparturesl.view.Departure;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -73,7 +74,6 @@ class SearchServiceTest {
         Set<Trip> trips = searchService.getTripsWithServiceId("19");
         assertNotNull(trips);
         assertEquals(7, trips.size());
-
     }
 
     @Test
@@ -92,20 +92,19 @@ class SearchServiceTest {
         Map<String, List<StopTime>> map = searchService.makeMap(searchService.getStopTimesWithStationId("9022001000101001").stream().toList());
         Set<StopTime> stopTimes = searchService.getStopTimeWithTrip(trips.stream().toList(), map);
 
-        List<Departure> departures = searchService.getDeparturesWithStopTimeToday("19:30:00", stopTimes.stream().toList(), "20250202");
+        List<Departure> departures = searchService.getDeparturesWithStopTimeToday( stopTimes.stream().toList(),
+                LocalDateTime.of(2025,2,2,19,30,0));
         for (Departure departure : departures) {
             System.out.println(departure);
         }
         assertNotNull(departures);
         assertEquals(1, departures.size());
-
-
-
     }
 
     @Test
     void getDeparturesFromStopName() {
-        List<Departure> departures = searchService.getDeparturesFromStopName("Stavsnäs", "20250202-19:30:00");
+        List<Departure> departures = searchService.getDeparturesFromStopName("Stavsnäs",
+                LocalDateTime.of(2025,2,2,19,30,0));
         assertNotNull(departures);
         for (Departure departure : departures) {
             System.out.println(departure);

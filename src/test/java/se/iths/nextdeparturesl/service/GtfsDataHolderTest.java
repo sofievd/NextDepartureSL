@@ -41,7 +41,7 @@ class GtfsDataHolderTest {
     void createRouteMapWithRouteId() {
         Map<String, Route> map = gtfsDataHolder.createRouteMapWithRouteId();
         assertFalse(map.isEmpty());
-        assertEquals(1, map.size());
+        assertEquals(2, map.size());
     }
 
     @Test

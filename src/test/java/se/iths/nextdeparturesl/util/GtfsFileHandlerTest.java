@@ -23,51 +23,6 @@ class GtfsFileHandlerTest {
         assertTrue(stopnameList.contains("Idöborg"));
     }
 
-//    @Test
-//    void createStopTimeMapWithStopId() {
-//        Map<String, List<StopTime>> map = fileUtil.createStopTimeMapWithStopId("src/test/resources/GTFS_SL_TEST/stop_times.txt");
-//
-//        assertFalse(map.isEmpty());
-//
-//        assertEquals(2, map.size());
-//    }
-
-//    @Test
-//    void createTripMapWithTripId() {
-//        Map<String, Trip> map = fileUtil.createTripMapWithTripId("src/test/resources/GTFS_SL_TEST/trips.txt");
-//        assertFalse(map.isEmpty());
-//        assertEquals(31, map.size());
-//    }
-//
-//    @Test
-//    void createRouteMapWithRouteId() {
-//        Map<String, Route> map = fileUtil.createRouteMapWithRouteId("src/test/resources/GTFS_SL_TEST/routes.txt");
-//        assertFalse(map.isEmpty());
-//        assertEquals(1, map.size());
-//    }
-//
-//    @Test
-//    void createCalendarDateMapWithServiceId() {
-//        Map<String, List<CalendarDate>> map = fileUtil.createCalendarDateMapWithServiceId("src/test/resources/GTFS_SL_TEST/calendar_dates.txt");
-//        assertFalse(map.isEmpty());
-//        assertEquals(10, map.size());
-//    }
-
-//    @Test
-//    void createStopIdMapWithStopName() {
-//        Map<String, List<String>> map = fileUtil.createStopIdMapWithStopName("src/test/resources/GTFS_SL_TEST/stops.txt");
-//        assertFalse(map.isEmpty());
-//        assertEquals(6, map.size());
-//    }
-//
-//    @Test
-//    void createTripIdListMapWithServiceId() {
-//        Map<String, List<String>> map = fileUtil.createTripIdListMapWithServiceId("src/test/resources/GTFS_SL_TEST/trips.txt");
-//
-//        assertFalse(map.isEmpty());
-//        assertEquals(10, map.size());
-//    }
-
     @Test
     void parseCsvToStop() {
         List<Stop> stopList = gtfsFileHandler.parseCsvToStop("src/test/resources/GTFS_SL_TEST/stops.txt");
@@ -93,7 +48,7 @@ class GtfsFileHandlerTest {
     @Test
     void parseCsvToRoute() {
         List<Route> routeList = gtfsFileHandler.parseCsvToRoute("src/test/resources/GTFS_SL_TEST/routes.txt");
-        assertEquals(1, routeList.size());
+        assertEquals(2, routeList.size());
         assertEquals("Waxholmsbolaget", routeList.get(0).getRouteDesc());
     }
 

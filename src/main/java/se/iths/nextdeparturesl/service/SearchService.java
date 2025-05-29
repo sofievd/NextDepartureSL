@@ -9,6 +9,7 @@ import se.iths.nextdeparturesl.model.Trip;
 import se.iths.nextdeparturesl.util.VehicleTypeConverter;
 import se.iths.nextdeparturesl.view.Departure;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -16,6 +17,9 @@ import java.util.*;
 public class SearchService {
 
     private static final Logger log = LogManager.getLogger();
+    private static final String GTFS_BOARDING_TYPE_NO_BOARDING = "1";
+    private static final int MAX_RESULTS = 20;
+    public static final int MAX_DAYS_FORWARD = 3;
 
     private GtfsDataHolder gtfsDataHolder = new GtfsDataHolder("src/main/resources/static/GTFS_SL/");
     private final VehicleTypeConverter vehicleTypeConverter = new VehicleTypeConverter();
@@ -133,27 +137,10 @@ public class SearchService {
         List<CalendarDate> calendarDateList = serviceIdToCalendarDates.get(serviceID);
         for (CalendarDate calendarDate : calendarDateList) {
             if (calendarDate.getDate().equals(date)) {
-               return true;
+                return true;
             }
         }
         return false;
-    }
-
-    public Set<String> getTomorrowServiceIdWithServiceId(String serviceID) {
-        log.debug("getting tomorrow service id with service id {}", serviceID);
-        Set<String> calendarDateId = new HashSet<>();
-        String tomorrow = LocalDateTime.now().plusDays(1).format(DateTimeFormatter.ofPattern("yyyyMMdd"));
-        if (serviceIdToCalendarDates.containsKey(serviceID)) {
-            List<CalendarDate> calendarDateList = serviceIdToCalendarDates.get(serviceID);
-            for (CalendarDate calendarDate : calendarDateList) {
-                if (calendarDate.getDate().equals(tomorrow)) {
-                    calendarDateId.add(calendarDate.getServiceId());
-                }
-            }
-        } else {
-            log.warn("no service found with id {} for date {}", serviceID, tomorrow);
-        }
-        return calendarDateId;
     }
 
     public Set<Trip> getTripsWithServiceId(String serviceId) {
@@ -182,16 +169,18 @@ public class SearchService {
         return stopTimeList;
     }
 
-    public List<Departure> getDeparturesWithStopTimeToday(String timeNow, List<StopTime> stopTimes, String date) {
-        log.info("getting departures with stopTime for day {} and time {}", date, timeNow);
+    public List<Departure> getDeparturesWithStopTimeToday(List<StopTime> stopTimes, LocalDateTime date) {
+        String dateStr = date.format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+        String timeStr = date.format(DateTimeFormatter.ofPattern("HH:mm:ss"));
+        log.info("getting departures with stopTime for day {} and time {}", date, timeStr);
         List<Departure> departures = new ArrayList<>();
         for (StopTime stopTime : stopTimes) {
             Trip trip = tripIdToTrips.get(stopTime.getTripId());
             Route route = routeIdToRoutes.get(trip.getRouteId());
             String parseTime = stopTime.getDepartureTime();
 
-            if (parseTime.compareTo(timeNow) > 0) {
-                createDeparture(stopTime, route, departures, date);
+            if (parseTime.compareTo(timeStr) > 0) {
+                createDeparture(stopTime, route, departures, dateStr);
             }
 
         }
@@ -213,7 +202,7 @@ public class SearchService {
         departures.add(departure);
     }
 
-    public List<Departure> getDeparturesWithStopTimeTomorow(List<StopTime> stopTimes, String date) {
+    public List<Departure> getDeparturesWithStopTime(List<StopTime> stopTimes, String date) {
         log.info("getting departures with stopTime {} and date {}", stopTimes, date);
         List<Departure> departures = new ArrayList<>();
         for (StopTime stopTime : stopTimes) {
@@ -225,75 +214,61 @@ public class SearchService {
         return departures;
     }
 
-    public List<Departure> getDeparturesFromStopName(String stopName, String dateTime) {
-        log.info("getting departures from stopName {} and dateTime {}", stopName, dateTime);
-        String date = dateTime.substring(0, 8);
-        String time = dateTime.substring(9);
-
-        List<Departure> departuresList = new ArrayList<>();
-        List<StopTime> stopTimesList;
-        List<Trip> tripList;
-        List<String> serviceIdList;
-        List<String> serviceIdListNow;
-        List<String> serviceIdListTomorow;
+    public List<Departure> getDeparturesFromStopName(String stopName, LocalDateTime searchDateTime) {
+        log.info("getting departures from stopName {} and dateTime {}", stopName, searchDateTime);
 
         if (stopNameToStopId == null) {
             log.warn("stopNameToStopId is null, no departures found");
-            return departuresList;
+            return new ArrayList<>();
         }
-        Set<String> StationIdList = getStationIdWithName(stopName);
 
+        Set<String> StationIdList = getStationIdWithName(stopName);
         if (StationIdList.isEmpty()) {
             log.warn("no stationIdList is null/ empty, no departures found");
-            return departuresList;
+            return new ArrayList<>();
         }
 
-        stopTimesList = getStopTimesFromStationId(StationIdList);
-        List<StopTime> tempList = new ArrayList<>();
-        for (StopTime stopTime : stopTimesList) {
-            if (stopTime.getStopHeadsign().equalsIgnoreCase(stopName) ||
-                    stopTime.getStopHeadsign().equalsIgnoreCase(stopName + " station")) {
-                tempList.add(stopTime);
-            }
-        }
-        stopTimesList.removeAll(tempList);
+        List<StopTime> stopTimesList = getStopTimesFromStationId(StationIdList);
+        stopTimesList.removeIf(stopTime -> stopTime.getPickupType().equals(GTFS_BOARDING_TYPE_NO_BOARDING));
 
         Map<String, List<StopTime>> stopTimeMap = makeMap(stopTimesList);
-        tripList = getTripsFromFromStopTimes(stopTimesList);
-        serviceIdList = getServiceIdFromTrips(tripList);
+        List<Trip> tripsAtStop = getTripsFromFromStopTimes(stopTimesList);
+        List<String> serviceIdsForTripsAtStop = getServiceIdFromTrips(tripsAtStop);
 
-        if ("16:00:00".compareTo(time) < 0) {
-            serviceIdListNow = getServiceIdForTodayFromServiceIds(serviceIdList, date);
-            serviceIdListTomorow = getServiceIdForTomorrowFromServiceIds(serviceIdList);
-            departuresList = getDeparturesTomorow(tripList, serviceIdListTomorow, stopTimeMap);
+        LocalDate searchDate = searchDateTime.toLocalDate();
+        List<Departure> departuresList = getDeparturesAtDate(tripsAtStop,serviceIdsForTripsAtStop,stopTimeMap, searchDate);
+        String earliestTimeString = searchDateTime.format(DateTimeFormatter.ofPattern("yyyyMMdd-HHmmss"));
+        departuresList.removeIf(departure -> departure.getDepartureTime().compareTo(earliestTimeString) < 0);
 
-        } else {
-            serviceIdListNow = getServiceIdForTodayFromServiceIds(serviceIdList, date);
+        for (int daysOffset = 1; departuresList.size() < MAX_RESULTS && daysOffset < MAX_DAYS_FORWARD; daysOffset++) {
+            LocalDate dayAfter = LocalDateTime.now().plusDays(daysOffset).toLocalDate();
+            List<Departure> departuresTomorrow = getDeparturesAtDate(tripsAtStop, serviceIdsForTripsAtStop, stopTimeMap, dayAfter);
+            departuresList.addAll(departuresTomorrow);
         }
-        List<Trip> tripsFromService = getTripsFromTodaysServiceIds(serviceIdListNow);
-        tripList.retainAll(tripsFromService);
-        Set<StopTime> stopTimesFromService = getStopTimeWithTrip(tripList, stopTimeMap);
-        List<StopTime> stopTimeList = stopTimesFromService.stream().sorted(Comparator.comparing(StopTime::getDepartureTime)).toList();
-        departuresList.addAll(getDeparturesWithStopTimeToday(time, stopTimeList, date));
+
         departuresList.sort(Comparator.comparing(Departure::getDepartureTime));
-        int limit = Math.min(departuresList.size(), 20);
+        int limit = Math.min(departuresList.size(), MAX_RESULTS);
         return departuresList.subList(0, limit);
     }
 
-    public List<Departure> getDeparturesTomorow(List<Trip> tripList, List<String> serviceIdList, Map<String, List<StopTime>> stopTimeMap) {
-        log.info("getting departures tomorow");
-        List<Trip> tripsFromServiceTomorrow = getTripsFromTodaysServiceIds(serviceIdList);
-        tripList.retainAll(tripsFromServiceTomorrow);
-        List<Departure> departuresList;
-        String tomorrow = LocalDateTime.now().plusDays(1).format(DateTimeFormatter.ofPattern("yyyyMMdd"));
 
-        Set<StopTime> stopTimesFromService = getStopTimeWithTrip(tripList, stopTimeMap);
+    public List<Departure> getDeparturesAtDate(List<Trip> tripsAtStop, List<String> serviceIdsForTripsAtStop,
+                                               Map<String, List<StopTime>> stopTimeMap, LocalDate date) {
+        log.info("getting departures at {}", date);
+
+        String dateStr = date.format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+        List<String> serviceIdListTomorrow = getServiceIdsActiveAtDate(serviceIdsForTripsAtStop, dateStr);
+
+        List<Trip> tripsFromServiceTomorrow = getTripsForServiceIds(serviceIdListTomorrow);
+        tripsFromServiceTomorrow.retainAll(tripsAtStop);
+
+        Set<StopTime> stopTimesFromService = getStopTimeWithTrip(tripsFromServiceTomorrow, stopTimeMap);
         List<StopTime> stopTimeList = stopTimesFromService.stream().sorted(Comparator.comparing(StopTime::getDepartureTime)).toList();
-        departuresList = getDeparturesWithStopTimeTomorow(stopTimeList, tomorrow);
-        return departuresList;
+
+        return getDeparturesWithStopTime(stopTimeList, dateStr);
     }
 
-    private List<Trip> getTripsFromTodaysServiceIds(List<String> serviceIdListToday) {
+    private List<Trip> getTripsForServiceIds(List<String> serviceIdListToday) {
         log.info("getting trips from todays with serviceIdList");
         Set<Trip> tripFromServiceSet = new HashSet<>();
         for (String serviceId : serviceIdListToday) {
@@ -304,29 +279,21 @@ public class SearchService {
         return tripFromService;
     }
 
-    private List<String> getServiceIdForTodayFromServiceIds(List<String> serviceIdList, String date) {
-        log.info("getting serviceId from todays with serviceIdList");
+    private List<String> getServiceIdsActiveAtDate(List<String> serviceIdList, String date) {
+        log.info("getting serviceIds active at {}, filtering from {} ids", date, serviceIdList.size());
         Set<String> serviceIdSet = new HashSet<>();
         for (String serviceId : serviceIdList) {
-            if (isServiceIdActiveAtDate(serviceId, date)){
+            if (isServiceIdActiveAtDate(serviceId, date)) {
                 serviceIdSet.add(serviceId);
             }
         }
-        List<String> serviceIdListToday = new ArrayList<>(serviceIdSet);
-        serviceIdListToday.sort(Comparator.naturalOrder());
-        return serviceIdListToday;
+        List<String> activeIds = new ArrayList<>(serviceIdSet);
+        activeIds.sort(Comparator.naturalOrder());
+
+        log.info("Filtered {} serviceIds for date {}, retained {} ids", serviceIdList.size(), date, activeIds.size());
+        return activeIds;
     }
 
-    private List<String> getServiceIdForTomorrowFromServiceIds(List<String> serviceIdList) {
-        log.info("getting serviceId from tomorrow with serviceIdList");
-        Set<String> serviceIdSet = new HashSet<>();
-        for (String serviceId : serviceIdList) {
-            serviceIdSet.addAll(getTomorrowServiceIdWithServiceId(serviceId));
-        }
-        List<String> serviceIdListTomorrow = new ArrayList<>(serviceIdSet);
-        serviceIdListTomorrow.sort(Comparator.naturalOrder());
-        return serviceIdListTomorrow;
-    }
 
     private List<String> getServiceIdFromTrips(List<Trip> tripList) {
         log.info("getting serviceId from trips");

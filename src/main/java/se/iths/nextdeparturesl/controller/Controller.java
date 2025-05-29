@@ -30,6 +30,6 @@ searchService.setUp();
     public ResponseEntity<?> searchStation(@RequestParam String stationName) {
         log.info("searching station: {}", stationName);
         LocalDateTime now = LocalDateTime.now();
-        return ResponseEntity.ok().body(searchService.getDeparturesFromStopName(stationName,now.format(DateTimeFormatter.ofPattern("yyyyMMdd-HH:mm:ss"))));
+        return ResponseEntity.ok().body(searchService.getDeparturesFromStopName(stationName,now));
     }
 }
