@@ -7,7 +7,6 @@ import se.iths.nextdeparturesl.model.*;
 import se.iths.nextdeparturesl.model.Calendar;
 
 import java.io.*;
-import java.math.BigInteger;
 import java.util.*;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
@@ -35,11 +34,11 @@ public class GtfsFileHandler {
         return stopNameSet.stream().toList();
     }
 
-    public List<BigInteger> getServiceIDListFromTripList(List<Trip> tripList) {
+    public List<String> getServiceIDListFromTripList(List<Trip> tripList) {
         logger.info("creating list of service Ids from a list of trips");
-        List<BigInteger> serviceIdList = new ArrayList<>();
+        List<String> serviceIdList = new ArrayList<>();
         for (Trip trip : tripList) {
-            BigInteger serviceId = new BigInteger(trip.getServiceId());
+            String serviceId = trip.getServiceId();
             if (!serviceIdList.contains(serviceId)) {
                 serviceIdList.add(serviceId);
             }
@@ -47,21 +46,21 @@ public class GtfsFileHandler {
         return serviceIdList;
     }
 
-    public List<BigInteger> getStopIdListWithStopName(String searchString, List<Stop> stopList) {
-        ArrayList<BigInteger> resultList = new ArrayList<>();
+    public List<String> getStopIdListWithStopName(String searchString, List<Stop> stopList) {
+        ArrayList<String> resultList = new ArrayList<>();
         for (Stop stop : stopList) {
             if (stop.getStopName().contains(searchString) && stop.getLocationType().equals("0")) {
-                resultList.add(new BigInteger(stop.getStopId()));
+                resultList.add(stop.getStopId());
             }
         }
         return resultList;
     }
 
-    public Set<BigInteger> getTripListWithServiceId(BigInteger serviceId, List<Trip> tripList) {
-        Set<BigInteger> resultList = new HashSet<>();
+    public Set<String> getTripListWithServiceId(String serviceId, List<Trip> tripList) {
+        Set<String> resultList = new HashSet<>();
         for (Trip trip : tripList) {
-            if (new BigInteger(trip.getServiceId()).equals(serviceId)) {
-                resultList.add(new BigInteger(trip.getTripId()));
+            if (trip.getServiceId().equals(serviceId)) {
+                resultList.add(trip.getTripId());
             }
         }
         return resultList;

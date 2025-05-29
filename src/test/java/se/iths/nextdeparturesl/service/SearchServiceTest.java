@@ -8,13 +8,11 @@ import se.iths.nextdeparturesl.model.StopTime;
 import se.iths.nextdeparturesl.model.Trip;
 import se.iths.nextdeparturesl.view.Departure;
 
-import java.math.BigInteger;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 class SearchServiceTest {
     private SearchService searchService;
@@ -37,7 +35,7 @@ class SearchServiceTest {
 
     @Test
     void getStationIdWithName() {
-        Set<BigInteger> stationIds = searchService.getStationIdWithName("Styrsvik");
+        Set<String> stationIds = searchService.getStationIdWithName("Styrsvik");
         assertNotNull(stationIds);
         assertEquals(1, stationIds.size());
 
@@ -45,36 +43,34 @@ class SearchServiceTest {
 
     @Test
     void getStopTimesWithStationId() {
-        Set<StopTime> stopTimes = searchService.getStopTimesWithStationId(new BigInteger("9022001000101001"));
+        Set<StopTime> stopTimes = searchService.getStopTimesWithStationId("9022001000101001");
         assertNotNull(stopTimes);
         assertEquals(31, stopTimes.size());
     }
 
     @Test
     void getTripWithTripId() {
-        Set<Trip> trips = searchService.getTripWithTripId(new BigInteger("14010000670499113"));
+        Set<Trip> trips = searchService.getTripWithTripId("14010000670499113");
         assertNotNull(trips);
         assertEquals(1, trips.size());
     }
 
     @Test
     void getServiceIdWithTripId() {
-        Set<BigInteger> serviceIds = searchService.getServiceIdWithTripId(new BigInteger("14010000670499113"));
+        Set<String> serviceIds = searchService.getServiceIdWithTripId("14010000670499113");
         assertNotNull(serviceIds);
         assertEquals(1, serviceIds.size());
 
     }
 
     @Test
-    void getTodayServiceIdWithServiceId() {
-        Set<BigInteger> serviceIds = searchService.getTodayServiceIdWithServiceId(new BigInteger("19"), "20250202");
-        assertNotNull(serviceIds);
-        assertEquals(1, serviceIds.size());
+    void isServiceIdActiveAtDate() {
+        assertTrue(searchService.isServiceIdActiveAtDate("19", "20250202"));
     }
 
     @Test
     void getTripsWithServiceId() {
-        Set<Trip> trips = searchService.getTripsWithServiceId(new BigInteger("19"));
+        Set<Trip> trips = searchService.getTripsWithServiceId("19");
         assertNotNull(trips);
         assertEquals(7, trips.size());
 
@@ -82,9 +78,9 @@ class SearchServiceTest {
 
     @Test
     void getStopTimeWithTrip() {
-        Set<Trip> trips = searchService.getTripsWithServiceId(new BigInteger("19"));
+        Set<Trip> trips = searchService.getTripsWithServiceId("19");
 
-        Map<String, List<StopTime>> map = searchService.makeMap(searchService.getStopTimesWithStationId(new BigInteger("9022001000101001")).stream().toList());
+        Map<String, List<StopTime>> map = searchService.makeMap(searchService.getStopTimesWithStationId("9022001000101001").stream().toList());
         Set<StopTime> stopTimes = searchService.getStopTimeWithTrip(trips.stream().toList(), map);
         assertNotNull(stopTimes);
         assertEquals(7, stopTimes.size());
@@ -92,8 +88,8 @@ class SearchServiceTest {
 
     @Test
     void getGetDeparturesFromStopNameWithStopTime() {
-        Set<Trip> trips = searchService.getTripsWithServiceId(new BigInteger("19"));
-        Map<String, List<StopTime>> map = searchService.makeMap(searchService.getStopTimesWithStationId(new BigInteger("9022001000101001")).stream().toList());
+        Set<Trip> trips = searchService.getTripsWithServiceId("19");
+        Map<String, List<StopTime>> map = searchService.makeMap(searchService.getStopTimesWithStationId("9022001000101001").stream().toList());
         Set<StopTime> stopTimes = searchService.getStopTimeWithTrip(trips.stream().toList(), map);
 
         List<Departure> departures = searchService.getDeparturesWithStopTimeToday("19:30:00", stopTimes.stream().toList(), "20250202");

@@ -20,12 +20,12 @@ class GtfsFileHandlerTest {
     void getStopNameList() {
         List<String> stopnameList = gtfsFileHandler.getStopNameList("src/test/resources/GTFS_SL_TEST/stops.txt");
         assertEquals(5, stopnameList.size());
-        assertTrue(stopnameList.contains("idöborg"));
+        assertTrue(stopnameList.contains("Idöborg"));
     }
 
 //    @Test
 //    void createStopTimeMapWithStopId() {
-//        Map<BigInteger, List<StopTime>> map = fileUtil.createStopTimeMapWithStopId("src/test/resources/GTFS_SL_TEST/stop_times.txt");
+//        Map<String, List<StopTime>> map = fileUtil.createStopTimeMapWithStopId("src/test/resources/GTFS_SL_TEST/stop_times.txt");
 //
 //        assertFalse(map.isEmpty());
 //
@@ -34,7 +34,7 @@ class GtfsFileHandlerTest {
 
 //    @Test
 //    void createTripMapWithTripId() {
-//        Map<BigInteger, Trip> map = fileUtil.createTripMapWithTripId("src/test/resources/GTFS_SL_TEST/trips.txt");
+//        Map<String, Trip> map = fileUtil.createTripMapWithTripId("src/test/resources/GTFS_SL_TEST/trips.txt");
 //        assertFalse(map.isEmpty());
 //        assertEquals(31, map.size());
 //    }
@@ -48,21 +48,21 @@ class GtfsFileHandlerTest {
 //
 //    @Test
 //    void createCalendarDateMapWithServiceId() {
-//        Map<BigInteger, List<CalendarDate>> map = fileUtil.createCalendarDateMapWithServiceId("src/test/resources/GTFS_SL_TEST/calendar_dates.txt");
+//        Map<String, List<CalendarDate>> map = fileUtil.createCalendarDateMapWithServiceId("src/test/resources/GTFS_SL_TEST/calendar_dates.txt");
 //        assertFalse(map.isEmpty());
 //        assertEquals(10, map.size());
 //    }
 
 //    @Test
 //    void createStopIdMapWithStopName() {
-//        Map<String, List<BigInteger>> map = fileUtil.createStopIdMapWithStopName("src/test/resources/GTFS_SL_TEST/stops.txt");
+//        Map<String, List<String>> map = fileUtil.createStopIdMapWithStopName("src/test/resources/GTFS_SL_TEST/stops.txt");
 //        assertFalse(map.isEmpty());
 //        assertEquals(6, map.size());
 //    }
 //
 //    @Test
 //    void createTripIdListMapWithServiceId() {
-//        Map<BigInteger, List<BigInteger>> map = fileUtil.createTripIdListMapWithServiceId("src/test/resources/GTFS_SL_TEST/trips.txt");
+//        Map<String, List<String>> map = fileUtil.createTripIdListMapWithServiceId("src/test/resources/GTFS_SL_TEST/trips.txt");
 //
 //        assertFalse(map.isEmpty());
 //        assertEquals(10, map.size());
