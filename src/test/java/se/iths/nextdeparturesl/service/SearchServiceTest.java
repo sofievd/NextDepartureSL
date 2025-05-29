@@ -20,12 +20,6 @@ class SearchServiceTest {
     private SearchService searchService;
 
     private GtfsDataHolder gtfsDataHolder;
-    private Map<BigInteger, List<StopTime>> StopIdTostopTimes;
-    private Map<BigInteger, Trip> TripIdTotrips;
-    private Map<String, Route> routes;
-    private Map<BigInteger, List<CalendarDate>> calendarDates;
-    private Map<String, List<BigInteger>> stopNameToStopId;
-    private Map<BigInteger, List<BigInteger>> serviceIdToTripId;
 
     @BeforeEach
     void setUp() {

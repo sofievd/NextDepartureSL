@@ -19,13 +19,13 @@ class GtfsFileHandlerTest {
     @Test
     void getStopNameList() {
         List<String> stopnameList = gtfsFileHandler.getStopNameList("src/test/resources/GTFS_SL_TEST/stops.txt");
-        assertEquals(6, stopnameList.size());
+        assertEquals(5, stopnameList.size());
         assertTrue(stopnameList.contains("idöborg"));
     }
 
 //    @Test
 //    void createStopTimeMapWithStopId() {
-//        Map<BigInteger, List<StopTime>> map = fileUtil.createStopTimeMapWithStopId("src/test/resources/GTFS_SL_TEST/stop-times.txt");
+//        Map<BigInteger, List<StopTime>> map = fileUtil.createStopTimeMapWithStopId("src/test/resources/GTFS_SL_TEST/stop_times.txt");
 //
 //        assertFalse(map.isEmpty());
 //
@@ -72,13 +72,13 @@ class GtfsFileHandlerTest {
     void parseCsvToStop() {
         List<Stop> stopList = gtfsFileHandler.parseCsvToStop("src/test/resources/GTFS_SL_TEST/stops.txt");
 
-        assertEquals(5, stopList.size());
+        assertEquals(6, stopList.size());
         assertEquals("Stavsnäs", stopList.get(0).getStopName());
     }
 
     @Test
     void parseCsvToStopTime() {
-        List<StopTime> stopTimeList = gtfsFileHandler.parseCsvToStopTime("src/test/resources/GTFS_SL_TEST/stop-times.txt");
+        List<StopTime> stopTimeList = gtfsFileHandler.parseCsvToStopTime("src/test/resources/GTFS_SL_TEST/stop_times.txt");
         assertEquals(32, stopTimeList.size());
         assertEquals("Hagede via Styrsvik Långvik Sandhamn", stopTimeList.get(0).getStopHeadsign());
     }

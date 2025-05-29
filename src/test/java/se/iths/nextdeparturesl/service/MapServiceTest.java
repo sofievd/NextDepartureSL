@@ -18,12 +18,13 @@ class MapServiceTest {
 
     @BeforeEach
     void setUp() {
-        gtfsDataHolder = new GtfsDataHolder("src/test/resources/GTFS_SL_TEST/");
+        String gtfsRootFolderPath = getClass().getClassLoader().getResource("GTFS_SL_TEST/").getPath();
+        gtfsDataHolder = new GtfsDataHolder(gtfsRootFolderPath);
     }
 
     @Test
     void createStopTimeMapWithStopId_notEmpty_shouldReturnStopTimes() {
-        Map<BigInteger, List<StopTime>> map = gtfsDataHolder.createStopTimeMapWithStopId("stop-times.txt");
+        Map<BigInteger, List<StopTime>> map = gtfsDataHolder.createStopTimeMapWithStopId("stop_times.txt");
 
         assertFalse(map.isEmpty());
 
@@ -32,14 +33,14 @@ class MapServiceTest {
 
     @Test
     void createTripMapWithTripId() {
-        Map<BigInteger, Trip> map = gtfsDataHolder.createTripMapWithTripId("GTFS_SL_TEST/trips.txt");
+        Map<BigInteger, Trip> map = gtfsDataHolder.createTripMapWithTripId("trips.txt");
         assertFalse(map.isEmpty());
         assertEquals(31, map.size());
     }
 
     @Test
     void createRouteMapWithRouteId() {
-        Map<String, Route> map = gtfsDataHolder.createRouteMapWithRouteId("GTFS_SL_TEST/routes.txt");
+        Map<String, Route> map = gtfsDataHolder.createRouteMapWithRouteId("routes.txt");
         assertFalse(map.isEmpty());
         assertEquals(1, map.size());
     }
@@ -53,7 +54,7 @@ class MapServiceTest {
 
     @Test
     void createStopIdMapWithStopName() {
-        Map<String, List<BigInteger>> map = gtfsDataHolder.createStopIdMapWithStopName("stops.txt");
+        Map<String, List<BigInteger>> map = gtfsDataHolder.createStopIdMapWithStopName();
         assertFalse(map.isEmpty());
         assertEquals(5, map.size());
         assertEquals(map.get("Stavsnäs"), List.of(new BigInteger("9022001000101001")));
