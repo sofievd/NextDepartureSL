@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import se.iths.nextdeparturesl.service.SearchService;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+
 @CrossOrigin("*")
 @RestController
 public class Controller {

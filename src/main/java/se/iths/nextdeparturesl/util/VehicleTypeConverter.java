@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class VehicleTypeConverter {
-    private Map<String, String> vehicleCodeToString = new HashMap<String, String>();
+    private final Map<String, String> vehicleCodeToString = new HashMap<>();
 
     public VehicleTypeConverter() {
         vehicleCodeToString.put("100", "Railway");

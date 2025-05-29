@@ -87,17 +87,12 @@ public class SearchService {
         return stopTimes;
     }
 
-    public Map<String, List<StopTime>> makeMap(List<StopTime> stopTimeslist) {
+    public Map<String, List<StopTime>> createTripIdToStopTimeMap(List<StopTime> stopTimeslist) {
         log.info("making stop times map from StopTimes List");
         Map<String, List<StopTime>> stopTimesMap = new HashMap<>();
         for (StopTime stopTime : stopTimeslist) {
-            if (stopTimesMap.containsKey(stopTime.getTripId())) {
-                stopTimesMap.get(stopTime.getTripId()).add(stopTime);
-            } else {
-                List<StopTime> stopTimes = new ArrayList<>();
-                stopTimes.add(stopTime);
-                stopTimesMap.put(stopTime.getTripId(), stopTimes);
-            }
+            stopTimesMap.putIfAbsent(stopTime.getTripId(), new ArrayList<>());
+            stopTimesMap.get(stopTime.getTripId()).add(stopTime);
         }
         return stopTimesMap;
     }
@@ -231,13 +226,13 @@ public class SearchService {
         List<StopTime> stopTimesList = getStopTimesFromStationId(StationIdList);
         stopTimesList.removeIf(stopTime -> stopTime.getPickupType().equals(GTFS_BOARDING_TYPE_NO_BOARDING));
 
-        Map<String, List<StopTime>> stopTimeMap = makeMap(stopTimesList);
+        Map<String, List<StopTime>> stopTimeMap = createTripIdToStopTimeMap(stopTimesList);
         List<Trip> tripsAtStop = getTripsFromFromStopTimes(stopTimesList);
         List<String> serviceIdsForTripsAtStop = getServiceIdFromTrips(tripsAtStop);
 
         LocalDate searchDate = searchDateTime.toLocalDate();
         List<Departure> departuresList = getDeparturesAtDate(tripsAtStop,serviceIdsForTripsAtStop,stopTimeMap, searchDate);
-        String earliestTimeString = searchDateTime.format(DateTimeFormatter.ofPattern("yyyyMMdd-HHmmss"));
+        String earliestTimeString = searchDateTime.format(DateTimeFormatter.ofPattern("yyyyMMdd-HH:mm:ss"));
         departuresList.removeIf(departure -> departure.getDepartureTime().compareTo(earliestTimeString) < 0);
 
         for (int daysOffset = 1; departuresList.size() < MAX_RESULTS && daysOffset < MAX_DAYS_FORWARD; daysOffset++) {
@@ -268,10 +263,10 @@ public class SearchService {
         return getDeparturesWithStopTime(stopTimeList, dateStr);
     }
 
-    private List<Trip> getTripsForServiceIds(List<String> serviceIdListToday) {
-        log.info("getting trips from todays with serviceIdList");
+    private List<Trip> getTripsForServiceIds(List<String> serviceIds) {
+        log.info("getting trips {} for serviceIds", serviceIds.size());
         Set<Trip> tripFromServiceSet = new HashSet<>();
-        for (String serviceId : serviceIdListToday) {
+        for (String serviceId : serviceIds) {
             tripFromServiceSet.addAll(getTripsWithServiceId(serviceId));
         }
         List<Trip> tripFromService = new ArrayList<>(tripFromServiceSet);

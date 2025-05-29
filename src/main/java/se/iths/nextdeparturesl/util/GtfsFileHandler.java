@@ -46,16 +46,6 @@ public class GtfsFileHandler {
         return serviceIdList;
     }
 
-    public List<String> getStopIdListWithStopName(String searchString, List<Stop> stopList) {
-        ArrayList<String> resultList = new ArrayList<>();
-        for (Stop stop : stopList) {
-            if (stop.getStopName().contains(searchString) && stop.getLocationType().equals("0")) {
-                resultList.add(stop.getStopId());
-            }
-        }
-        return resultList;
-    }
-
     public Set<String> getTripListWithServiceId(String serviceId, List<Trip> tripList) {
         Set<String> resultList = new HashSet<>();
         for (Trip trip : tripList) {

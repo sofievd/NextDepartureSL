@@ -103,11 +103,11 @@ public class StopTime {
         this.shape_dist_traveled = shape_dist_traveled;
     }
 
-    public String gettimepoint() {
+    public String getTimePoint() {
         return timepoint;
     }
 
-    public void setTimepoint(String timepoint) {
-        this.timepoint = timepoint;
+    public void setTimePoint(String timePoint) {
+        this.timepoint = timePoint;
     }
 }

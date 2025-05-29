@@ -2,8 +2,6 @@ package se.iths.nextdeparturesl.service;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import se.iths.nextdeparturesl.model.CalendarDate;
-import se.iths.nextdeparturesl.model.Route;
 import se.iths.nextdeparturesl.model.StopTime;
 import se.iths.nextdeparturesl.model.Trip;
 import se.iths.nextdeparturesl.view.Departure;
@@ -80,7 +78,7 @@ class SearchServiceTest {
     void getStopTimeWithTrip() {
         Set<Trip> trips = searchService.getTripsWithServiceId("19");
 
-        Map<String, List<StopTime>> map = searchService.makeMap(searchService.getStopTimesWithStationId("9022001000101001").stream().toList());
+        Map<String, List<StopTime>> map = searchService.createTripIdToStopTimeMap(searchService.getStopTimesWithStationId("9022001000101001").stream().toList());
         Set<StopTime> stopTimes = searchService.getStopTimeWithTrip(trips.stream().toList(), map);
         assertNotNull(stopTimes);
         assertEquals(7, stopTimes.size());
@@ -89,7 +87,7 @@ class SearchServiceTest {
     @Test
     void getGetDeparturesFromStopNameWithStopTime() {
         Set<Trip> trips = searchService.getTripsWithServiceId("19");
-        Map<String, List<StopTime>> map = searchService.makeMap(searchService.getStopTimesWithStationId("9022001000101001").stream().toList());
+        Map<String, List<StopTime>> map = searchService.createTripIdToStopTimeMap(searchService.getStopTimesWithStationId("9022001000101001").stream().toList());
         Set<StopTime> stopTimes = searchService.getStopTimeWithTrip(trips.stream().toList(), map);
 
         List<Departure> departures = searchService.getDeparturesWithStopTimeToday( stopTimes.stream().toList(),

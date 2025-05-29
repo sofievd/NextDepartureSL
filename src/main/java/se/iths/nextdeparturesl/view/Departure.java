@@ -1,14 +1,14 @@
 package se.iths.nextdeparturesl.view;
 
 public class Departure {
-    private String destination;
-    private String departureTime;
-    private String arrivalTime;
-    private String vehicleType;
-    private String vehicleTypeCode;
-    private String routeName;
-    private String routeDescription;
-    private String lineNumber;
+    private final String destination;
+    private final String departureTime;
+    private final String arrivalTime;
+    private final String vehicleType;
+    private final String vehicleTypeCode;
+    private final String routeName;
+    private final String routeDescription;
+    private final String lineNumber;
 
     public Departure(String destination, String departureTime,String arrivalTime,
                      String vehicleType,String vehicleTypeCode, String routeName,
