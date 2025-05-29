@@ -12,7 +12,7 @@ import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class MapServiceTest {
+class GtfsDataHolderTest {
     private GtfsDataHolder gtfsDataHolder;
 
     @BeforeEach
