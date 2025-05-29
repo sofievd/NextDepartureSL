@@ -64,13 +64,8 @@ public class GtfsDataHolder {
         List<StopTime> stopTimeList = gtfsFileHandler.parseCsvToStopTime(path + STOP_TIMES_FILE_NAME);
         for (StopTime stopTime : stopTimeList) {
             String stopId = stopTime.getStopId();
-            if (map.containsKey(stopId)) {
-                map.get(stopId).add(stopTime);
-            } else {
-                List<StopTime> stopTimes = new ArrayList<>();
-                stopTimes.add(stopTime);
-                map.put(stopId, stopTimes);
-            }
+            map.putIfAbsent(stopId, new ArrayList<>());
+            map.get(stopId).add(stopTime);
         }
         return map;
     }
@@ -118,13 +113,8 @@ public class GtfsDataHolder {
         List<CalendarDate> calendarDateList = gtfsFileHandler.parseCsvToCalendarDate(path + CALENDAR_DATE_FILE_NAME);
         for (CalendarDate calendar : calendarDateList) {
             String calendarDateId = calendar.getServiceId();
-            if (map.containsKey(calendarDateId)) {
-                map.get(calendarDateId).add(calendar);
-            } else {
-                List<CalendarDate> calendarDates = new ArrayList<>();
-                calendarDates.add(calendar);
-                map.put(calendarDateId, calendarDates);
-            }
+            map.putIfAbsent(calendarDateId, new ArrayList<>());
+            map.get(calendarDateId).add(calendar);
         }
 
         return map;

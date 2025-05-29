@@ -228,8 +228,7 @@ public class SearchService {
 
         LocalDate searchDate = searchDateTime.toLocalDate();
         List<Departure> departuresList = getDeparturesAtDate(tripsAtStop,serviceIdsForTripsAtStop,stopTimeMap, searchDate);
-        String earliestTimeString = searchDateTime.format(DateTimeFormatter.ofPattern("yyyyMMdd-HH:mm:ss"));
-        departuresList.removeIf(departure -> departure.getDepartureTime().compareTo(earliestTimeString) < 0);
+        removeDeparturesBeforeSearchDateTime(searchDateTime, departuresList);
 
         for (int daysOffset = 1; departuresList.size() < MAX_RESULTS && daysOffset < MAX_DAYS_FORWARD; daysOffset++) {
             LocalDate dayAfter = LocalDateTime.now().plusDays(daysOffset).toLocalDate();
@@ -240,6 +239,11 @@ public class SearchService {
         departuresList.sort(Comparator.comparing(Departure::getDepartureTime));
         int limit = Math.min(departuresList.size(), MAX_RESULTS);
         return departuresList.subList(0, limit);
+    }
+
+    private void removeDeparturesBeforeSearchDateTime(LocalDateTime searchDateTime, List<Departure> departuresList) {
+        String earliestTimeString = searchDateTime.format(DateTimeFormatter.ofPattern("yyyyMMdd-HH:mm:ss"));
+        departuresList.removeIf(departure -> departure.getDepartureTime().compareTo(earliestTimeString) < 0);
     }
 
 
