@@ -11,6 +11,7 @@ import se.iths.nextdeparturesl.view.Departure;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
@@ -164,29 +165,11 @@ public class SearchService {
         return stopTimeList;
     }
 
-    public List<Departure> getDeparturesWithStopTimeToday(List<StopTime> stopTimes, LocalDateTime date) {
-        String dateStr = date.format(DateTimeFormatter.ofPattern("yyyyMMdd"));
-        String timeStr = date.format(DateTimeFormatter.ofPattern("HH:mm:ss"));
-        log.info("getting departures with stopTime for day {} and time {}", date, timeStr);
-        List<Departure> departures = new ArrayList<>();
-        for (StopTime stopTime : stopTimes) {
-            Trip trip = tripIdToTrips.get(stopTime.getTripId());
-            Route route = routeIdToRoutes.get(trip.getRouteId());
-            String parseTime = stopTime.getDepartureTime();
-
-            if (parseTime.compareTo(timeStr) > 0) {
-                createDeparture(stopTime, route, departures, dateStr);
-            }
-
-        }
-        return departures;
-    }
-
-    private void createDeparture(StopTime stopTime, Route route, List<Departure> departures, String date) {
+    private void createDeparture(StopTime stopTime, Route route, List<Departure> departures, LocalDate date) {
         log.info("Creating a departure from stopTime {}, route {} and date {}", stopTime, route, date);
         String destination = stopTime.getStopHeadsign();
-        String departureTime = date + "-" + stopTime.getDepartureTime();
-        String arrivalTime = date + "-" + stopTime.getArrivalTime();
+        String departureTime = formatOffsetTime(stopTime.getDepartureTime(), date);
+        String arrivalTime = formatOffsetTime(stopTime.getArrivalTime(), date);
         String vehicleType = vehicleTypeConverter.convert(route.getRouteType());
         String vehicleTypeCode = route.getRouteType();
         String routeLongName = route.getRouteLongName();
@@ -197,7 +180,20 @@ public class SearchService {
         departures.add(departure);
     }
 
-    public List<Departure> getDeparturesWithStopTime(List<StopTime> stopTimes, String date) {
+    private String formatOffsetTime(String offsetTime, LocalDate date) {
+        int offsetTimeSeconds = offsetTimeToSeconds(offsetTime);
+        LocalDateTime dateTime = date.atTime(LocalTime.of(0,0,0)).plusSeconds(offsetTimeSeconds);
+        return dateTime.format(DateTimeFormatter.ofPattern("yyyyMMdd-HH:mm:ss"));
+    }
+
+    private int offsetTimeToSeconds(String offsetTime) {
+        int hour = Integer.parseInt(offsetTime.substring(0, 2));
+        int minute = Integer.parseInt(offsetTime.substring(3, 5));
+        int second = Integer.parseInt(offsetTime.substring(6, 8));
+        return (3600*hour)+(60*minute)+second;
+    }
+
+    public List<Departure> getDeparturesWithStopTime(List<StopTime> stopTimes, LocalDate date) {
         log.info("getting departures with stopTime {} and date {}", stopTimes, date);
         List<Departure> departures = new ArrayList<>();
         for (StopTime stopTime : stopTimes) {
@@ -247,12 +243,12 @@ public class SearchService {
     }
 
 
-    public List<Departure> getDeparturesAtDate(List<Trip> tripsAtStop, List<String> serviceIdsForTripsAtStop,
+    private List<Departure> getDeparturesAtDate(List<Trip> tripsAtStop, List<String> serviceIdsForTripsAtStop,
                                                Map<String, List<StopTime>> stopTimeMap, LocalDate date) {
         log.info("getting departures at {}", date);
 
-        String dateStr = date.format(DateTimeFormatter.ofPattern("yyyyMMdd"));
-        List<String> serviceIdListTomorrow = getServiceIdsActiveAtDate(serviceIdsForTripsAtStop, dateStr);
+
+        List<String> serviceIdListTomorrow = getServiceIdsActiveAtDate(serviceIdsForTripsAtStop, date);
 
         List<Trip> tripsFromServiceTomorrow = getTripsForServiceIds(serviceIdListTomorrow);
         tripsFromServiceTomorrow.retainAll(tripsAtStop);
@@ -260,7 +256,7 @@ public class SearchService {
         Set<StopTime> stopTimesFromService = getStopTimeWithTrip(tripsFromServiceTomorrow, stopTimeMap);
         List<StopTime> stopTimeList = stopTimesFromService.stream().sorted(Comparator.comparing(StopTime::getDepartureTime)).toList();
 
-        return getDeparturesWithStopTime(stopTimeList, dateStr);
+        return getDeparturesWithStopTime(stopTimeList, date);
     }
 
     private List<Trip> getTripsForServiceIds(List<String> serviceIds) {
@@ -274,11 +270,12 @@ public class SearchService {
         return tripFromService;
     }
 
-    private List<String> getServiceIdsActiveAtDate(List<String> serviceIdList, String date) {
+    private List<String> getServiceIdsActiveAtDate(List<String> serviceIdList, LocalDate date) {
         log.info("getting serviceIds active at {}, filtering from {} ids", date, serviceIdList.size());
         Set<String> serviceIdSet = new HashSet<>();
+        String dateStr = date.format(DateTimeFormatter.ofPattern("yyyyMMdd"));
         for (String serviceId : serviceIdList) {
-            if (isServiceIdActiveAtDate(serviceId, date)) {
+            if (isServiceIdActiveAtDate(serviceId, dateStr)) {
                 serviceIdSet.add(serviceId);
             }
         }

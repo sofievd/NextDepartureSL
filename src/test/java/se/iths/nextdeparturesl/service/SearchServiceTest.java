@@ -85,21 +85,6 @@ class SearchServiceTest {
     }
 
     @Test
-    void getGetDeparturesFromStopNameWithStopTime() {
-        Set<Trip> trips = searchService.getTripsWithServiceId("19");
-        Map<String, List<StopTime>> map = searchService.createTripIdToStopTimeMap(searchService.getStopTimesWithStationId("9022001000101001").stream().toList());
-        Set<StopTime> stopTimes = searchService.getStopTimeWithTrip(trips.stream().toList(), map);
-
-        List<Departure> departures = searchService.getDeparturesWithStopTimeToday( stopTimes.stream().toList(),
-                LocalDateTime.of(2025,2,2,19,30,0));
-        for (Departure departure : departures) {
-            System.out.println(departure);
-        }
-        assertNotNull(departures);
-        assertEquals(1, departures.size());
-    }
-
-    @Test
     void getDeparturesFromStopName() {
         List<Departure> departures = searchService.getDeparturesFromStopName("Stavsnäs",
                 LocalDateTime.of(2025,2,2,19,30,0));
