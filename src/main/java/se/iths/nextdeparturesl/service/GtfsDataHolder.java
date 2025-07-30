@@ -5,10 +5,8 @@ import org.apache.logging.log4j.Logger;
 import se.iths.nextdeparturesl.model.*;
 import se.iths.nextdeparturesl.util.GtfsFileHandler;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.io.File;
+import java.util.*;
 
 /**
  * MapService Provides access to in-memory mappings of GTFS data for efficient lookups and operations.
@@ -27,7 +25,7 @@ public class GtfsDataHolder {
     private List<String> stationList;
     private final String path;
 
-    private final GtfsFileHandler gtfsFileHandler = new GtfsFileHandler();
+    private final GtfsFileHandler gtfsFileHandler;
     private static final String STOP_FILE_NAME = "stops.txt";
     private static final String STOP_TIMES_FILE_NAME = "stop_times.txt";
     private static final String TRIP_FILE_NAME = "trips.txt";
@@ -36,6 +34,8 @@ public class GtfsDataHolder {
 
     public GtfsDataHolder(String path) {
         this.path = path;
+        File file = new File(path+"sl.zip");
+        this.gtfsFileHandler = new GtfsFileHandler(file);
     }
 
     /**
@@ -43,13 +43,13 @@ public class GtfsDataHolder {
      */
     public void createMaps() {
         log.info("Starting making maps");
-        stationList = gtfsFileHandler.getStopNameList(path + STOP_FILE_NAME);
-        stopIdToStopTimes = createStopTimeMapWithStopId();
-        tripIdToTrips = createTripMapWithTripId();
-        routeIdToRoutes = createRouteMapWithRouteId();
-        serviceIdToCalendarDates = createCalendarDateMapWithServiceId();
-        stopNameToStopId = createStopIdMapWithStopName();
-        serviceIdToTripId = createTripIdListMapWithServiceId();
+        //stationList = gtfsFileHandler.getStopNameList(path + STOP_FILE_NAME);
+       // stopIdToStopTimes = createStopTimeMapWithStopId();
+//        tripIdToTrips = createTripMapWithTripId();
+//        routeIdToRoutes = createRouteMapWithRouteId();
+//        serviceIdToCalendarDates = createCalendarDateMapWithServiceId();
+//        stopNameToStopId = createStopIdMapWithStopName();
+//        serviceIdToTripId = createTripIdListMapWithServiceId();
         log.info("Finished making maps");
     }
 
@@ -61,12 +61,17 @@ public class GtfsDataHolder {
     public Map<String, List<StopTime>> createStopTimeMapWithStopId() {
         log.info("creating StopTime map with StopId");
         Map<String, List<StopTime>> map = new HashMap<>();
-        List<StopTime> stopTimeList = gtfsFileHandler.parseCsvToStopTime(path + STOP_TIMES_FILE_NAME);
-        for (StopTime stopTime : stopTimeList) {
+        List<StopTime> stopTimeList = gtfsFileHandler.getStopTimeList();
+        stopTimeList.forEach(stopTime -> {
             String stopId = stopTime.getStopId();
             map.putIfAbsent(stopId, new ArrayList<>());
             map.get(stopId).add(stopTime);
-        }
+        });
+//        for (StopTime stopTime : stopTimeList) {
+//            String stopId = stopTime.getStopId();
+//            map.putIfAbsent(stopId, new ArrayList<>());
+//            map.get(stopId).add(stopTime);
+//        }
         return map;
     }
 
@@ -78,7 +83,7 @@ public class GtfsDataHolder {
     public Map<String, Trip> createTripMapWithTripId() {
         log.info("creating Trip map with TripId");
         Map<String, Trip> map = new HashMap<>();
-        List<Trip> tripList = gtfsFileHandler.parseCsvToTrip(path + TRIP_FILE_NAME); //getTripList();
+        List<Trip> tripList = gtfsFileHandler.getTripList(); //getTripList();
         for (Trip trip : tripList) {
             String tripId = trip.getTripId();
             map.put(tripId, trip);
@@ -94,7 +99,7 @@ public class GtfsDataHolder {
     public Map<String, Route> createRouteMapWithRouteId() {
         log.info("creating Route map with RouteId");
         Map<String, Route> map = new HashMap<>();
-        List<Route> routeList = gtfsFileHandler.parseCsvToRoute(path + ROUTE_FILE_NAME);
+        List<Route> routeList = gtfsFileHandler.getRouteList();
         for (Route route : routeList) {
             String routeId = route.getRouteId();
             map.put(routeId, route);
@@ -110,7 +115,7 @@ public class GtfsDataHolder {
     public Map<String, List<CalendarDate>> createCalendarDateMapWithServiceId() {
         log.info("creating CalendarDate map with ServiceId");
         Map<String, List<CalendarDate>> map = new HashMap<>();
-        List<CalendarDate> calendarDateList = gtfsFileHandler.parseCsvToCalendarDate(path + CALENDAR_DATE_FILE_NAME);
+        List<CalendarDate> calendarDateList = gtfsFileHandler.getCalendarDateList();
         for (CalendarDate calendar : calendarDateList) {
             String calendarDateId = calendar.getServiceId();
             map.putIfAbsent(calendarDateId, new ArrayList<>());
@@ -125,11 +130,11 @@ public class GtfsDataHolder {
      */
     public Map<String, List<String>> createStopIdMapWithStopName() {
         log.info("creating StopId map with StopName");
-        String stopsFilePath = path + STOP_FILE_NAME;
-        List<Stop> stopList = gtfsFileHandler.parseCsvToStop(stopsFilePath);
+       // String stopsFilePath = path + STOP_FILE_NAME;
+        List<Stop> stopList = gtfsFileHandler.getStopList();
         Map<String, List<String>> result = new HashMap<>();
         for (Stop stop : stopList) {
-            if (!stop.getLocationType().equals("0")) {
+            if (stop.getLocationType() != 0) {
                 continue;
             }
             result.putIfAbsent(stop.getStopName(), new ArrayList<>());
@@ -141,15 +146,38 @@ public class GtfsDataHolder {
     public Map<String, List<String>> createTripIdListMapWithServiceId() {
         log.info("creating TripIdList map with ServiceId");
         Map<String, List<String>> map = new HashMap<>();
-        List<Trip> tripList = gtfsFileHandler.parseCsvToTrip(path + TRIP_FILE_NAME); //getTripList();
-        List<String> serviceIdList = gtfsFileHandler.getServiceIDListFromTripList(tripList);
+        List<Trip> tripList = gtfsFileHandler.getTripList(); //getTripList();
+        List<String> serviceIdList = getServiceIDListFromTripList(tripList);
         for (String serviceId : serviceIdList) {
             if (!map.containsKey(serviceId)) {
-                List<String> tripIdList = gtfsFileHandler.getTripListWithServiceId(serviceId, tripList).stream().toList();
+                List<String> tripIdList = getTripListWithServiceId(serviceId, tripList).stream().toList();
                 map.put(serviceId, tripIdList);
             }
         }
         return map;
+    }
+
+
+    public List<String> getServiceIDListFromTripList(List<Trip> tripList) {
+        log.info("creating list of service Ids from a list of trips");
+        List<String> serviceIdList = new ArrayList<>();
+        for (Trip trip : tripList) {
+            String serviceId = trip.getServiceId();
+            if (!serviceIdList.contains(serviceId)) {
+                serviceIdList.add(serviceId);
+            }
+        }
+        return serviceIdList;
+    }
+
+    public Set<String> getTripListWithServiceId(String serviceId, List<Trip> tripList) {
+        Set<String> resultList = new HashSet<>();
+        for (Trip trip : tripList) {
+            if (trip.getServiceId().equals(serviceId)) {
+                resultList.add(trip.getTripId());
+            }
+        }
+        return resultList;
     }
 
     public List<String> getStationList() {

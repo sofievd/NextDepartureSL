@@ -1,7 +1,5 @@
 package se.iths.nextdeparturesl.model;
 
-import com.opencsv.bean.CsvBindByName;
-
 /**
  * StopTime represents stop times for a trip in a GTFS feed.
  * Contains timing and sequencing information for stops along a trip.
@@ -10,104 +8,116 @@ import com.opencsv.bean.CsvBindByName;
  */
 public class StopTime {
 
-    @CsvBindByName
-    private String trip_id;
-    @CsvBindByName
-    private String arrival_time;
-    @CsvBindByName
-    private String departure_time;
-    @CsvBindByName
-    private String stop_id;
-    @CsvBindByName
-    private String stop_sequence;
-    @CsvBindByName
-    private String stop_headsign;
-    @CsvBindByName
-    private String pickup_type;
-    @CsvBindByName
-    private String drop_off_type;
-    @CsvBindByName
-    private String shape_dist_traveled;
-    @CsvBindByName
-    private String timepoint;
 
-    public String getTripId() {
-        return trip_id;
+    private String tripId;
+    private String arrivalTime;
+    private String departureTime;
+    private String stopId;
+    private int stopSequence;
+    private String stopHeadsign;
+    private int pickupType;
+    private int dropOffType;
+    private double shapeDistTraveled;
+    private int timepoint;
+
+    public StopTime(String tripId,
+                    String arrivalTime,
+                    String departureTime,
+                    String stopId,
+                    int stopSequence,
+                    String stopHeadsign,
+                    int pickupType,
+                    int dropOffType,
+                    double shapeDistTraveled,
+                    int timepoint) {
+        this.tripId = tripId;
+        this.arrivalTime = arrivalTime;
+        this.departureTime = departureTime;
+        this.stopId = stopId;
+        this.stopSequence = stopSequence;
+        this.stopHeadsign = stopHeadsign;
+        this.pickupType = pickupType;
+        this.dropOffType = dropOffType;
+        this.shapeDistTraveled = shapeDistTraveled;
+        this.timepoint = timepoint;
     }
 
-    public void setTripId(String trip_id) {
-        this.trip_id = trip_id;
+    public String getTripId() {
+        return tripId;
+    }
+
+    public void setTripId(String tripId) {
+        this.tripId = tripId;
     }
 
     public String getArrivalTime() {
-        return arrival_time;
+        return arrivalTime;
     }
 
-    public void setArrivalTime(String arrival_time) {
-        this.arrival_time = arrival_time;
+    public void setArrivalTime(String arrivalTime) {
+        this.arrivalTime = arrivalTime;
     }
 
     public String getDepartureTime() {
-        return departure_time;
+        return departureTime;
     }
 
-    public void setDepartureTime(String departure_time) {
-        this.departure_time = departure_time;
+    public void setDepartureTime(String departureTime) {
+        this.departureTime = departureTime;
     }
 
     public String getStopId() {
-        return stop_id;
+        return stopId;
+    }
+    public void setStopId(String stopId) {
+        this.stopId = stopId;
     }
 
-    public void setStopId(String stop_id) {
-        this.stop_id = stop_id;
+    public int getStopSequence() {
+        return stopSequence;
     }
 
-    public String getStopSequence() {
-        return stop_sequence;
-    }
-
-    public void setStopSequence(String stop_sequence) {
-        this.stop_sequence = stop_sequence;
+    public void setStopSequence(int stopSequence) {
+        this.stopSequence = stopSequence;
     }
 
     public String getStopHeadsign() {
-        return stop_headsign;
+        return stopHeadsign;
     }
 
-    public void setStopHeadsign(String stop_headsign) {
-        this.stop_headsign = stop_headsign;
+    public void setStopHeadsign(String stopHeadsign) {
+        this.stopHeadsign = stopHeadsign;
     }
 
-    public String getPickupType() {
-        return pickup_type;
+    public int getPickupType() {
+        return pickupType;
     }
 
-    public void setPickupType(String pickup_type) {
-        this.pickup_type = pickup_type;
+    public void setPickupType(int pickupType) {
+        this.pickupType = pickupType;
     }
 
-    public String getDropOffType() {
-        return drop_off_type;
+    public int getDropOffType() {
+        return dropOffType;
     }
 
-    public void setDropOffType(String drop_off_type) {
-        this.drop_off_type = drop_off_type;
+    public void setDropOffType(int dropOffType) {
+        this.dropOffType = dropOffType;
     }
 
-    public String getShapeDistTraveled() {
-        return shape_dist_traveled;
+    public double getShapeDistTraveled() {
+        return shapeDistTraveled;
     }
 
-    public void setShapeDistTraveled(String shape_dist_traveled) {
-        this.shape_dist_traveled = shape_dist_traveled;
+    public void setShapeDistTraveled(double shapeDistTraveled) {
+        this.shapeDistTraveled = shapeDistTraveled;
     }
 
-    public String getTimePoint() {
+    public int getTimePoint() {
         return timepoint;
     }
 
-    public void setTimePoint(String timePoint) {
+    public void setTimePoint(int timePoint) {
         this.timepoint = timePoint;
     }
 }

@@ -1,7 +1,5 @@
 package se.iths.nextdeparturesl.model;
 
-import com.opencsv.bean.CsvBindByName;
-
 /**
  * Route represents a transit route in a GTFS feed.
  * Includes identifiers, names, and descriptive details.
@@ -9,65 +7,74 @@ import com.opencsv.bean.CsvBindByName;
  * @author Sofie Van Dingenen
  */
 public class Route {
-    @CsvBindByName
-    private String route_id;
-    @CsvBindByName
-    private String agency_id;
-    @CsvBindByName
-    private String route_short_name;
-    @CsvBindByName
-    private String route_long_name;
-    @CsvBindByName
-    private String route_type;
-    @CsvBindByName
-    private String route_desc;
 
-    public String getRouteId() {
-        return route_id;
+    private String id;
+    private String agencyId;
+    private String shortName;
+    private String longName;
+    private String type;
+    private String desc;
+
+    public Route(String id,
+                 String agencyId,
+                 String shortName,
+                 String longName,
+                 String type,
+                 String desc) {
+        this.id = id;
+        this.agencyId = agencyId;
+        this.shortName = shortName;
+        this.longName = longName;
+        this.type = type;
+        this.desc = desc;
     }
 
-    public void setRouteId(String route_id) {
-        this.route_id = route_id;
+    public String getRouteId() {
+        return id;
+    }
+
+    public void setRouteId(String id) {
+        this.id = id;
     }
 
     public String getAgencyId() {
-        return agency_id;
+        return agencyId;
     }
 
-    public void setAgencyId(String agency_id) {
-        this.agency_id = agency_id;
+    public void setAgencyId(String agencyId) {
+        this.agencyId = agencyId;
     }
 
-    public String getRouteShortName() {
-        return route_short_name;
+    public String getShortName() {
+        return shortName;
     }
 
-    public void setRouteShortName(String route_short_name) {
-        this.route_short_name = route_short_name;
+    public void setRouteShortName(String shortName) {
+        this.shortName = shortName;
     }
 
-    public String getRouteLongName() {
-        return route_long_name;
+    public String getLongName() {
+        return longName;
     }
 
-    public void setRouteLongName(String route_long_name) {
-        this.route_long_name = route_long_name;
+    public void setLongName(String longName) {
+        this.longName = longName;
     }
 
-    public String getRouteType() {
-        return route_type;
+    public String getType() {
+        return type;
     }
 
-    public void setRouteType(String route_type) {
-        this.route_type = route_type;
+    public void setType(String type) {
+        this.type = type;
     }
 
-    public String getRouteDesc() {
-        return route_desc;
+    public String getDesc() {
+        return desc;
     }
 
-    public void setRouteDesc(String route_desc) {
-        this.route_desc = route_desc;
+    public void setDesc(String desc) {
+        this.desc = desc;
     }
 
 }

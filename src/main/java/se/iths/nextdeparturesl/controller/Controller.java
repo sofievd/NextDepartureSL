@@ -7,7 +7,9 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 import se.iths.nextdeparturesl.service.SearchService;
+import se.iths.nextdeparturesl.util.ApiDownload;
 
 import java.time.LocalDateTime;
 
@@ -24,6 +26,14 @@ searchService.setUp();
     public ResponseEntity<?> stationList() {
        log.info("getting station list");
         return ResponseEntity.ok().body(searchService.getStationList());
+    }
+    @GetMapping("/download")
+    public ResponseEntity<?> download() {
+        System.out.println("here");
+        ApiDownload download = new ApiDownload();
+        download.download();
+        return ResponseEntity.ok().body("download completed");
+
     }
 
     @GetMapping("/searchStation")

@@ -170,11 +170,11 @@ public class SearchService {
         String destination = stopTime.getStopHeadsign();
         String departureTime = formatOffsetTime(stopTime.getDepartureTime(), date);
         String arrivalTime = formatOffsetTime(stopTime.getArrivalTime(), date);
-        String vehicleType = vehicleTypeConverter.convert(route.getRouteType());
-        String vehicleTypeCode = route.getRouteType();
-        String routeLongName = route.getRouteLongName();
-        String routeDescription = route.getRouteDesc();
-        String lineNumber = route.getRouteShortName();
+        String vehicleType = vehicleTypeConverter.convert(route.getType());
+        String vehicleTypeCode = route.getType();
+        String routeLongName = route.getLongName();
+        String routeDescription = route.getDesc();
+        String lineNumber = route.getShortName();
 
         Departure departure = new Departure(destination, departureTime, arrivalTime, vehicleType, vehicleTypeCode, routeLongName, routeDescription, lineNumber);
         departures.add(departure);
@@ -220,7 +220,7 @@ public class SearchService {
         }
 
         List<StopTime> stopTimesList = getStopTimesFromStationId(StationIdList);
-        stopTimesList.removeIf(stopTime -> stopTime.getPickupType().equals(GTFS_BOARDING_TYPE_NO_BOARDING));
+        stopTimesList.removeIf(stopTime -> String.valueOf(stopTime.getPickupType()).equals(GTFS_BOARDING_TYPE_NO_BOARDING));
 
         Map<String, List<StopTime>> stopTimeMap = createTripIdToStopTimeMap(stopTimesList);
         List<Trip> tripsAtStop = getTripsFromFromStopTimes(stopTimesList);
