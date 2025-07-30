@@ -12,8 +12,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 public class ApiDownload {
-    private String URLString = "https://opendata.samtrafiken.se/gtfs/sl/sl.zip?key=";
-    private String APIKEY = "d1fedf5c43ef42749b24d43fde33c556";
+
 
     public void download() {
         try {
