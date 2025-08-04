@@ -14,14 +14,15 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
  //TODO: Static data updates every day
 //TODO: realtime data updates every 15 seconds
+//TODO: create method to download static and one for realtime
 public class ApiDownload {
     private final String URLString = "https://opendata.samtrafiken.se/gtfs/sl/sl.zip?key=";
 
-    @Value("${api.key}")
-    private String APIKEY;
+    private String APIKEY = System.getenv("API_KEY");
 
+
+    //TODO: remove the opening of the zipfile...
     public void download() {
-
         try {
             URL obj = new URL(URLString + APIKEY);
             HttpURLConnection con = (HttpURLConnection) obj.openConnection();
