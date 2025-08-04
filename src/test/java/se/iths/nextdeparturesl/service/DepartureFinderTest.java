@@ -13,28 +13,28 @@ import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class SearchServiceTest {
-    private SearchService searchService;
+class DepartureFinderTest {
+    private DepartureFinder departureFinder;
 
     private GtfsDataHolder gtfsDataHolder;
 
     @BeforeEach
     void setUp() {
         gtfsDataHolder = new GtfsDataHolder("src/test/resources/GTFS_SL_TEST/");
-        searchService = new SearchService(gtfsDataHolder);
-        searchService.setUp();
+        departureFinder = new DepartureFinder(gtfsDataHolder);
+        departureFinder.setUp();
     }
 
     @Test
     void getStationList() {
-        List<String> stations = searchService.getStationList();
+        List<String> stations = departureFinder.getStationList();
         assertNotNull(stations);
         assertEquals(5, stations.size());
     }
 
     @Test
     void getStationIdWithName() {
-        Set<String> stationIds = searchService.getStationIdWithName("Styrsvik");
+        Set<String> stationIds = departureFinder.getStationIdWithName("Styrsvik");
         assertNotNull(stationIds);
         assertEquals(1, stationIds.size());
 
@@ -42,21 +42,21 @@ class SearchServiceTest {
 
     @Test
     void getStopTimesWithStationId() {
-        Set<StopTime> stopTimes = searchService.getStopTimesWithStationId("9022001000101001");
+        Set<StopTime> stopTimes = departureFinder.getStopTimesWithStationId("9022001000101001");
         assertNotNull(stopTimes);
         assertEquals(31, stopTimes.size());
     }
 
     @Test
     void getTripWithTripId() {
-        Set<Trip> trips = searchService.getTripWithTripId("14010000670499113");
+        Set<Trip> trips = departureFinder.getTripWithTripId("14010000670499113");
         assertNotNull(trips);
         assertEquals(1, trips.size());
     }
 
     @Test
     void getServiceIdWithTripId() {
-        Set<String> serviceIds = searchService.getServiceIdWithTripId("14010000670499113");
+        Set<String> serviceIds = departureFinder.getServiceIdWithTripId("14010000670499113");
         assertNotNull(serviceIds);
         assertEquals(1, serviceIds.size());
 
@@ -64,29 +64,29 @@ class SearchServiceTest {
 
     @Test
     void isServiceIdActiveAtDate() {
-        assertTrue(searchService.isServiceIdActiveAtDate("19", "20250202"));
+        assertTrue(departureFinder.isServiceIdActiveAtDate("19", "20250202"));
     }
 
     @Test
     void getTripsWithServiceId() {
-        Set<Trip> trips = searchService.getTripsWithServiceId("19");
+        Set<Trip> trips = departureFinder.getTripsWithServiceId("19");
         assertNotNull(trips);
         assertEquals(7, trips.size());
     }
 
     @Test
     void getStopTimeWithTrip() {
-        Set<Trip> trips = searchService.getTripsWithServiceId("19");
+        Set<Trip> trips = departureFinder.getTripsWithServiceId("19");
 
-        Map<String, List<StopTime>> map = searchService.createTripIdToStopTimeMap(searchService.getStopTimesWithStationId("9022001000101001").stream().toList());
-        Set<StopTime> stopTimes = searchService.getStopTimeWithTrip(trips.stream().toList(), map);
+        Map<String, List<StopTime>> map = departureFinder.createTripIdToStopTimeMap(departureFinder.getStopTimesWithStationId("9022001000101001").stream().toList());
+        Set<StopTime> stopTimes = departureFinder.getStopTimeWithTrip(trips.stream().toList(), map);
         assertNotNull(stopTimes);
         assertEquals(7, stopTimes.size());
     }
 
     @Test
     void getDeparturesFromStopName() {
-        List<Departure> departures = searchService.getDeparturesFromStopName("Stavsnäs",
+        List<Departure> departures = departureFinder.getDeparturesFromStopName("Stavsnäs",
                 LocalDateTime.of(2025,2,2,19,30,0));
         assertNotNull(departures);
         for (Departure departure : departures) {

@@ -15,7 +15,7 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
-public class SearchService {
+public class DepartureFinder {
 
     private static final Logger log = LogManager.getLogger();
     private static final String GTFS_BOARDING_TYPE_NO_BOARDING = "1";
@@ -34,10 +34,10 @@ public class SearchService {
     private List<String> stationList;
 
 
-    public SearchService() {
+    public DepartureFinder() {
     }
 
-    public SearchService(GtfsDataHolder gtfsDataHolder) {
+    public DepartureFinder(GtfsDataHolder gtfsDataHolder) {
         this.gtfsDataHolder = gtfsDataHolder;
     }
 

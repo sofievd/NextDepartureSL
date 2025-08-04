@@ -7,8 +7,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
-import se.iths.nextdeparturesl.service.SearchService;
+import se.iths.nextdeparturesl.service.DepartureFinder;
 import se.iths.nextdeparturesl.util.ApiDownload;
 
 import java.time.LocalDateTime;
@@ -17,15 +16,15 @@ import java.time.LocalDateTime;
 @RestController
 public class Controller {
     private static final Logger log = LogManager.getLogger();
-    private final SearchService searchService = new SearchService();
+    private final DepartureFinder departureFinder = new DepartureFinder();
     public Controller(){
-searchService.setUp();
+departureFinder.setUp();
     }
 
     @GetMapping("/stationList")
     public ResponseEntity<?> stationList() {
        log.info("getting station list");
-        return ResponseEntity.ok().body(searchService.getStationList());
+        return ResponseEntity.ok().body(departureFinder.getStationList());
     }
     @GetMapping("/download")
     public ResponseEntity<?> download() {
@@ -40,6 +39,6 @@ searchService.setUp();
     public ResponseEntity<?> searchStation(@RequestParam String stationName) {
         log.info("searching station: {}", stationName);
         LocalDateTime now = LocalDateTime.now();
-        return ResponseEntity.ok().body(searchService.getDeparturesFromStopName(stationName,now));
+        return ResponseEntity.ok().body(departureFinder.getDeparturesFromStopName(stationName,now));
     }
 }
