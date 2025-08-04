@@ -22,7 +22,7 @@ public class SearchService {
     private static final int MAX_RESULTS = 20;
     public static final int MAX_DAYS_FORWARD = 3;
 
-    private GtfsDataHolder gtfsDataHolder = new GtfsDataHolder("src/main/resources/static/GTFS_SL/");
+    private GtfsDataHolder gtfsDataHolder = new GtfsDataHolder("src/main/resources/static/");
     private final VehicleTypeConverter vehicleTypeConverter = new VehicleTypeConverter();
 
     private Map<String, List<StopTime>> stopIdToStopTimes;
@@ -180,9 +180,9 @@ public class SearchService {
         departures.add(departure);
     }
 
-    private String formatOffsetTime(String offsetTime, LocalDate date) {
-        int offsetTimeSeconds = offsetTimeToSeconds(offsetTime);
-        LocalDateTime dateTime = date.atTime(LocalTime.of(0,0,0)).plusSeconds(offsetTimeSeconds);
+    private String formatOffsetTime(int offsetTime, LocalDate date) {
+       // int offsetTimeSeconds = offsetTimeToSeconds(offsetTime);
+        LocalDateTime dateTime = date.atTime(LocalTime.of(0,0,0)).plusSeconds(offsetTime);
         return dateTime.format(DateTimeFormatter.ofPattern("yyyyMMdd-HH:mm:ss"));
     }
 

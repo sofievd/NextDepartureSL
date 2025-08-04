@@ -95,6 +95,7 @@ public class GtfsFileHandler {
         List<StopTime> stopTimeList = new ArrayList<>();
         for (org.onebusaway.gtfs.model.StopTime stopTimeOneBusAway : store.getAllStopTimes()) {
             StopTime stopTime = createInMemoryStopTime(stopTimeOneBusAway);
+            //System.out.println(stopTime.getDepartureTime());
             stopTimeList.add(stopTime);
         }
         return stopTimeList;
@@ -102,8 +103,8 @@ public class GtfsFileHandler {
 
     private StopTime createInMemoryStopTime(org.onebusaway.gtfs.model.StopTime stopTimeOneBusAway) {
         return new StopTime(stopTimeOneBusAway.getTrip().getId().getId(),
-                String.valueOf(stopTimeOneBusAway.getArrivalTime()),
-                String.valueOf(stopTimeOneBusAway.getDepartureTime()),
+                stopTimeOneBusAway.getArrivalTime(),
+                stopTimeOneBusAway.getDepartureTime(),
                 stopTimeOneBusAway.getStop().getId().getId(),
                 stopTimeOneBusAway.getStopSequence(),
                 stopTimeOneBusAway.getStopHeadsign(),
@@ -186,8 +187,6 @@ public class GtfsFileHandler {
                 serviceCalendarDate.getExceptionType());
     }
 
-
-    //TODO: implement One bus away
     //TODO: make sure that all maps are created as they should.
 
 

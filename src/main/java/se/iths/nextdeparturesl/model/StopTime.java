@@ -10,8 +10,8 @@ public class StopTime {
 
 
     private String tripId;
-    private String arrivalTime;
-    private String departureTime;
+    private int arrivalTime;
+    private int departureTime;
     private String stopId;
     private int stopSequence;
     private String stopHeadsign;
@@ -21,8 +21,8 @@ public class StopTime {
     private int timepoint;
 
     public StopTime(String tripId,
-                    String arrivalTime,
-                    String departureTime,
+                    int arrivalTime,
+                    int departureTime,
                     String stopId,
                     int stopSequence,
                     String stopHeadsign,
@@ -50,19 +50,19 @@ public class StopTime {
         this.tripId = tripId;
     }
 
-    public String getArrivalTime() {
+    public int getArrivalTime() {
         return arrivalTime;
     }
 
-    public void setArrivalTime(String arrivalTime) {
+    public void setArrivalTime(int arrivalTime) {
         this.arrivalTime = arrivalTime;
     }
 
-    public String getDepartureTime() {
+    public int getDepartureTime() {
         return departureTime;
     }
 
-    public void setDepartureTime(String departureTime) {
+    public void setDepartureTime(int departureTime) {
         this.departureTime = departureTime;
     }
 
