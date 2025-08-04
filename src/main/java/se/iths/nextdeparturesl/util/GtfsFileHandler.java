@@ -24,7 +24,7 @@ import java.util.zip.ZipEntry;
 public class GtfsFileHandler {
 
     private static final Logger logger = LogManager.getLogger();
-    private List<Stop> stopList = new ArrayList<>();
+    private List<Stop> stopList;
     private List<StopTime> stopTimeList;
     private List<Trip> tripList;
     private List<Route> routeList;
@@ -74,7 +74,6 @@ public class GtfsFileHandler {
         List<Stop> stopList = new ArrayList<>();
         for (org.onebusaway.gtfs.model.Stop stopOneBusAway : store.getAllStops()) {
             Stop stop = createInMemoryStop(stopOneBusAway);
-           // System.out.println(stopOneBusAway.getName());
             stopList.add(stop);
         }
         return stopList;
@@ -95,7 +94,6 @@ public class GtfsFileHandler {
         List<StopTime> stopTimeList = new ArrayList<>();
         for (org.onebusaway.gtfs.model.StopTime stopTimeOneBusAway : store.getAllStopTimes()) {
             StopTime stopTime = createInMemoryStopTime(stopTimeOneBusAway);
-            //System.out.println(stopTime.getDepartureTime());
             stopTimeList.add(stopTime);
         }
         return stopTimeList;
@@ -186,8 +184,6 @@ public class GtfsFileHandler {
                 serviceCalendarDate.getDate().getAsString(),
                 serviceCalendarDate.getExceptionType());
     }
-
-    //TODO: make sure that all maps are created as they should.
 
 
     public List<Stop> getStopList() {
