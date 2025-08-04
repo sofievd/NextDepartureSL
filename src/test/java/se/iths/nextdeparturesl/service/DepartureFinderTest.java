@@ -15,7 +15,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class DepartureFinderTest {
     private DepartureFinder departureFinder;
-
     private GtfsDataHolder gtfsDataHolder;
 
     @BeforeEach

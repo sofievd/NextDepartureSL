@@ -23,12 +23,10 @@ public class GtfsDataHolder {
     private Map<String, List<String>> stopNameToStopId;
     private Map<String, List<String>> serviceIdToTripId;
     private List<String> stationList;
-    private final String path;
 
     private final GtfsFileHandler gtfsFileHandler;
 
     public GtfsDataHolder(String path) {
-        this.path = path;
         File file = new File(path + "sl.zip");
         this.gtfsFileHandler = new GtfsFileHandler(file);
     }
