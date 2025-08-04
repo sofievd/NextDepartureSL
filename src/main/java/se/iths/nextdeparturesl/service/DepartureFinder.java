@@ -15,14 +15,14 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
-public class SearchService {
+public class DepartureFinder {
 
     private static final Logger log = LogManager.getLogger();
     private static final String GTFS_BOARDING_TYPE_NO_BOARDING = "1";
     private static final int MAX_RESULTS = 20;
     public static final int MAX_DAYS_FORWARD = 3;
 
-    private GtfsDataHolder gtfsDataHolder = new GtfsDataHolder("src/main/resources/static/GTFS_SL/");
+    private GtfsDataHolder gtfsDataHolder = new GtfsDataHolder("src/main/resources/static/");
     private final VehicleTypeConverter vehicleTypeConverter = new VehicleTypeConverter();
 
     private Map<String, List<StopTime>> stopIdToStopTimes;
@@ -34,10 +34,10 @@ public class SearchService {
     private List<String> stationList;
 
 
-    public SearchService() {
+    public DepartureFinder() {
     }
 
-    public SearchService(GtfsDataHolder gtfsDataHolder) {
+    public DepartureFinder(GtfsDataHolder gtfsDataHolder) {
         this.gtfsDataHolder = gtfsDataHolder;
     }
 
@@ -170,19 +170,19 @@ public class SearchService {
         String destination = stopTime.getStopHeadsign();
         String departureTime = formatOffsetTime(stopTime.getDepartureTime(), date);
         String arrivalTime = formatOffsetTime(stopTime.getArrivalTime(), date);
-        String vehicleType = vehicleTypeConverter.convert(route.getRouteType());
-        String vehicleTypeCode = route.getRouteType();
-        String routeLongName = route.getRouteLongName();
-        String routeDescription = route.getRouteDesc();
-        String lineNumber = route.getRouteShortName();
+        String vehicleType = vehicleTypeConverter.convert(route.getType());
+        String vehicleTypeCode = route.getType();
+        String routeLongName = route.getLongName();
+        String routeDescription = route.getDesc();
+        String lineNumber = route.getShortName();
 
         Departure departure = new Departure(destination, departureTime, arrivalTime, vehicleType, vehicleTypeCode, routeLongName, routeDescription, lineNumber);
         departures.add(departure);
     }
 
-    private String formatOffsetTime(String offsetTime, LocalDate date) {
-        int offsetTimeSeconds = offsetTimeToSeconds(offsetTime);
-        LocalDateTime dateTime = date.atTime(LocalTime.of(0,0,0)).plusSeconds(offsetTimeSeconds);
+    private String formatOffsetTime(int offsetTime, LocalDate date) {
+       // int offsetTimeSeconds = offsetTimeToSeconds(offsetTime);
+        LocalDateTime dateTime = date.atTime(LocalTime.of(0,0,0)).plusSeconds(offsetTime);
         return dateTime.format(DateTimeFormatter.ofPattern("yyyyMMdd-HH:mm:ss"));
     }
 
@@ -220,7 +220,7 @@ public class SearchService {
         }
 
         List<StopTime> stopTimesList = getStopTimesFromStationId(StationIdList);
-        stopTimesList.removeIf(stopTime -> stopTime.getPickupType().equals(GTFS_BOARDING_TYPE_NO_BOARDING));
+        stopTimesList.removeIf(stopTime -> String.valueOf(stopTime.getPickupType()).equals(GTFS_BOARDING_TYPE_NO_BOARDING));
 
         Map<String, List<StopTime>> stopTimeMap = createTripIdToStopTimeMap(stopTimesList);
         List<Trip> tripsAtStop = getTripsFromFromStopTimes(stopTimesList);
