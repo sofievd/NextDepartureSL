@@ -8,9 +8,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import se.iths.nextdeparturesl.service.DepartureFinder;
-import se.iths.nextdeparturesl.util.ApiDownload;
+import se.iths.nextdeparturesl.util.ApiDownloader;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @CrossOrigin("*")
 @RestController
@@ -29,8 +30,10 @@ departureFinder.setUp();
     @GetMapping("/download")
     public ResponseEntity<?> download() {
         System.out.println("here");
-        ApiDownload download = new ApiDownload();
-        download.download();
+        ApiDownloader download = new ApiDownloader();
+        LocalDateTime now = LocalDateTime.now();
+        String today = now.format(DateTimeFormatter.ofPattern(("YYYY-MM-dd")));
+      //  download.download(today);
         return ResponseEntity.ok().body("download completed");
 
     }

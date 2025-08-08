@@ -22,7 +22,8 @@ public class DepartureFinder {
     private static final int MAX_RESULTS = 20;
     public static final int MAX_DAYS_FORWARD = 3;
 
-    private GtfsDataHolder gtfsDataHolder = new GtfsDataHolder("src/main/resources/static/");
+    private String date = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+    private GtfsDataHolder gtfsDataHolder = new GtfsDataHolder("src/main/resources/static/"+date);
     private final VehicleTypeConverter vehicleTypeConverter = new VehicleTypeConverter();
 
     private Map<String, List<StopTime>> stopIdToStopTimes;
