@@ -10,10 +10,7 @@ import org.slf4j.LoggerFactory;
 import java.io.*;
 import java.util.Date;
 
-//TODO: create a timer task class where a method will be created that downloads the static data once a day and also deletes the previous one
-// this needs to be transactional
-
-//TODO: create a method that will download the realtime data ( every 15 seconds )
+//TODO: create a method that will download the realtime data
 
 public class ApiDownloader {
     private static final Logger log = LoggerFactory.getLogger(ApiDownloader.class);

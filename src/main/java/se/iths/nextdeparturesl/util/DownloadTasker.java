@@ -7,7 +7,7 @@ import java.io.File;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-
+//TODO: have a method that will download realtime data every 15 seconds
 public class DownloadTasker {
 
     private static final Logger log = LoggerFactory.getLogger(DownloadTasker.class);
