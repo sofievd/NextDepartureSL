@@ -8,12 +8,16 @@ import se.iths.nextdeparturesl.model.StopTime;
 import se.iths.nextdeparturesl.model.Trip;
 import se.iths.nextdeparturesl.util.VehicleTypeConverter;
 import se.iths.nextdeparturesl.view.Departure;
+import se.iths.nextdeparturesl.view.VehiclePosition;
 
+import java.io.File;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+//TODO:: separate searching methods from realtime data methods
+
 
 public class DepartureFinder {
 
@@ -21,10 +25,12 @@ public class DepartureFinder {
     private static final String GTFS_BOARDING_TYPE_NO_BOARDING = "1";
     private static final int MAX_RESULTS = 20;
     public static final int MAX_DAYS_FORWARD = 3;
+    private  List<VehiclePosition> vehicleList;
 
-    private String date = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-    private GtfsDataHolder gtfsDataHolder = new GtfsDataHolder("src/main/resources/static/"+date);
+    //private String date = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+    private GtfsDataHolder gtfsDataHolder = new GtfsDataHolder(new File(getClass().getClassLoader().getResource("sl.zip").getFile()));
     private final VehicleTypeConverter vehicleTypeConverter = new VehicleTypeConverter();
+    private GtfsVehiclePositionHolder vehiclePositionHolder = new GtfsVehiclePositionHolder();
 
     private Map<String, List<StopTime>> stopIdToStopTimes;
     private Map<String, Trip> tripIdToTrips;
@@ -36,6 +42,7 @@ public class DepartureFinder {
 
 
     public DepartureFinder() {
+        //this.gtfsDataHolder = new GtfsDataHolder(new File(getClass().getClassLoader().getResource("sl.zip").getFile()));
     }
 
     public DepartureFinder(GtfsDataHolder gtfsDataHolder) {
@@ -52,6 +59,7 @@ public class DepartureFinder {
         stopNameToStopId = gtfsDataHolder.getStopNameToStopId();
         serviceIdToTripId = gtfsDataHolder.getServiceIdToTripId();
         stationList = gtfsDataHolder.getStationList();
+        vehicleList = vehiclePositionHolder.getVehicles();
     }
 
     public List<String> getStationList() {
@@ -171,8 +179,8 @@ public class DepartureFinder {
         String destination = stopTime.getStopHeadsign();
         String departureTime = formatOffsetTime(stopTime.getDepartureTime(), date);
         String arrivalTime = formatOffsetTime(stopTime.getArrivalTime(), date);
-        String vehicleType = vehicleTypeConverter.convert(route.getType());
-        String vehicleTypeCode = route.getType();
+        String vehicleType = vehicleTypeConverter.convert(String.valueOf(route.getType()));
+        String vehicleTypeCode = String.valueOf(route.getType());
         String routeLongName = route.getLongName();
         String routeDescription = route.getDesc();
         String lineNumber = route.getShortName();
@@ -324,5 +332,35 @@ public class DepartureFinder {
         List<StopTime> stopTimes = new ArrayList<>(stopTimeSet);
         stopTimes.sort(Comparator.comparing(StopTime::getDepartureTime));
         return stopTimes;
+    }
+
+    public void updateVehiclePositionWithType() {
+        for (VehiclePosition vehicle : vehicleList) {
+            String tripId = vehicle.getId();
+            if(tripIdToTrips.containsKey(tripId)){
+                Trip trip = tripIdToTrips.get(tripId);
+                String routeId = trip.getRouteId();
+                Route route = routeIdToRoutes.get(routeId);
+                int type = route.getType();
+                String routeName = route.getLongName();
+                String lineNumber = route.getShortName();
+                String description = route.getDesc();
+                vehicle.setType(type);
+                vehicle.setRouteName(routeName);
+                vehicle.setRouteDescription(description);
+                vehicle.setLineNumber(lineNumber);
+                System.out.println(vehicle);
+            }
+            //System.out.println(vehicle);
+        }
+    }
+
+    public List<VehiclePosition> getVehicles() {
+        updateVehiclePositionWithType();
+        return vehicleList;
+    }
+
+    public void setVehicles(List<VehiclePosition> vehicles) {
+        this.vehicleList = vehicles;
     }
 }

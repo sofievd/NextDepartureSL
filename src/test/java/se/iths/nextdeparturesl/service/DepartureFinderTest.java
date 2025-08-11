@@ -5,7 +5,9 @@ import org.junit.jupiter.api.Test;
 import se.iths.nextdeparturesl.model.StopTime;
 import se.iths.nextdeparturesl.model.Trip;
 import se.iths.nextdeparturesl.view.Departure;
+import se.iths.nextdeparturesl.view.VehiclePosition;
 
+import java.io.File;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
@@ -19,8 +21,9 @@ class DepartureFinderTest {
 
     @BeforeEach
     void setUp() {
-        gtfsDataHolder = new GtfsDataHolder("src/test/resources/GTFS_SL_TEST/");
-        departureFinder = new DepartureFinder(gtfsDataHolder);
+        //File gtfsRootFolderPath = new File(getClass().getClassLoader().getResource("test_sl.zip").getFile());
+       // gtfsDataHolder = new GtfsDataHolder(gtfsRootFolderPath);
+        departureFinder = new DepartureFinder();
         departureFinder.setUp();
     }
 
@@ -94,5 +97,17 @@ class DepartureFinderTest {
         assertEquals(1, departures.size());
         assertEquals("Hagede via Styrsvik Långvik Sandhamn", departures.get(0).getDestination());
         assertEquals("Water Transport", departures.get(0).getVehicleType());
+    }
+
+
+    @Test
+    void updateVehiclePositionWithType() {
+        departureFinder.updateVehiclePositionWithType();
+    }
+
+    @Test
+    void getVehicles() {
+        List<VehiclePosition> vehicleList = departureFinder.getVehicles();
+        assertNotNull(vehicleList);
     }
 }
