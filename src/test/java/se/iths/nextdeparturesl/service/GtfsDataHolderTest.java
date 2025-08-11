@@ -72,7 +72,7 @@ class GtfsDataHolderTest {
     }
 
     @Test
-    void getStopIdTostopTimes() {
+    void getStopIdToStopTimes() {
         assertNull(gtfsDataHolder.getStopIdToStopTimes());
     }
 
