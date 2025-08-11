@@ -7,6 +7,7 @@ import se.iths.nextdeparturesl.model.Route;
 import se.iths.nextdeparturesl.model.StopTime;
 import se.iths.nextdeparturesl.model.Trip;
 
+import java.io.File;
 import java.util.List;
 import java.util.Map;
 
@@ -17,16 +18,14 @@ class GtfsDataHolderTest {
 
     @BeforeEach
     void setUp() {
-        String gtfsRootFolderPath = getClass().getClassLoader().getResource("GTFS_SL_TEST/").getPath();
+        File gtfsRootFolderPath = new File(getClass().getClassLoader().getResource("sl.zip").getFile());
         gtfsDataHolder = new GtfsDataHolder(gtfsRootFolderPath);
     }
 
     @Test
     void createStopTimeMapWithStopId_notEmpty_shouldReturnStopTimes() {
         Map<String, List<StopTime>> map = gtfsDataHolder.createStopTimeMapWithStopId();
-
         assertFalse(map.isEmpty());
-
         assertEquals(2, map.size());
     }
 
@@ -34,28 +33,28 @@ class GtfsDataHolderTest {
     void createTripMapWithTripId() {
         Map<String, Trip> map = gtfsDataHolder.createTripMapWithTripId();
         assertFalse(map.isEmpty());
-        assertEquals(31, map.size());
+        assertEquals(32, map.size());
     }
 
     @Test
     void createRouteMapWithRouteId() {
         Map<String, Route> map = gtfsDataHolder.createRouteMapWithRouteId();
         assertFalse(map.isEmpty());
-        assertEquals(2, map.size());
+        assertEquals(3, map.size());
     }
 
     @Test
     void createCalendarDateMapWithServiceId() {
         Map<String, List<CalendarDate>> map = gtfsDataHolder.createCalendarDateMapWithServiceId();
         assertFalse(map.isEmpty());
-        assertEquals(10, map.size());
+        assertEquals(11, map.size());
     }
 
     @Test
     void createStopIdMapWithStopName() {
         Map<String, List<String>> map = gtfsDataHolder.createStopIdMapWithStopName();
         assertFalse(map.isEmpty());
-        assertEquals(5, map.size());
+        assertEquals(6, map.size());
         assertEquals(map.get("Stavsnäs"), List.of("9022001000101001"));
     }
 
@@ -64,7 +63,7 @@ class GtfsDataHolderTest {
         Map<String, List<String>> map = gtfsDataHolder.createTripIdListMapWithServiceId();
 
         assertFalse(map.isEmpty());
-        assertEquals(10, map.size());
+        assertEquals(11, map.size());
     }
 
     @Test
@@ -98,7 +97,7 @@ class GtfsDataHolderTest {
     }
 
     @Test
-    void getTripIdTotrips() {
+    void getTripIdToTrips() {
         assertNull(gtfsDataHolder.getTripIdToTrips());
     }
 }

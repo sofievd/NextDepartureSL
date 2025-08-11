@@ -26,8 +26,8 @@ public class GtfsDataHolder {
 
     private final GtfsFileHandler gtfsFileHandler;
 
-    public GtfsDataHolder(String path) {
-        File file = new File(path + "sl.zip");
+    public GtfsDataHolder(File file) {
+        //File file = new File(path + "sl.zip");
         this.gtfsFileHandler = new GtfsFileHandler(file);
     }
 

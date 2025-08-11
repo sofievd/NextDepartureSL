@@ -143,7 +143,7 @@ public class GtfsFileHandler {
                 routeOneBusAway.getAgency().getId(),
                 routeOneBusAway.getShortName(),
                 routeOneBusAway.getLongName(),
-                String.valueOf(routeOneBusAway.getType()),
+                routeOneBusAway.getType(),
                 routeOneBusAway.getDesc());
     }
 
