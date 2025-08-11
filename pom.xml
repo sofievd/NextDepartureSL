@@ -54,7 +54,11 @@
 			<groupId>org.apache.camel.springboot</groupId>
 			<artifactId>camel-spring-boot-starter</artifactId>
 			<version>4.11.0</version>
-
+		</dependency>
+		<dependency>
+			<groupId>org.mobilitydata</groupId>
+			<artifactId>gtfs-realtime-bindings</artifactId>
+			<version>0.0.8</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
