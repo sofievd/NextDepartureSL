@@ -12,14 +12,14 @@ public class Route {
     private String agencyId;
     private String shortName;
     private String longName;
-    private String type;
+    private int type;
     private String desc;
 
     public Route(String id,
                  String agencyId,
                  String shortName,
                  String longName,
-                 String type,
+                 int type,
                  String desc) {
         this.id = id;
         this.agencyId = agencyId;
@@ -61,11 +61,11 @@ public class Route {
         this.longName = longName;
     }
 
-    public String getType() {
+    public int getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(int type) {
         this.type = type;
     }
 
