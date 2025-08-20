@@ -8,7 +8,7 @@ import java.io.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 class FileUtilTest {
-    FileUtil fileUtil = new FileUtil();
+    FileUtil fileUtil= new FileUtil();
     File directory;
     @BeforeEach
     void setUp() {
@@ -17,7 +17,6 @@ class FileUtilTest {
             directory.mkdirs();
         }
     }
-
 
     @Test
     void deleteFile() {
@@ -48,4 +47,5 @@ class FileUtilTest {
         assertTrue(theFile.canRead());
         assertTrue(theFile.canWrite());
     }
+
 }

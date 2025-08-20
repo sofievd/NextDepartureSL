@@ -5,12 +5,17 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 
 
 public class FileUtil {
     private static final Logger log = LoggerFactory.getLogger(FileUtil.class);
+
+    public FileUtil() {
+    }
+
     public void deleteFile(File folder) {
         log.info("Deleting file: " + folder.getAbsolutePath());
         File[] files = folder.listFiles();
@@ -35,6 +40,14 @@ public class FileUtil {
             }
         } catch (Exception e) {
             throw new RuntimeException("error writing zip-file, error message: " + e.getMessage(), e);
+        }
+    }
+
+    public void clearFileContent(File file) {
+        try {
+            new FileOutputStream(file.getPath()).close();
+        } catch (IOException e) {
+            throw new RuntimeException("error clearing file, error message: " + e.getMessage(), e);
         }
     }
 }
