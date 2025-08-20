@@ -13,7 +13,7 @@ class GtfsVehiclePositionHolderTest {
 
     @BeforeEach
     void setUp() {
-        gtfsVehiclePositionHolder = new GtfsVehiclePositionHolder();
+        gtfsVehiclePositionHolder = GtfsVehiclePositionHolder.getInstance();
     }
 
 
