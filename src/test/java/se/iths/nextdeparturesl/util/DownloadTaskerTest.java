@@ -10,6 +10,6 @@ class DownloadTaskerTest {
 
     @Test
     void downloadStaticDataDaily() {
-        tasker.downloadStaticDataDaily();
+        tasker.run();
     }
 }
