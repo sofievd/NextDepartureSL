@@ -6,6 +6,8 @@ import org.onebusaway.gtfs.impl.GtfsDaoImpl;
 import se.iths.nextdeparturesl.model.*;
 
 import java.io.File;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -16,9 +18,11 @@ class GtfsFileHandlerTest {
 
     @BeforeEach
     void setUp() {
-        //File file = new File("src/test/resources/test_sl.zip");
+        LocalDateTime now = LocalDateTime.now();
+        String today = now.format(DateTimeFormatter.ofPattern(("YYYY-MM-dd")));
         gtfsFileHandler = new GtfsFileHandler();
-        store = gtfsFileHandler.setUp(new File(getClass().getClassLoader().getResource("sl.zip").getFile()));
+
+        store = gtfsFileHandler.setUp(new File(getClass().getClassLoader().getResource(today+"-sl.zip").getFile()));
 
     }
 
