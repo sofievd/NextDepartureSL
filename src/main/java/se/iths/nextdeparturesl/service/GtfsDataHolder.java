@@ -2,11 +2,15 @@ package se.iths.nextdeparturesl.service;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import se.iths.nextdeparturesl.model.*;
-import se.iths.nextdeparturesl.util.GtfsFileHandler;
+import se.iths.nextdeparturesl.model.CalendarDate;
+import se.iths.nextdeparturesl.model.Route;
+import se.iths.nextdeparturesl.model.StopTime;
+import se.iths.nextdeparturesl.model.Trip;
+import se.iths.nextdeparturesl.util.MapCreator;
 
 import java.io.File;
-import java.util.*;
+import java.util.List;
+import java.util.Map;
 
 /**
  * MapService Provides access to in-memory mappings of GTFS data for efficient lookups and operations.
@@ -24,11 +28,23 @@ public class GtfsDataHolder {
     private Map<String, List<String>> serviceIdToTripId;
     private List<String> stationList;
 
-    private final GtfsFileHandler gtfsFileHandler;
+    private File file;
+    private static GtfsDataHolder gtfsDataHolder;
+    private MapCreator creator;
 
-    public GtfsDataHolder(File file) {
-        //File file = new File(path + "sl.zip");
-        this.gtfsFileHandler = new GtfsFileHandler(file);
+    private GtfsDataHolder(File file) {
+        this.file = file;
+    }
+
+    public static GtfsDataHolder getInstance(File file) {
+        if (gtfsDataHolder == null) {
+            gtfsDataHolder = new GtfsDataHolder(file);
+        }
+        return gtfsDataHolder;
+    }
+
+    public static GtfsDataHolder getInstance() {
+        return gtfsDataHolder;
     }
 
     /**
@@ -36,21 +52,81 @@ public class GtfsDataHolder {
      */
     public void createMaps() {
         log.info("Starting making maps");
-        stationList = gtfsFileHandler.getStopNameList();
-        stopIdToStopTimes = createStopTimeMapWithStopId();
-        tripIdToTrips = createTripMapWithTripId();
-        routeIdToRoutes = createRouteMapWithRouteId();
-        serviceIdToCalendarDates = createCalendarDateMapWithServiceId();
-        stopNameToStopId = createStopIdMapWithStopName();
-        serviceIdToTripId = createTripIdListMapWithServiceId();
+        this.creator = new MapCreator(file);
+        stationList = creator.getStopNameList();
+        stopIdToStopTimes = creator.createStopTimeMapWithStopId();
+        tripIdToTrips = creator.createTripMapWithTripId();
+        routeIdToRoutes = creator.createRouteMapWithRouteId();
+        serviceIdToCalendarDates = creator.createCalendarDateMapWithServiceId();
+        stopNameToStopId = creator.createStopIdMapWithStopName();
+        serviceIdToTripId = creator.createTripIdListMapWithServiceId();
         log.info("Finished making maps");
     }
 
-    /**
+    public void updateFile(File file) {
+        this.file = file;
+    }
+
+    public List<String> getStationList() {
+        return stationList;
+    }
+
+    public Map<String, List<StopTime>> getStopIdToStopTimes() {
+        return stopIdToStopTimes;
+    }
+
+    public Map<String, List<String>> getStopNameToStopId() {
+        return stopNameToStopId;
+    }
+
+    public Map<String, List<String>> getServiceIdToTripId() {
+        return serviceIdToTripId;
+    }
+
+    public Map<String, List<CalendarDate>> getServiceIdToCalendarDates() {
+        return serviceIdToCalendarDates;
+    }
+
+    public Map<String, Route> getRouteIdToRoutes() {
+        return routeIdToRoutes;
+    }
+
+    public Map<String, Trip> getTripIdToTrips() {
+        return tripIdToTrips;
+    }
+
+    public void setStopIdToStopTimes(Map<String, List<StopTime>> stopIdToStopTimes) {
+        this.stopIdToStopTimes = stopIdToStopTimes;
+    }
+
+    public void setTripIdToTrips(Map<String, Trip> tripIdToTrips) {
+        this.tripIdToTrips = tripIdToTrips;
+    }
+
+    public void setRouteIdToRoutes(Map<String, Route> routeIdToRoutes) {
+        this.routeIdToRoutes = routeIdToRoutes;
+    }
+
+    public void setServiceIdToCalendarDates(Map<String, List<CalendarDate>> serviceIdToCalendarDates) {
+        this.serviceIdToCalendarDates = serviceIdToCalendarDates;
+    }
+
+    public void setStopNameToStopId(Map<String, List<String>> stopNameToStopId) {
+        this.stopNameToStopId = stopNameToStopId;
+    }
+
+    public void setServiceIdToTripId(Map<String, List<String>> serviceIdToTripId) {
+        this.serviceIdToTripId = serviceIdToTripId;
+    }
+
+    public void setStationList(List<String> stationList) {
+        this.stationList = stationList;
+    }
+    /*  *//**
      * Creates a map that groups {@link StopTime} entries by their stop ID.
      *
      * @return a map where each key is a stop ID and the value is a list of StopTime entries for that stop
-     */
+     *//*
     public Map<String, List<StopTime>> createStopTimeMapWithStopId() {
         log.info("creating StopTime map with StopId");
         Map<String, List<StopTime>> map = new HashMap<>();
@@ -63,11 +139,11 @@ public class GtfsDataHolder {
         return map;
     }
 
-    /**
+    *//**
      * Creates a map with {@link Trip} entries and their trip ID.
      *
      * @return a map where each key is a trip ID and the value is the corresponding trip
-     */
+     *//*
     public Map<String, Trip> createTripMapWithTripId() {
         log.info("creating Trip map with TripId");
         Map<String, Trip> map = new HashMap<>();
@@ -79,11 +155,11 @@ public class GtfsDataHolder {
         return map;
     }
 
-    /**
+    *//**
      * Creates a map with {@link Route} entries and their route ID.
      *
      * @return a map where each key is a route ID and the value is the corresponding route
-     */
+     *//*
     public Map<String, Route> createRouteMapWithRouteId() {
         log.info("creating Route map with RouteId");
         Map<String, Route> map = new HashMap<>();
@@ -95,11 +171,11 @@ public class GtfsDataHolder {
         return map;
     }
 
-    /**
+    *//**
      * Creates a map that groups {@link CalendarDate} entries by their service ID.
      *
      * @return a map where each key is a service ID and the value is a list of calendarDate entries for that service
-     */
+     *//*
     public Map<String, List<CalendarDate>> createCalendarDateMapWithServiceId() {
         log.info("creating CalendarDate map with ServiceId");
         Map<String, List<CalendarDate>> map = new HashMap<>();
@@ -112,9 +188,9 @@ public class GtfsDataHolder {
         return map;
     }
 
-    /**
+    *//**
      * Crates a map that groups stop ID's by their stop Name.
-     */
+     *//*
     public Map<String, List<String>> createStopIdMapWithStopName() {
         log.info("creating StopId map with StopName");
         List<Stop> stopList = gtfsFileHandler.getStopList();
@@ -164,33 +240,5 @@ public class GtfsDataHolder {
             }
         }
         return resultList;
-    }
-
-    public List<String> getStationList() {
-        return stationList;
-    }
-
-    public Map<String, List<StopTime>> getStopIdToStopTimes() {
-        return stopIdToStopTimes;
-    }
-
-    public Map<String, List<String>> getStopNameToStopId() {
-        return stopNameToStopId;
-    }
-
-    public Map<String, List<String>> getServiceIdToTripId() {
-        return serviceIdToTripId;
-    }
-
-    public Map<String, List<CalendarDate>> getServiceIdToCalendarDates() {
-        return serviceIdToCalendarDates;
-    }
-
-    public Map<String, Route> getRouteIdToRoutes() {
-        return routeIdToRoutes;
-    }
-
-    public Map<String, Trip> getTripIdToTrips() {
-        return tripIdToTrips;
-    }
+    }*/
 }

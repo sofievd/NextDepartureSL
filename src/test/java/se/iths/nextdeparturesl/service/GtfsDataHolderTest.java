@@ -8,6 +8,8 @@ import se.iths.nextdeparturesl.model.StopTime;
 import se.iths.nextdeparturesl.model.Trip;
 
 import java.io.File;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 
@@ -18,57 +20,13 @@ class GtfsDataHolderTest {
 
     @BeforeEach
     void setUp() {
-        File gtfsRootFolderPath = new File(getClass().getClassLoader().getResource("sl.zip").getFile());
-        gtfsDataHolder = new GtfsDataHolder(gtfsRootFolderPath);
-    }
-
-    @Test
-    void createStopTimeMapWithStopId_notEmpty_shouldReturnStopTimes() {
-        Map<String, List<StopTime>> map = gtfsDataHolder.createStopTimeMapWithStopId();
-        assertFalse(map.isEmpty());
-        assertEquals(2, map.size());
-    }
-
-    @Test
-    void createTripMapWithTripId() {
-        Map<String, Trip> map = gtfsDataHolder.createTripMapWithTripId();
-        assertFalse(map.isEmpty());
-        assertEquals(32, map.size());
-    }
-
-    @Test
-    void createRouteMapWithRouteId() {
-        Map<String, Route> map = gtfsDataHolder.createRouteMapWithRouteId();
-        assertFalse(map.isEmpty());
-        assertEquals(3, map.size());
-    }
-
-    @Test
-    void createCalendarDateMapWithServiceId() {
-        Map<String, List<CalendarDate>> map = gtfsDataHolder.createCalendarDateMapWithServiceId();
-        assertFalse(map.isEmpty());
-        assertEquals(11, map.size());
-    }
-
-    @Test
-    void createStopIdMapWithStopName() {
-        Map<String, List<String>> map = gtfsDataHolder.createStopIdMapWithStopName();
-        assertFalse(map.isEmpty());
-        assertEquals(6, map.size());
-        assertEquals(map.get("Stavsnäs"), List.of("9022001000101001"));
-    }
-
-    @Test
-    void createTripIdListMapWithServiceId() {
-        Map<String, List<String>> map = gtfsDataHolder.createTripIdListMapWithServiceId();
-
-        assertFalse(map.isEmpty());
-        assertEquals(11, map.size());
+        File gtfsRootFolderPath = new File(getClass().getClassLoader().getResource("2025-08-18-sl.zip").getFile());
+        gtfsDataHolder = GtfsDataHolder.getInstance(gtfsRootFolderPath);
     }
 
     @Test
     void getStationList() {
-        assertNull(gtfsDataHolder.getStationList());
+       assertNull(gtfsDataHolder.getStationList());
     }
 
     @Test
