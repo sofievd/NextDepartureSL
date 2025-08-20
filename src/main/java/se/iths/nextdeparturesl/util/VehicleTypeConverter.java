@@ -12,7 +12,7 @@ public class VehicleTypeConverter {
         vehicleCodeToString.put("102", "Long Distance Rail");
         vehicleCodeToString.put("103", "Inter Regional Rail");
         vehicleCodeToString.put("105", "Sleeper Rail");
-        vehicleCodeToString.put("106", "Regional Rai");
+        vehicleCodeToString.put("106", "Regional Rail");
         vehicleCodeToString.put("401", "Metro");
         vehicleCodeToString.put("700", "Buss");
         vehicleCodeToString.put("714", "Rail Replacement Bus");
