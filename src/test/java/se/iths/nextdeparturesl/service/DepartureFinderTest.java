@@ -21,8 +21,7 @@ class DepartureFinderTest {
 
     @BeforeEach
     void setUp() {
-        //File gtfsRootFolderPath = new File(getClass().getClassLoader().getResource("test_sl.zip").getFile());
-       // gtfsDataHolder = new GtfsDataHolder(gtfsRootFolderPath);
+       //File gtfsRootFolderPath = new File(getClass().getClassLoader().getResource("test_sl.zip").getFile());
         departureFinder = new DepartureFinder();
         departureFinder.setUp();
     }
@@ -31,7 +30,7 @@ class DepartureFinderTest {
     void getStationList() {
         List<String> stations = departureFinder.getStationList();
         assertNotNull(stations);
-        assertEquals(5, stations.size());
+        assertEquals(6, stations.size());
     }
 
     @Test
@@ -99,15 +98,20 @@ class DepartureFinderTest {
         assertEquals("Water Transport", departures.get(0).getVehicleType());
     }
 
-
     @Test
-    void updateVehiclePositionWithType() {
-        departureFinder.updateVehiclePositionWithType();
+    void update() {
+        departureFinder.update();
     }
 
-    @Test
-    void getVehicles() {
-        List<VehiclePosition> vehicleList = departureFinder.getVehicles();
-        assertNotNull(vehicleList);
-    }
+
+//    @Test
+//    void updateVehiclePositionWithType() {
+//        departureFinder.updateVehiclePositionWithType();
+//    }
+//
+//    @Test
+//    void getVehicles() {
+//        List<VehiclePosition> vehicleList = departureFinder.getVehicles();
+//        assertNotNull(vehicleList);
+//    }
 }

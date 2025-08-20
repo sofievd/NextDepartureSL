@@ -6,9 +6,10 @@ import se.iths.nextdeparturesl.model.CalendarDate;
 import se.iths.nextdeparturesl.model.Route;
 import se.iths.nextdeparturesl.model.StopTime;
 import se.iths.nextdeparturesl.model.Trip;
+import se.iths.nextdeparturesl.util.ApiDownloader;
+import se.iths.nextdeparturesl.util.DownloadTasker;
 import se.iths.nextdeparturesl.util.VehicleTypeConverter;
 import se.iths.nextdeparturesl.view.Departure;
-import se.iths.nextdeparturesl.view.VehiclePosition;
 
 import java.io.File;
 import java.time.LocalDate;
@@ -16,21 +17,20 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import static java.time.temporal.ChronoUnit.MILLIS;
 //TODO:: separate searching methods from realtime data methods
 
 
 public class DepartureFinder {
-
     private static final Logger log = LogManager.getLogger();
     private static final String GTFS_BOARDING_TYPE_NO_BOARDING = "1";
     private static final int MAX_RESULTS = 20;
     public static final int MAX_DAYS_FORWARD = 3;
-    private  List<VehiclePosition> vehicleList;
+
 
     //private String date = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-    private GtfsDataHolder gtfsDataHolder = new GtfsDataHolder(new File(getClass().getClassLoader().getResource("sl.zip").getFile()));
+    private GtfsDataHolder gtfsDataHolder;
     private final VehicleTypeConverter vehicleTypeConverter = new VehicleTypeConverter();
-    private GtfsVehiclePositionHolder vehiclePositionHolder = new GtfsVehiclePositionHolder();
 
     private Map<String, List<StopTime>> stopIdToStopTimes;
     private Map<String, Trip> tripIdToTrips;
@@ -40,18 +40,20 @@ public class DepartureFinder {
     private Map<String, List<String>> serviceIdToTripId;
     private List<String> stationList;
 
-
     public DepartureFinder() {
-        //this.gtfsDataHolder = new GtfsDataHolder(new File(getClass().getClassLoader().getResource("sl.zip").getFile()));
-    }
-
-    public DepartureFinder(GtfsDataHolder gtfsDataHolder) {
-        this.gtfsDataHolder = gtfsDataHolder;
+        setUp();
     }
 
     public void setUp() {
         log.info("Setting up search service");
+        LocalDateTime now = LocalDateTime.now();
+        String today = now.format(DateTimeFormatter.ofPattern(("YYYY-MM-dd")));
+        gtfsDataHolder = GtfsDataHolder.getInstance(new File(getClass().getClassLoader().getResource(today + "-sl.zip").getFile()));
         gtfsDataHolder.createMaps();
+        setMaps();
+    }
+
+    private void setMaps(){
         stopIdToStopTimes = gtfsDataHolder.getStopIdToStopTimes();
         tripIdToTrips = gtfsDataHolder.getTripIdToTrips();
         routeIdToRoutes = gtfsDataHolder.getRouteIdToRoutes();
@@ -59,7 +61,18 @@ public class DepartureFinder {
         stopNameToStopId = gtfsDataHolder.getStopNameToStopId();
         serviceIdToTripId = gtfsDataHolder.getServiceIdToTripId();
         stationList = gtfsDataHolder.getStationList();
-        vehicleList = vehiclePositionHolder.getVehicles();
+    }
+
+    public void update() {
+        LocalDateTime now = LocalDateTime.now();
+        int day = now.getDayOfMonth() + 1;
+        LocalDateTime tomorrow = LocalDateTime.of(now.getYear(), now.getMonth(), day, 02, 0);
+        long difference = MILLIS.between(now, tomorrow);
+        long period = 1000*60*60*24;
+
+        new Timer().scheduleAtFixedRate(new DownloadTasker(), difference, period);
+        gtfsDataHolder = GtfsDataHolder.getInstance();
+        setMaps();
     }
 
     public List<String> getStationList() {
@@ -190,17 +203,16 @@ public class DepartureFinder {
     }
 
     private String formatOffsetTime(int offsetTime, LocalDate date) {
-       // int offsetTimeSeconds = offsetTimeToSeconds(offsetTime);
-        LocalDateTime dateTime = date.atTime(LocalTime.of(0,0,0)).plusSeconds(offsetTime);
+        LocalDateTime dateTime = date.atTime(LocalTime.of(0, 0, 0)).plusSeconds(offsetTime);
         return dateTime.format(DateTimeFormatter.ofPattern("yyyyMMdd-HH:mm:ss"));
     }
 
-    private int offsetTimeToSeconds(String offsetTime) {
-        int hour = Integer.parseInt(offsetTime.substring(0, 2));
-        int minute = Integer.parseInt(offsetTime.substring(3, 5));
-        int second = Integer.parseInt(offsetTime.substring(6, 8));
-        return (3600*hour)+(60*minute)+second;
-    }
+//    private int offsetTimeToSeconds(String offsetTime) {
+//        int hour = Integer.parseInt(offsetTime.substring(0, 2));
+//        int minute = Integer.parseInt(offsetTime.substring(3, 5));
+//        int second = Integer.parseInt(offsetTime.substring(6, 8));
+//        return (3600*hour)+(60*minute)+second;
+//    }
 
     public List<Departure> getDeparturesWithStopTime(List<StopTime> stopTimes, LocalDate date) {
         log.info("getting departures with stopTime {} and date {}", stopTimes, date);
@@ -236,7 +248,7 @@ public class DepartureFinder {
         List<String> serviceIdsForTripsAtStop = getServiceIdFromTrips(tripsAtStop);
 
         LocalDate searchDate = searchDateTime.toLocalDate();
-        List<Departure> departuresList = getDeparturesAtDate(tripsAtStop,serviceIdsForTripsAtStop,stopTimeMap, searchDate);
+        List<Departure> departuresList = getDeparturesAtDate(tripsAtStop, serviceIdsForTripsAtStop, stopTimeMap, searchDate);
         removeDeparturesBeforeSearchDateTime(searchDateTime, departuresList);
 
         for (int daysOffset = 1; departuresList.size() < MAX_RESULTS && daysOffset < MAX_DAYS_FORWARD; daysOffset++) {
@@ -255,9 +267,8 @@ public class DepartureFinder {
         departuresList.removeIf(departure -> departure.getDepartureTime().compareTo(earliestTimeString) < 0);
     }
 
-
     private List<Departure> getDeparturesAtDate(List<Trip> tripsAtStop, List<String> serviceIdsForTripsAtStop,
-                                               Map<String, List<StopTime>> stopTimeMap, LocalDate date) {
+                                                Map<String, List<StopTime>> stopTimeMap, LocalDate date) {
         log.info("getting departures at {}", date);
 
 
@@ -299,7 +310,6 @@ public class DepartureFinder {
         return activeIds;
     }
 
-
     private List<String> getServiceIdFromTrips(List<Trip> tripList) {
         log.info("getting serviceId from trips");
         Set<String> serviceIdSet = new HashSet<>();
@@ -334,33 +344,4 @@ public class DepartureFinder {
         return stopTimes;
     }
 
-    public void updateVehiclePositionWithType() {
-        for (VehiclePosition vehicle : vehicleList) {
-            String tripId = vehicle.getId();
-            if(tripIdToTrips.containsKey(tripId)){
-                Trip trip = tripIdToTrips.get(tripId);
-                String routeId = trip.getRouteId();
-                Route route = routeIdToRoutes.get(routeId);
-                int type = route.getType();
-                String routeName = route.getLongName();
-                String lineNumber = route.getShortName();
-                String description = route.getDesc();
-                vehicle.setType(type);
-                vehicle.setRouteName(routeName);
-                vehicle.setRouteDescription(description);
-                vehicle.setLineNumber(lineNumber);
-                System.out.println(vehicle);
-            }
-            //System.out.println(vehicle);
-        }
-    }
-
-    public List<VehiclePosition> getVehicles() {
-        updateVehiclePositionWithType();
-        return vehicleList;
-    }
-
-    public void setVehicles(List<VehiclePosition> vehicles) {
-        this.vehicleList = vehicles;
-    }
 }
