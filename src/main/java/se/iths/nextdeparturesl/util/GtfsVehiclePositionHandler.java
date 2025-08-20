@@ -4,25 +4,24 @@ import com.google.transit.realtime.GtfsRealtime;
 import se.iths.nextdeparturesl.view.VehiclePosition;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class GtfsVehiclePositionHandler {
-    private File file;
 
-    public GtfsVehiclePositionHandler(){}
+    private List<VehiclePosition> vehiclePositionsList;
+    private byte[] vehiclePositionBytes;
 
-    public GtfsVehiclePositionHandler(File file){
-        this.file = file;
+    public GtfsVehiclePositionHandler(byte[] vehiclePositionBytes) {
+        this.vehiclePositionBytes = vehiclePositionBytes;
     }
 
-    public List<VehiclePosition> readVehiclePositions() {
+    public List<VehiclePosition> readVehiclePositions(byte[] input) {
         List<VehiclePosition> vehicles = new ArrayList<>();
         try {
-            FileInputStream fileInputStream = new FileInputStream(file);
-            GtfsRealtime.FeedMessage message = GtfsRealtime.FeedMessage.parseFrom(fileInputStream);
+            //  FileInputStream fileInputStream = new FileInputStream(file);
+            GtfsRealtime.FeedMessage message = GtfsRealtime.FeedMessage.parseFrom(input);
             for (GtfsRealtime.FeedEntity entity : message.getEntityList()) {
                 if (entity.hasVehicle()) {
                     VehiclePosition vehicle = new VehiclePosition(
@@ -38,7 +37,11 @@ public class GtfsVehiclePositionHandler {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-    return vehicles;
+        return vehicles;
     }
 
+    public List<VehiclePosition> getVehiclePositionsList() {
+        vehiclePositionsList = readVehiclePositions(vehiclePositionBytes);
+        return vehiclePositionsList;
+    }
 }
