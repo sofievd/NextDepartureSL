@@ -1,21 +1,13 @@
 package se.iths.nextdeparturesl.util;
 
 import com.google.transit.realtime.GtfsRealtime;
-import se.iths.nextdeparturesl.view.VehiclePosition;
+import se.iths.nextdeparturesl.model.VehiclePosition;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class GtfsVehiclePositionHandler {
-
-    private List<VehiclePosition> vehiclePositionsList;
-    private byte[] vehiclePositionBytes;
-
-    public GtfsVehiclePositionHandler(byte[] vehiclePositionBytes) {
-        this.vehiclePositionBytes = vehiclePositionBytes;
-    }
 
     public List<VehiclePosition> readVehiclePositions(byte[] input) {
         List<VehiclePosition> vehicles = new ArrayList<>();
@@ -40,8 +32,4 @@ public class GtfsVehiclePositionHandler {
         return vehicles;
     }
 
-    public List<VehiclePosition> getVehiclePositionsList() {
-        vehiclePositionsList = readVehiclePositions(vehiclePositionBytes);
-        return vehiclePositionsList;
-    }
 }

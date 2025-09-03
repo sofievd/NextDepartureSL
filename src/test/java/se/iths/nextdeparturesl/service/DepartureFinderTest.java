@@ -4,8 +4,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import se.iths.nextdeparturesl.model.StopTime;
 import se.iths.nextdeparturesl.model.Trip;
-import se.iths.nextdeparturesl.view.Departure;
-import se.iths.nextdeparturesl.view.VehiclePosition;
+import se.iths.nextdeparturesl.DTO.Departure;
+import se.iths.nextdeparturesl.util.GtfsFileHandler;
+import se.iths.nextdeparturesl.util.MapCreator;
 
 import java.io.File;
 import java.time.LocalDateTime;
@@ -17,13 +18,25 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class DepartureFinderTest {
     private DepartureFinder departureFinder;
-    private GtfsDataHolder gtfsDataHolder;
 
     @BeforeEach
     void setUp() {
-       //File gtfsRootFolderPath = new File(getClass().getClassLoader().getResource("test_sl.zip").getFile());
+        GtfsFileHandler fileHandler = new GtfsFileHandler(new File(getClass().getClassLoader().getResource("2025-08-18-sl.zip").getFile()));
+        MapCreator creator = new MapCreator();
+        creator.setFileHandler(fileHandler);
+
+        GtfsDataHolder dataHolder = GtfsDataHolder.getInstance();
+        dataHolder.setStationList(creator.getStopNameList());
+        dataHolder.setStopIdToStopTimes(creator.createStopTimeMapWithStopId());
+        dataHolder.setTripIdToTrips(creator.createTripMapWithTripId());
+        dataHolder.setRouteIdToRoutes(creator.createRouteMapWithRouteId());
+        dataHolder.setServiceIdToCalendarDates(creator.createCalendarDateMapWithServiceId());
+        dataHolder.setStopNameToStopId(creator.createStopIdMapWithStopName());
+        dataHolder.setServiceIdToTripId(creator.createTripIdListMapWithServiceId());
+
         departureFinder = new DepartureFinder();
-        departureFinder.setUp();
+        departureFinder.setGtfsDataHolder(dataHolder);
+        departureFinder.setMaps();
     }
 
     @Test
@@ -97,12 +110,6 @@ class DepartureFinderTest {
         assertEquals("Hagede via Styrsvik Långvik Sandhamn", departures.get(0).getDestination());
         assertEquals("Water Transport", departures.get(0).getVehicleType());
     }
-
-    @Test
-    void update() {
-        departureFinder.update();
-    }
-
 
 //    @Test
 //    void updateVehiclePositionWithType() {

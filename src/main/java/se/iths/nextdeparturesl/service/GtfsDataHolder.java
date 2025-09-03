@@ -6,9 +6,7 @@ import se.iths.nextdeparturesl.model.CalendarDate;
 import se.iths.nextdeparturesl.model.Route;
 import se.iths.nextdeparturesl.model.StopTime;
 import se.iths.nextdeparturesl.model.Trip;
-import se.iths.nextdeparturesl.util.MapCreator;
 
-import java.io.File;
 import java.util.List;
 import java.util.Map;
 
@@ -28,44 +26,33 @@ public class GtfsDataHolder {
     private Map<String, List<String>> serviceIdToTripId;
     private List<String> stationList;
 
-    private File file;
     private static GtfsDataHolder gtfsDataHolder;
-    private MapCreator creator;
 
-    private GtfsDataHolder(File file) {
-        this.file = file;
+    private GtfsDataHolder() {
     }
 
-    public static GtfsDataHolder getInstance(File file) {
+    public static GtfsDataHolder getInstance() {
         if (gtfsDataHolder == null) {
-            gtfsDataHolder = new GtfsDataHolder(file);
+            gtfsDataHolder = new GtfsDataHolder();
         }
         return gtfsDataHolder;
     }
 
-    public static GtfsDataHolder getInstance() {
-        return gtfsDataHolder;
-    }
+//    /**
+//     * Creates all the necessary maps in memory
+//     */
+//    public void createMaps() {
+//        log.info("Starting making maps");
+//        stationList = mapCreator.getStopNameList();
+//        stopIdToStopTimes = mapCreator.createStopTimeMapWithStopId();
+//        tripIdToTrips = mapCreator.createTripMapWithTripId();
+//        routeIdToRoutes = mapCreator.createRouteMapWithRouteId();
+//        serviceIdToCalendarDates = mapCreator.createCalendarDateMapWithServiceId();
+//        stopNameToStopId = mapCreator.createStopIdMapWithStopName();
+//        serviceIdToTripId = mapCreator.createTripIdListMapWithServiceId();
+//        log.info("Finished making maps");
+//    }
 
-    /**
-     * Creates all the necessary maps in memory
-     */
-    public void createMaps() {
-        log.info("Starting making maps");
-        this.creator = new MapCreator(file);
-        stationList = creator.getStopNameList();
-        stopIdToStopTimes = creator.createStopTimeMapWithStopId();
-        tripIdToTrips = creator.createTripMapWithTripId();
-        routeIdToRoutes = creator.createRouteMapWithRouteId();
-        serviceIdToCalendarDates = creator.createCalendarDateMapWithServiceId();
-        stopNameToStopId = creator.createStopIdMapWithStopName();
-        serviceIdToTripId = creator.createTripIdListMapWithServiceId();
-        log.info("Finished making maps");
-    }
-
-    public void updateFile(File file) {
-        this.file = file;
-    }
 
     public List<String> getStationList() {
         return stationList;

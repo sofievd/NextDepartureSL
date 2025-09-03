@@ -1,6 +1,6 @@
-package se.iths.nextdeparturesl.view;
+package se.iths.nextdeparturesl.DTO;
 
-public class VehiclePosition {
+public class VehiclePositionDTO {
     private String id;
     private double latitude;
     private double longitude;
@@ -11,7 +11,7 @@ public class VehiclePosition {
     private String routeDescription;
     private String lineNumber;
 
-    public VehiclePosition(String id, double latitude, double longitude, double bearing, double speed) {
+    public VehiclePositionDTO(String id, double latitude, double longitude, double bearing, double speed) {
         this.id = id;
         this.latitude = latitude;
         this.longitude = longitude;

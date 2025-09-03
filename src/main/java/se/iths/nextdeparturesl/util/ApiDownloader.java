@@ -10,9 +10,9 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
-//TODO: create a method that will download the realtime data
 
 public class ApiDownloader {
     private static final Logger log = LoggerFactory.getLogger(ApiDownloader.class);
@@ -23,8 +23,11 @@ public class ApiDownloader {
 
     FileUtil fileUtil = new FileUtil();
 
-    public boolean downloadGtfsStatic(File file,String date) {
-        log.info("trying to download today's zip file: " + new Date());
+    public File downloadGtfsStatic() {
+        File file = new File(getClass().getClassLoader().getResource("").getFile());
+        LocalDateTime now = LocalDateTime.now();
+        String today = now.format(DateTimeFormatter.ofPattern(("YYYY-MM-dd")));
+        log.info("trying to download today's zip file: {}", today);
         try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
             HttpGet httpGet = new HttpGet(URL_GTFS_STATIC + API_KEY_STATIC);
             try (CloseableHttpResponse response = httpClient.execute(httpGet)) {
@@ -32,19 +35,22 @@ public class ApiDownloader {
                 log.info("statusCode: {}", statusCode);
                 if (statusCode == 200) {
                     log.info("trying to write into file: {}", file.getName());
-                    FileOutputStream outputStream = new FileOutputStream((file.getPath() +"/"+ date+"-sl.zip"));
+                    FileOutputStream outputStream = new FileOutputStream((file.getPath() + "/" + today + "-sl.zip"));
                     fileUtil.writeToFile(outputStream, response.getEntity().getContent());
                     log.info("successfully wrote into file: {}", file.getName());
+                    File newFile = new File(file.getPath()+"/"+today+"-sl.zip");
+                    return newFile;
                 } else {
                     log.warn("error downloading file, HTTP Status code: {} ", statusCode);
-                    return false;
+                    return null;
                 }
             }
         } catch (IOException e) {
+            log.warn(e.getMessage());
             throw new RuntimeException(e);
         }
-        return true;
     }
+
     public byte[] downloadGtfsRealTimeVehiclePosition() {
         try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
             HttpGet httpGet = new HttpGet(URL_GTFS_REAL_VEHICLE + API_KEY_REAL);
@@ -52,12 +58,8 @@ public class ApiDownloader {
                 int statusCode = response.getStatusLine().getStatusCode();
                 log.info("statusCode: {}", statusCode);
                 if (statusCode == 200) {
-                    //fileUtil.clearFileContent(file);
-                    //log.info("trying to write into file: {}", file.getName());
-                    //FileOutputStream outputStream = new FileOutputStream(file.getPath());
-                    //fileUtil.writeToFile(outputStream, response.getEntity().getContent());
                     return response.getEntity().getContent().readAllBytes();
-                }else{
+                } else {
                     log.warn("error downloading file, HTTP Status code: {} ", statusCode);
                 }
             }

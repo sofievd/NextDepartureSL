@@ -1,13 +1,13 @@
 package se.iths.nextdeparturesl.model;
 
-public class Vehicle {
+public class VehiclePosition {
     private String id;
     private double latitude;
     private double longitude;
     private double bearing;
     private double speed;
 
-    public Vehicle(String id, double latitude, double longitude, double bearing, double speed) {
+    public VehiclePosition(String id, double latitude, double longitude, double bearing, double speed) {
         this.id = id;
         this.latitude = latitude;
         this.longitude = longitude;

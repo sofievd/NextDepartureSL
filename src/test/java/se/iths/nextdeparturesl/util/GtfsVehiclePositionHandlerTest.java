@@ -1,7 +1,7 @@
 package se.iths.nextdeparturesl.util;
 
 import org.junit.jupiter.api.Test;
-import se.iths.nextdeparturesl.view.VehiclePosition;
+import se.iths.nextdeparturesl.model.VehiclePosition;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -14,17 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class GtfsVehiclePositionHandlerTest {
     private File file = new File(getClass().getClassLoader().getResource("realtime/vehiclePositions.pb").getFile());
-    private byte[] bytes;
-
-    {
-        try {
-            bytes = new FileInputStream(file).readAllBytes();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    private GtfsVehiclePositionHandler handler = new GtfsVehiclePositionHandler(bytes);
+    private GtfsVehiclePositionHandler handler = new GtfsVehiclePositionHandler();
 
 
     @Test
@@ -39,10 +29,4 @@ class GtfsVehiclePositionHandlerTest {
         assertFalse(vehicleList.isEmpty());
     }
 
-
-    @Test
-    void getVehiclePositionsList() {
-        List<VehiclePosition> vehicleList = handler.getVehiclePositionsList();
-        assertNotNull(vehicleList);
-    }
 }

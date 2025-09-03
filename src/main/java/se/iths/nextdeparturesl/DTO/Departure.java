@@ -1,4 +1,4 @@
-package se.iths.nextdeparturesl.view;
+package se.iths.nextdeparturesl.DTO;
 
 public class Departure {
     private final String destination;

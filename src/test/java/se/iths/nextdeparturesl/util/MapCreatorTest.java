@@ -20,7 +20,9 @@ class MapCreatorTest {
     @BeforeEach
     void setUp() {
         File gtfsRootFolderPath = new File(getClass().getClassLoader().getResource("2025-08-18-sl.zip").getFile());
-        this.mapCreator = new MapCreator(gtfsRootFolderPath);
+        GtfsFileHandler fileHandler = new GtfsFileHandler(gtfsRootFolderPath);
+        this.mapCreator = new MapCreator();
+        mapCreator.setFileHandler(fileHandler);
 
     }
 

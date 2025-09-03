@@ -1,13 +1,14 @@
 package se.iths.nextdeparturesl.util;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.onebusaway.gtfs.impl.GtfsDaoImpl;
+import org.onebusaway.gtfs.serialization.GtfsReader;
 import se.iths.nextdeparturesl.model.*;
 
 import java.io.File;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.io.IOException;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -18,13 +19,20 @@ class GtfsFileHandlerTest {
 
     @BeforeEach
     void setUp() {
-        LocalDateTime now = LocalDateTime.now();
-        String today = now.format(DateTimeFormatter.ofPattern(("YYYY-MM-dd")));
+        File file = new File(getClass().getClassLoader().getResource("2025-08-18-sl.zip").getFile());
         gtfsFileHandler = new GtfsFileHandler();
 
-        store = gtfsFileHandler.setUp(new File(getClass().getClassLoader().getResource(today+"-sl.zip").getFile()));
-
+        GtfsReader reader = new GtfsReader();
+        store = new GtfsDaoImpl();
+        try {
+            reader.setInputLocation(file);
+            reader.setEntityStore(store);
+            reader.run();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
+
 
     @Test
     void getAllStops() {
@@ -51,7 +59,7 @@ class GtfsFileHandlerTest {
     void getAllRoutes() {
         List<Route> routeList = gtfsFileHandler.getAllRoutes(store);
         assertEquals(3, routeList.size());
-       assertEquals("Waxholmsbolaget", routeList.get(0).getDesc());
+        assertEquals("Waxholmsbolaget", routeList.get(0).getDesc());
     }
 
     @Test
@@ -71,7 +79,7 @@ class GtfsFileHandlerTest {
 
     @Test
     void getStopList() {
-        File file = new File(getClass().getClassLoader().getResource("sl.zip").getFile());
+        File file = new File(getClass().getClassLoader().getResource("2025-08-18-sl.zip").getFile());
         GtfsFileHandler gtfsFileHandler = new GtfsFileHandler(file);
         List<Stop> stopList = gtfsFileHandler.getStopList();
         assertEquals(6, stopList.size());
@@ -79,7 +87,7 @@ class GtfsFileHandlerTest {
 
     @Test
     void getStopTimeList() {
-        File file = new File(getClass().getClassLoader().getResource("sl.zip").getFile());
+        File file = new File(getClass().getClassLoader().getResource("2025-08-18-sl.zip").getFile());
         GtfsFileHandler gtfsFileHandler = new GtfsFileHandler(file);
         List<StopTime> stopTimeList = gtfsFileHandler.getStopTimeList();
         assertEquals(32, stopTimeList.size());
@@ -88,7 +96,7 @@ class GtfsFileHandlerTest {
 
     @Test
     void getTripList() {
-        File file =new File(getClass().getClassLoader().getResource("sl.zip").getFile());
+        File file = new File(getClass().getClassLoader().getResource("2025-08-18-sl.zip").getFile());
         GtfsFileHandler gtfsFileHandler = new GtfsFileHandler(file);
         List<Trip> tripList = gtfsFileHandler.getTripList();
         assertNotNull(tripList);
@@ -96,7 +104,7 @@ class GtfsFileHandlerTest {
 
     @Test
     void getRouteList() {
-        File file = new File(getClass().getClassLoader().getResource("sl.zip").getFile());
+        File file = new File(getClass().getClassLoader().getResource("2025-08-18-sl.zip").getFile());
         GtfsFileHandler gtfsFileHandler = new GtfsFileHandler(file);
         List<Route> routeList = gtfsFileHandler.getRouteList();
         assertNotNull(routeList);
@@ -104,7 +112,7 @@ class GtfsFileHandlerTest {
 
     @Test
     void getCalendarList() {
-        File file = new File(getClass().getClassLoader().getResource("sl.zip").getFile());
+        File file = new File(getClass().getClassLoader().getResource("2025-08-18-sl.zip").getFile());
         GtfsFileHandler gtfsFileHandler = new GtfsFileHandler(file);
         List<Calendar> calendarList = gtfsFileHandler.getCalendarList();
         assertNotNull(calendarList);
@@ -112,7 +120,7 @@ class GtfsFileHandlerTest {
 
     @Test
     void getCalendarDateList() {
-        File file = new File(getClass().getClassLoader().getResource("sl.zip").getFile());
+        File file = new File(getClass().getClassLoader().getResource("2025-08-18-sl.zip").getFile());
         GtfsFileHandler gtfsFileHandler = new GtfsFileHandler(file);
         List<CalendarDate> calendarDateList = gtfsFileHandler.getCalendarDateList();
         assertNotNull(calendarDateList);
@@ -120,7 +128,7 @@ class GtfsFileHandlerTest {
 
     @Test
     void testGetStopNameList() {
-        File file = new File(getClass().getClassLoader().getResource("sl.zip").getFile());
+        File file = new File(getClass().getClassLoader().getResource("2025-08-18-sl.zip").getFile());
         GtfsFileHandler gtfsFileHandler = new GtfsFileHandler(file);
         List<String> stopnameList = gtfsFileHandler.getStopNameList();
         assertEquals(6, stopnameList.size());

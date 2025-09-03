@@ -4,7 +4,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import se.iths.nextdeparturesl.model.*;
 
-import java.io.File;
 import java.util.*;
 
 public class MapCreator {
@@ -12,8 +11,8 @@ public class MapCreator {
 
     private GtfsFileHandler gtfsFileHandler;
 
-    public MapCreator(File file) {
-        this.gtfsFileHandler = new GtfsFileHandler(file);
+
+    public MapCreator() {
     }
 
     /**
@@ -140,5 +139,7 @@ public class MapCreator {
         return gtfsFileHandler.getStopNameList();
     }
 
-
+    public void setFileHandler(GtfsFileHandler fileHandler) {
+        gtfsFileHandler = fileHandler;
+    }
 }

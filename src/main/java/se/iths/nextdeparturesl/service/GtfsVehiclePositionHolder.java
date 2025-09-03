@@ -1,44 +1,32 @@
 package se.iths.nextdeparturesl.service;
 
-import se.iths.nextdeparturesl.model.Route;
-import se.iths.nextdeparturesl.model.Trip;
-import se.iths.nextdeparturesl.util.GtfsVehiclePositionHandler;
-import se.iths.nextdeparturesl.view.VehiclePosition;
+import se.iths.nextdeparturesl.model.VehiclePosition;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-
 
 public class GtfsVehiclePositionHolder {
-    private List<VehiclePosition> vehicleList;
-    private byte[] vehiclePositionBytes;
+    private List<VehiclePosition> positions;
     private static GtfsVehiclePositionHolder instance;
-    private final GtfsDataHolder gtfsDataHolder = GtfsDataHolder.getInstance();
-    private final Map<String, Trip> tripIdToTrips = gtfsDataHolder.getTripIdToTrips();
-    private final Map<String, Route> routeIdToRoutes = gtfsDataHolder.getRouteIdToRoutes();
 
 
-    private GtfsVehiclePositionHolder(byte[] vehiclePositionBytes) {
-        GtfsVehiclePositionHandler vehiclePositionHandler = new GtfsVehiclePositionHandler(vehiclePositionBytes);
-        this.vehicleList = vehiclePositionHandler.getVehiclePositionsList();
+    private GtfsVehiclePositionHolder() {
     }
 
-    public static GtfsVehiclePositionHolder getInstance(byte[] vehiclePositionBytes) {
-        if(instance == null) {
-            instance = new GtfsVehiclePositionHolder(vehiclePositionBytes);
+    public static GtfsVehiclePositionHolder getInstance() {
+        if (instance == null) {
+            instance = new GtfsVehiclePositionHolder();
         }
         return instance;
     }
-    public static GtfsVehiclePositionHolder getInstance() {
-        return instance;
+
+    public List<VehiclePosition> getPositions() {
+        return new ArrayList<>(positions);
     }
 
-    public List<VehiclePosition> getVehicles() {
-        return vehicleList;
-    }
+    public void setVehiclePositions(List<VehiclePosition> vehiclePositions) {
+        positions = vehiclePositions;
 
-    public void setVehiclePositionBytes(byte[] vehiclePositionBytes) {
-        this.vehiclePositionBytes = vehiclePositionBytes;
     }
 
 }
