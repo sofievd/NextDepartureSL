@@ -43,11 +43,4 @@ public class FileUtil {
         }
     }
 
-    public void clearFileContent(File file) {
-        try {
-            new FileOutputStream(file.getPath()).close();
-        } catch (IOException e) {
-            throw new RuntimeException("error clearing file, error message: " + e.getMessage(), e);
-        }
-    }
 }
