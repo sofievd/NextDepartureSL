@@ -34,6 +34,7 @@ public class VehiclePositionLoader {
     }
 
     public List<VehiclePositionDTO> getVehiclePositions() {
+        log.info("trying to get vehicle positions");
         GtfsVehiclePositionHolder gtfsVehiclePositionHolder = GtfsVehiclePositionHolder.getInstance();
         List<VehiclePosition> vehiclePositionList = gtfsVehiclePositionHolder.getPositions();
 
