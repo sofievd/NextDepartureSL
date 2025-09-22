@@ -16,7 +16,6 @@ import java.util.Timer;
 
 public class VehiclePositionLoader {
     private static final Logger log = LogManager.getLogger();
-    private GtfsDataHolder gtfsDataHolder; //= GtfsDataHolder.getInstance();
     private  Map<String, Trip> tripIdToTrips;// gtfsDataHolder.getTripIdToTrips();
     private  Map<String, Route> routeIdToRoutes;// = gtfsDataHolder.getRouteIdToRoutes();
 
@@ -24,7 +23,7 @@ public class VehiclePositionLoader {
     }
 
     public void startUpdate() {
-        gtfsDataHolder = GtfsDataHolder.getInstance();
+        GtfsDataHolder gtfsDataHolder = GtfsDataHolder.getInstance();
         tripIdToTrips= gtfsDataHolder.getTripIdToTrips();
         routeIdToRoutes = gtfsDataHolder.getRouteIdToRoutes();
         GtfsRealtimeDownloadTask task = new GtfsRealtimeDownloadTask();
