@@ -73,7 +73,7 @@ public class DepartureFinder {
     public void startUpdate() {
         LocalDateTime now = LocalDateTime.now();
         int day = now.getDayOfMonth() + 1;
-        LocalDateTime tomorrow = LocalDateTime.of(now.getYear(), now.getMonth(), day, 02, 0);
+        LocalDateTime tomorrow = LocalDateTime.of(now.getYear(), now.getMonth(), day, 2, 0);
         long difference = MILLIS.between(now, tomorrow);
         long period = 1000 * 60 * 60 * 24;
         GtfsStaticDownloadTask task = new GtfsStaticDownloadTask();

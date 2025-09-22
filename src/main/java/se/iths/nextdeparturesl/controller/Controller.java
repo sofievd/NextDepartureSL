@@ -17,8 +17,8 @@ import java.time.LocalDateTime;
 @RestController
 public class Controller {
     private static final Logger log = LogManager.getLogger();
-    private DepartureFinder departureFinder = new DepartureFinder();
-    private VehiclePositionLoader vehiclePositionLoader = new VehiclePositionLoader();
+    private final DepartureFinder departureFinder = new DepartureFinder();
+    private final VehiclePositionLoader vehiclePositionLoader = new VehiclePositionLoader();
 
     public Controller() {
         departureFinder.setUp();

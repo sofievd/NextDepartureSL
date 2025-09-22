@@ -16,7 +16,7 @@ public class GtfsStaticDownloadTask extends TimerTask {
     @Override
     public void run() {
         LocalDateTime now = LocalDateTime.now();
-        String today = now.format(DateTimeFormatter.ofPattern(("YYYY-MM-dd")));
+        String today = now.format(DateTimeFormatter.ofPattern(("yyyy-MM-dd")));
 
         ApiDownloader download = new ApiDownloader();
         log.info("Trying to download new data for: {}", today);

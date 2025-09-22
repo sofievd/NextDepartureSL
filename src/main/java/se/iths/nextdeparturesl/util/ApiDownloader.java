@@ -34,7 +34,7 @@ public class ApiDownloader {
             throw new RuntimeException(e);
         }
 
-        if (API_KEY_STATIC != null || !API_KEY_STATIC.equals("")) {
+        if (API_KEY_STATIC != null && !API_KEY_STATIC.isEmpty()) {
             LocalDateTime now = LocalDateTime.now();
             String today = now.format(DateTimeFormatter.ofPattern(("yyyy-MM-dd")));
             log.info("trying to download today's zip file: {}", today);
@@ -67,7 +67,7 @@ public class ApiDownloader {
     }
 
     public byte[] downloadGtfsRealTimeVehiclePosition() {
-        if (API_KEY_REAL != null || !API_KEY_REAL.equals("")) {
+        if (API_KEY_REAL != null && !API_KEY_REAL.isEmpty()) {
             try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
                 HttpGet httpGet = new HttpGet(URL_GTFS_REAL_VEHICLE + API_KEY_REAL);
                 try (CloseableHttpResponse response = httpClient.execute(httpGet)) {

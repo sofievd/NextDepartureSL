@@ -21,7 +21,8 @@ class DepartureFinderTest {
 
     @BeforeEach
     void setUp() {
-        GtfsFileHandler fileHandler = new GtfsFileHandler(new File(getClass().getClassLoader().getResource("2025-08-18-sl.zip").getFile()));
+        String path = getClass().getClassLoader().getResource("2025-08-18-sl.zip").getPath();
+        GtfsFileHandler fileHandler = new GtfsFileHandler(new File(path));
         MapCreator creator = new MapCreator();
         creator.setFileHandler(fileHandler);
 
