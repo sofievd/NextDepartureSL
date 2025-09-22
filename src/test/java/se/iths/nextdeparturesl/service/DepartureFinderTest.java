@@ -111,14 +111,4 @@ class DepartureFinderTest {
         assertEquals("Water Transport", departures.get(0).getVehicleType());
     }
 
-//    @Test
-//    void updateVehiclePositionWithType() {
-//        departureFinder.updateVehiclePositionWithType();
-//    }
-//
-//    @Test
-//    void getVehicles() {
-//        List<VehiclePosition> vehicleList = departureFinder.getVehicles();
-//        assertNotNull(vehicleList);
-//    }
 }

@@ -2,12 +2,12 @@ package se.iths.nextdeparturesl.service;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import se.iths.nextdeparturesl.DTO.Departure;
 import se.iths.nextdeparturesl.model.CalendarDate;
 import se.iths.nextdeparturesl.model.Route;
 import se.iths.nextdeparturesl.model.StopTime;
 import se.iths.nextdeparturesl.model.Trip;
 import se.iths.nextdeparturesl.util.*;
-import se.iths.nextdeparturesl.DTO.Departure;
 
 import java.io.File;
 import java.time.LocalDate;
@@ -15,6 +15,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+
 import static java.time.temporal.ChronoUnit.MILLIS;
 
 
@@ -38,10 +39,11 @@ public class DepartureFinder {
     }
 
     public void setUp() {
+        log.info("Trying to setup and download first files");
         ApiDownloader downloader = new ApiDownloader();
         File file = downloader.downloadGtfsStatic();
 
-        if(file != null) {
+        if (file != null) {
             GtfsFileHandler fileHandler = new GtfsFileHandler(file);
             MapCreator creator = new MapCreator();
             creator.setFileHandler(fileHandler);
@@ -54,10 +56,11 @@ public class DepartureFinder {
             gtfsDataHolder.setStopNameToStopId(creator.createStopIdMapWithStopName());
             gtfsDataHolder.setServiceIdToTripId(creator.createTripIdListMapWithServiceId());
             setMaps();
+            file.delete();
         }
     }
 
-    public void setMaps(){
+    public void setMaps() {
         stopIdToStopTimes = gtfsDataHolder.getStopIdToStopTimes();
         tripIdToTrips = gtfsDataHolder.getTripIdToTrips();
         routeIdToRoutes = gtfsDataHolder.getRouteIdToRoutes();
@@ -72,7 +75,7 @@ public class DepartureFinder {
         int day = now.getDayOfMonth() + 1;
         LocalDateTime tomorrow = LocalDateTime.of(now.getYear(), now.getMonth(), day, 02, 0);
         long difference = MILLIS.between(now, tomorrow);
-        long period = 1000*60*60*24;
+        long period = 1000 * 60 * 60 * 24;
         GtfsStaticDownloadTask task = new GtfsStaticDownloadTask();
         new Timer().scheduleAtFixedRate(task, difference, period);
     }

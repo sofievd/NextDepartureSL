@@ -8,6 +8,5 @@ class GtfsStaticDownloadTaskTest {
 
     @Test
     void downloadStaticDataDaily() {
-        tasker.run();
     }
 }

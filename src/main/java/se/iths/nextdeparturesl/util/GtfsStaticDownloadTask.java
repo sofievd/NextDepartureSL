@@ -17,22 +17,13 @@ public class GtfsStaticDownloadTask extends TimerTask {
     public void run() {
         LocalDateTime now = LocalDateTime.now();
         String today = now.format(DateTimeFormatter.ofPattern(("YYYY-MM-dd")));
-        String yesterday = now.minusDays(1).format(DateTimeFormatter.ofPattern(("YYYY-MM-dd")));
 
         ApiDownloader download = new ApiDownloader();
         log.info("Trying to download new data for: {}", today);
         File newFile = download.downloadGtfsStatic();
 
-
         if (newFile != null) {
             log.info("done downloading");
-
-            log.info("trying to delete file for: {}", yesterday);
-            File oldFile = new File(getClass().getClassLoader().getResource(yesterday + "-sl.zip").getFile());
-            FileUtil fileUtil = new FileUtil();
-            fileUtil.deleteFile(oldFile);
-            log.info("File deleted: {}", yesterday);
-
             GtfsFileHandler fileHandler = new GtfsFileHandler(newFile);
             MapCreator creator = new MapCreator();
             creator.setFileHandler(fileHandler);
@@ -48,6 +39,8 @@ public class GtfsStaticDownloadTask extends TimerTask {
             gtfsDataHolder.setStopNameToStopId(creator.createStopIdMapWithStopName());
             gtfsDataHolder.setServiceIdToTripId(creator.createTripIdListMapWithServiceId());
             log.info("done creating maps");
+
+            newFile.delete();
         }
 
     }
