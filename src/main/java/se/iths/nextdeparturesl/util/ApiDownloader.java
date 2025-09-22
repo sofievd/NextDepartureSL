@@ -28,8 +28,9 @@ public class ApiDownloader {
     public File downloadGtfsStatic() {
         File file;
         try {
-            file = File.createTempFile("sl", ".zip");
+            file = File.createTempFile("sl-static", ".zip");
         } catch (IOException e) {
+            log.warn("Unable to create temporary file", e);
             throw new RuntimeException(e);
         }
 

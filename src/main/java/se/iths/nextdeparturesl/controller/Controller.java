@@ -32,15 +32,6 @@ public class Controller {
         return ResponseEntity.ok().body(departureFinder.getStationList());
     }
 
-//    @GetMapping("/download")
-//    public ResponseEntity<?> download() {
-//        System.out.println("here");
-//        ApiDownloader download = new ApiDownloader();
-//        LocalDateTime now = LocalDateTime.now();
-//        String today = now.format(DateTimeFormatter.ofPattern(("YYYY-MM-dd")));
-//      //  download.download(today);
-//        return ResponseEntity.ok().body("download completed");
-//    }
 
     @GetMapping("/searchStation")
     public ResponseEntity<?> searchStation(@RequestParam String stationName) {
