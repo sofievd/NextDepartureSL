@@ -12,7 +12,6 @@ public class GtfsVehiclePositionHandler {
     public List<VehiclePosition> readVehiclePositions(byte[] input) {
         List<VehiclePosition> vehicles = new ArrayList<>();
         try {
-            //  FileInputStream fileInputStream = new FileInputStream(file);
             GtfsRealtime.FeedMessage message = GtfsRealtime.FeedMessage.parseFrom(input);
             for (GtfsRealtime.FeedEntity entity : message.getEntityList()) {
                 if (entity.hasVehicle()) {
