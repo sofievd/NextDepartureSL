@@ -1,7 +1,5 @@
 package se.iths.nextdeparturesl.model;
 
-import com.opencsv.bean.CsvBindByName;
-
 /**
  * Stop Represents a transit stop in a transportation system.
  * This class is used for mapping data from a CSV file using OpenCSV annotations.
@@ -9,75 +7,84 @@ import com.opencsv.bean.CsvBindByName;
  * @author Sofie Van Dingenen
  */
 public class Stop {
-    @CsvBindByName
-    private String stop_id;
-    @CsvBindByName
-    private String stop_name;
-    @CsvBindByName
-    private String stop_lat;
-    @CsvBindByName
-    private String stop_lon;
-    @CsvBindByName
-    private String location_type;
-    @CsvBindByName
-    private String parent_station;
-    @CsvBindByName
-    private String platform_code;
 
+    private String id;
+    private String name;
+    private double lat;
+    private double lon;
+    private int locationType;
+    private String parentStation;
+    private String platformCode;
 
-    public String getStopId() {
-        return stop_id;
+    public Stop(String id,
+                String name,
+                double lat,
+                double lon,
+                int locationType,
+                String parentStation,
+                String platformCode) {
+        this.id = id;
+        this.name = name;
+        this.lat = lat;
+        this.lon = lon;
+        this.locationType = locationType;
+        this.parentStation = parentStation;
+        this.platformCode = platformCode;
     }
 
-    public void setStopId(String stop_id) {
-        this.stop_id = stop_id;
+    public String getStopId() {
+        return id;
+    }
+
+    public void setStopId(String id) {
+        this.id = id;
     }
 
     public String getStopName() {
-        return stop_name;
+        return name;
     }
 
-    public void setStopName(String stop_name) {
-        this.stop_name = stop_name;
+    public void setStopName(String name) {
+        this.name = name;
     }
 
-    public String getStopLat() {
-        return stop_lat;
+    public double getStopLat() {
+        return lat;
     }
 
-    public void setStopLat(String stop_lat) {
-        this.stop_lat = stop_lat;
+    public void setStopLat(double lat) {
+        this.lat = lat;
     }
 
-    public String getStopLon() {
-        return stop_lon;
+    public double getStopLon() {
+        return lon;
     }
 
-    public void setStopLon(String stop_lon) {
-        this.stop_lon = stop_lon;
+    public void setStopLon(double lon) {
+        this.lon = lon;
     }
 
-    public String getLocationType() {
-        return location_type;
+    public int getLocationType() {
+        return locationType;
     }
 
-    public void setLocationType(String location_type) {
-        this.location_type = location_type;
+    public void setLocationType(int locationType) {
+        this.locationType = locationType;
     }
 
     public String getParentStation() {
-        return parent_station;
+        return parentStation;
     }
 
-    public void setParentStation(String parent_station) {
-        this.parent_station = parent_station;
+    public void setParentStation(String parentStation) {
+        this.parentStation = parentStation;
     }
 
     public String getPlatformCode() {
-        return platform_code;
+        return platformCode;
     }
 
-    public void setPlatformCode(String platform_code) {
-        this.platform_code = platform_code;
+    public void setPlatformCode(String platformCode) {
+        this.platformCode = platformCode;
     }
 }

@@ -7,29 +7,42 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import se.iths.nextdeparturesl.service.SearchService;
+import se.iths.nextdeparturesl.service.DepartureFinder;
+import se.iths.nextdeparturesl.service.VehiclePositionLoader;
 
 import java.time.LocalDateTime;
+
 
 @CrossOrigin("*")
 @RestController
 public class Controller {
     private static final Logger log = LogManager.getLogger();
-    private final SearchService searchService = new SearchService();
-    public Controller(){
-searchService.setUp();
+    private final DepartureFinder departureFinder = new DepartureFinder();
+    private final VehiclePositionLoader vehiclePositionLoader = new VehiclePositionLoader();
+
+    public Controller() {
+        departureFinder.setUp();
+        departureFinder.startUpdate();
+        vehiclePositionLoader.startUpdate();
     }
 
     @GetMapping("/stationList")
     public ResponseEntity<?> stationList() {
-       log.info("getting station list");
-        return ResponseEntity.ok().body(searchService.getStationList());
+        log.info("getting station list");
+        return ResponseEntity.ok().body(departureFinder.getStationList());
     }
+
 
     @GetMapping("/searchStation")
     public ResponseEntity<?> searchStation(@RequestParam String stationName) {
         log.info("searching station: {}", stationName);
         LocalDateTime now = LocalDateTime.now();
-        return ResponseEntity.ok().body(searchService.getDeparturesFromStopName(stationName,now));
+        return ResponseEntity.ok().body(departureFinder.getDeparturesFromStopName(stationName, now));
+    }
+
+    @GetMapping("/vehiclePositions")
+    public ResponseEntity<?> vehiclePosition() {
+        log.info("getting vehicle position");
+        return ResponseEntity.ok().body(vehiclePositionLoader.getVehiclePositions());
     }
 }

@@ -1,7 +1,5 @@
 package se.iths.nextdeparturesl.model;
 
-import com.opencsv.bean.CsvBindByName;
-
 /**
  * CalendarDate represents a single calendar exception date in a GTFS feed.
  * Used to add or remove service for specific dates.
@@ -9,19 +7,25 @@ import com.opencsv.bean.CsvBindByName;
  * @author Sofie Van Dingenen
  */
 public class CalendarDate {
-    @CsvBindByName
-    private String service_id;
-    @CsvBindByName
-    private String date;
-    @CsvBindByName
-    private String exception_type;
 
-    public String getServiceId() {
-        return service_id;
+    private String serviceId;
+
+    private String date;
+
+    private int exceptionType;
+
+    public CalendarDate(String serviceId, String date, int exceptionType) {
+        this.serviceId = serviceId;
+        this.date = date;
+        this.exceptionType = exceptionType;
     }
 
-    public void setServiceId(String service_id) {
-        this.service_id = service_id;
+    public String getServiceId() {
+        return serviceId;
+    }
+
+    public void setServiceId(String serviceId) {
+        this.serviceId = serviceId;
     }
 
     public String getDate() {
@@ -32,11 +36,11 @@ public class CalendarDate {
         this.date = date;
     }
 
-    public String getExceptionType() {
-        return exception_type;
+    public int getExceptionType() {
+        return exceptionType;
     }
 
-    public void setExceptionType(String exception_type) {
-        this.exception_type = exception_type;
+    public void setExceptionType(int exceptionType) {
+        this.exceptionType = exceptionType;
     }
 }
