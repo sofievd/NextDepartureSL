@@ -22,9 +22,6 @@ class FileUtilTest {
     void deleteFile() {
         assertTrue(directory.exists());
         fileUtil.deleteFile(directory);
-      // System.out.println(fileUtil.deleteFile(theDir));
-               //assertFalse(theDir.exists());
-      // assertTrue(fileUtil.deleteFile(theDir));
         assertFalse(directory.exists());
     }
 

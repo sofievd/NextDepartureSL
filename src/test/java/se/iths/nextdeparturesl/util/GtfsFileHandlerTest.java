@@ -1,6 +1,5 @@
 package se.iths.nextdeparturesl.util;
 
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.onebusaway.gtfs.impl.GtfsDaoImpl;
@@ -80,16 +79,16 @@ class GtfsFileHandlerTest {
     @Test
     void getStopList() {
         File file = new File(getClass().getClassLoader().getResource("2025-08-18-sl.zip").getFile());
-        GtfsFileHandler gtfsFileHandler = new GtfsFileHandler(file);
-        List<Stop> stopList = gtfsFileHandler.getStopList();
+        GtfsFileHandler fileHandler = new GtfsFileHandler(file);
+        List<Stop> stopList = fileHandler.getStopList();
         assertEquals(6, stopList.size());
     }
 
     @Test
     void getStopTimeList() {
         File file = new File(getClass().getClassLoader().getResource("2025-08-18-sl.zip").getFile());
-        GtfsFileHandler gtfsFileHandler = new GtfsFileHandler(file);
-        List<StopTime> stopTimeList = gtfsFileHandler.getStopTimeList();
+        GtfsFileHandler fileHandler = new GtfsFileHandler(file);
+        List<StopTime> stopTimeList = fileHandler.getStopTimeList();
         assertEquals(32, stopTimeList.size());
         assertNotNull(stopTimeList);
     }
@@ -97,40 +96,40 @@ class GtfsFileHandlerTest {
     @Test
     void getTripList() {
         File file = new File(getClass().getClassLoader().getResource("2025-08-18-sl.zip").getFile());
-        GtfsFileHandler gtfsFileHandler = new GtfsFileHandler(file);
-        List<Trip> tripList = gtfsFileHandler.getTripList();
+        GtfsFileHandler fileHandler = new GtfsFileHandler(file);
+        List<Trip> tripList = fileHandler.getTripList();
         assertNotNull(tripList);
     }
 
     @Test
     void getRouteList() {
         File file = new File(getClass().getClassLoader().getResource("2025-08-18-sl.zip").getFile());
-        GtfsFileHandler gtfsFileHandler = new GtfsFileHandler(file);
-        List<Route> routeList = gtfsFileHandler.getRouteList();
+        GtfsFileHandler fileHandler = new GtfsFileHandler(file);
+        List<Route> routeList = fileHandler.getRouteList();
         assertNotNull(routeList);
     }
 
     @Test
     void getCalendarList() {
         File file = new File(getClass().getClassLoader().getResource("2025-08-18-sl.zip").getFile());
-        GtfsFileHandler gtfsFileHandler = new GtfsFileHandler(file);
-        List<Calendar> calendarList = gtfsFileHandler.getCalendarList();
+        GtfsFileHandler fileHandler = new GtfsFileHandler(file);
+        List<Calendar> calendarList = fileHandler.getCalendarList();
         assertNotNull(calendarList);
     }
 
     @Test
     void getCalendarDateList() {
         File file = new File(getClass().getClassLoader().getResource("2025-08-18-sl.zip").getFile());
-        GtfsFileHandler gtfsFileHandler = new GtfsFileHandler(file);
-        List<CalendarDate> calendarDateList = gtfsFileHandler.getCalendarDateList();
+        GtfsFileHandler fileHandler = new GtfsFileHandler(file);
+        List<CalendarDate> calendarDateList = fileHandler.getCalendarDateList();
         assertNotNull(calendarDateList);
     }
 
     @Test
     void testGetStopNameList() {
         File file = new File(getClass().getClassLoader().getResource("2025-08-18-sl.zip").getFile());
-        GtfsFileHandler gtfsFileHandler = new GtfsFileHandler(file);
-        List<String> stopnameList = gtfsFileHandler.getStopNameList();
+        GtfsFileHandler fileHandler = new GtfsFileHandler(file);
+        List<String> stopnameList = fileHandler.getStopNameList();
         assertEquals(6, stopnameList.size());
         assertTrue(stopnameList.contains("Idöborg"));
     }

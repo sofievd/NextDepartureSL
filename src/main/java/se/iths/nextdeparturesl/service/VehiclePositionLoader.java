@@ -7,7 +7,7 @@ import se.iths.nextdeparturesl.model.Route;
 import se.iths.nextdeparturesl.model.Trip;
 import se.iths.nextdeparturesl.model.VehiclePosition;
 import se.iths.nextdeparturesl.util.GtfsRealtimeDownloadTask;
-import se.iths.nextdeparturesl.DTO.VehiclePositionDTO;
+import se.iths.nextdeparturesl.dto.VehiclePositionDTO;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,11 +16,8 @@ import java.util.Timer;
 
 public class VehiclePositionLoader {
     private static final Logger log = LogManager.getLogger();
-    private  Map<String, Trip> tripIdToTrips;// gtfsDataHolder.getTripIdToTrips();
-    private  Map<String, Route> routeIdToRoutes;// = gtfsDataHolder.getRouteIdToRoutes();
-
-    public VehiclePositionLoader() {
-    }
+    private  Map<String, Trip> tripIdToTrips;
+    private  Map<String, Route> routeIdToRoutes;
 
     public void startUpdate() {
         GtfsDataHolder gtfsDataHolder = GtfsDataHolder.getInstance();

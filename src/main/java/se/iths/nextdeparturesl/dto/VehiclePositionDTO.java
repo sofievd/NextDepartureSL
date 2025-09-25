@@ -1,4 +1,4 @@
-package se.iths.nextdeparturesl.DTO;
+package se.iths.nextdeparturesl.dto;
 
 public class VehiclePositionDTO {
     private String id;

@@ -12,21 +12,17 @@ import java.nio.file.Files;
 public class FileUtil {
     private static final Logger log = LoggerFactory.getLogger(FileUtil.class);
 
-    public FileUtil() {
-    }
-
     public void deleteFile(File folder) {
-        log.info("Deleting file: " + folder.getAbsolutePath());
+        log.info("Deleting file: {} " ,folder.getAbsolutePath());
         File[] files = folder.listFiles();
         if (files != null) {
             for (File file : files) {
                 if (!Files.isSymbolicLink(file.toPath())) {
-                    //System.out.println(file);
                     deleteFile(file);
                 }
             }
         }
-        log.info("Deleted file: " + folder.getAbsolutePath());
+        log.info("Deleted file: {} ", folder.getAbsolutePath());
         folder.delete();
     }
 
@@ -38,7 +34,7 @@ public class FileUtil {
                 outputStream.write(bytes, 0, read);
             }
         } catch (Exception e) {
-            throw new RuntimeException("error writing zip-file, error message: " + e.getMessage(), e);
+            throw new RuntimeException("error writing zip-file, error message: {}" + e.getMessage(), e);
         }
     }
 

@@ -2,7 +2,7 @@ package se.iths.nextdeparturesl.service;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import se.iths.nextdeparturesl.DTO.Departure;
+import se.iths.nextdeparturesl.dto.Departure;
 import se.iths.nextdeparturesl.model.CalendarDate;
 import se.iths.nextdeparturesl.model.Route;
 import se.iths.nextdeparturesl.model.StopTime;
@@ -35,8 +35,6 @@ public class DepartureFinder {
     private Map<String, List<String>> serviceIdToTripId;
     private List<String> stationList;
 
-    public DepartureFinder() {
-    }
 
     public void setUp() {
         log.info("Trying to setup and download first files");
@@ -138,7 +136,6 @@ public class DepartureFinder {
             log.warn("no trip found with id {}", tripId);
             return tripIdList;
         }
-        //stopTimeList.forEach(stop -> System.out.println(stop.getStop_headsign()));
         return tripIdList;
     }
 
@@ -339,10 +336,10 @@ public class DepartureFinder {
         return tripList;
     }
 
-    private List<StopTime> getStopTimesFromStationId(Set<String> StationIdList) {
+    private List<StopTime> getStopTimesFromStationId(Set<String> stationIdList) {
         log.info("getting stop times from stationId");
         Set<StopTime> stopTimeSet = new HashSet<>();
-        for (String stationId : StationIdList) {
+        for (String stationId : stationIdList) {
             stopTimeSet.addAll(getStopTimesWithStationId(stationId));
         }
         List<StopTime> stopTimes = new ArrayList<>(stopTimeSet);
