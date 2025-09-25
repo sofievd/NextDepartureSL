@@ -45,8 +45,8 @@ public class Calendar {
         return serviceId;
     }
 
-    public void setServiceId(String service_id) {
-        this.serviceId = service_id;
+    public void setServiceId(String serviceId) {
+        this.serviceId = serviceId;
     }
 
     public int getMonday() {

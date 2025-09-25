@@ -70,12 +70,12 @@ public class GtfsFileHandler {
     }
 
     public List<Stop> getAllStops(GtfsDaoImpl store) {
-        List<Stop> stopList = new ArrayList<>();
+        List<Stop> stops = new ArrayList<>();
         for (org.onebusaway.gtfs.model.Stop stopOneBusAway : store.getAllStops()) {
             Stop stop = createInMemoryStop(stopOneBusAway);
-            stopList.add(stop);
+            stops.add(stop);
         }
-        return stopList;
+        return stops;
     }
 
     private Stop createInMemoryStop(org.onebusaway.gtfs.model.Stop stopOneBusAway) {
@@ -90,12 +90,12 @@ public class GtfsFileHandler {
     }
 
     public List<StopTime> getAllStopTimes(GtfsDaoImpl store) {
-        List<StopTime> stopTimeList = new ArrayList<>();
+        List<StopTime> stopTimes = new ArrayList<>();
         for (org.onebusaway.gtfs.model.StopTime stopTimeOneBusAway : store.getAllStopTimes()) {
             StopTime stopTime = createInMemoryStopTime(stopTimeOneBusAway);
-            stopTimeList.add(stopTime);
+            stopTimes.add(stopTime);
         }
-        return stopTimeList;
+        return stopTimes;
     }
 
     private StopTime createInMemoryStopTime(org.onebusaway.gtfs.model.StopTime stopTimeOneBusAway) {
@@ -112,12 +112,12 @@ public class GtfsFileHandler {
     }
 
     public List<Trip> getAllTrips(GtfsDaoImpl store) {
-        List<Trip> tripList = new ArrayList<>();
+        List<Trip> trips = new ArrayList<>();
         for (org.onebusaway.gtfs.model.Trip tripOneBusAway : store.getAllTrips()) {
             Trip trip = createInMemoryTrip(tripOneBusAway);
-            tripList.add(trip);
+            trips.add(trip);
         }
-        return tripList;
+        return trips;
     }
 
     private Trip createInMemoryTrip(org.onebusaway.gtfs.model.Trip tripOneBusAway) {
@@ -130,12 +130,12 @@ public class GtfsFileHandler {
     }
 
     public List<Route> getAllRoutes(GtfsDaoImpl store) {
-        List<Route> routeList = new ArrayList<>();
+        List<Route> routes = new ArrayList<>();
         for (org.onebusaway.gtfs.model.Route routeOneBusAway : store.getAllRoutes()) {
             Route route = createInMemoryRoute(routeOneBusAway);
-            routeList.add(route);
+            routes.add(route);
         }
-        return routeList;
+        return routes;
     }
 
     private Route createInMemoryRoute(org.onebusaway.gtfs.model.Route routeOneBusAway) {
@@ -148,12 +148,12 @@ public class GtfsFileHandler {
     }
 
     public List<Calendar> getAllCalendars(GtfsDaoImpl store) {
-        List<Calendar> calendarList = new ArrayList<>();
+        List<Calendar> calendars = new ArrayList<>();
         for (ServiceCalendar serviceCalendar : store.getAllCalendars()) {
             Calendar calendar = createInMemoryCalendar(serviceCalendar);
-            calendarList.add(calendar);
+            calendars.add(calendar);
         }
-        return calendarList;
+        return calendars;
     }
 
     private Calendar createInMemoryCalendar(ServiceCalendar serviceCalendar) {
@@ -170,12 +170,12 @@ public class GtfsFileHandler {
     }
 
     public List<CalendarDate> getAllCalendarDates(GtfsDaoImpl store) {
-        List<CalendarDate> calendarDateList = new ArrayList<>();
+        List<CalendarDate> calendarDates = new ArrayList<>();
         for (ServiceCalendarDate serviceCalendarDate : store.getAllCalendarDates()) {
             CalendarDate calendarDate = createInMemoryCalendarDate(serviceCalendarDate);
-            calendarDateList.add(calendarDate);
+            calendarDates.add(calendarDate);
         }
-        return calendarDateList;
+        return calendarDates;
     }
 
     private CalendarDate createInMemoryCalendarDate(ServiceCalendarDate serviceCalendarDate) {

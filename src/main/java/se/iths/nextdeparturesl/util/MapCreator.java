@@ -12,9 +12,6 @@ public class MapCreator {
     private GtfsFileHandler gtfsFileHandler;
 
 
-    public MapCreator() {
-    }
-
     /**
      * Creates a map that groups {@link StopTime} entries by their stop ID.
      *
@@ -101,7 +98,7 @@ public class MapCreator {
     public Map<String, List<String>> createTripIdListMapWithServiceId() {
         log.info("creating TripIdList map with ServiceId");
         Map<String, List<String>> map = new HashMap<>();
-        List<Trip> tripList = gtfsFileHandler.getTripList(); //getTripList();
+        List<Trip> tripList = gtfsFileHandler.getTripList();
         List<String> serviceIdList = getServiceIDListFromTripList(tripList);
         for (String serviceId : serviceIdList) {
             if (!map.containsKey(serviceId)) {

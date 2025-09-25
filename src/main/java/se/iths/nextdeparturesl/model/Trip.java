@@ -30,47 +30,47 @@ public class Trip {
         return routeId;
     }
 
-    public void setRouteId(String route_id) {
-        this.routeId = route_id;
+    public void setRouteId(String routeId) {
+        this.routeId = routeId;
     }
 
     public String getServiceId() {
         return serviceId;
     }
 
-    public void setServiceId(String service_id) {
-        this.serviceId = service_id;
+    public void setServiceId(String serviceId) {
+        this.serviceId = serviceId;
     }
 
     public String getTripId() {
         return id;
     }
 
-    public void setTripId(String trip_id) {
-        this.id = trip_id;
+    public void setTripId(String tripId) {
+        this.id = tripId;
     }
 
     public String getTripHeadsign() {
         return tripHeadsign;
     }
 
-    public void setTripHeadsign(String trip_headsign) {
-        this.tripHeadsign = trip_headsign;
+    public void setTripHeadsign(String tripHeadsign) {
+        this.tripHeadsign = tripHeadsign;
     }
 
     public String getDirectionId() {
         return directionId;
     }
 
-    public void setDirectionId(String direction_id) {
-        this.directionId = direction_id;
+    public void setDirectionId(String directionId) {
+        this.directionId = directionId;
     }
 
     public String getShapeId() {
         return shapeId;
     }
 
-    public void setShapeId(String shape_id) {
-        this.shapeId = shape_id;
+    public void setShapeId(String shapeId) {
+        this.shapeId = shapeId;
     }
 }

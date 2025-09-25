@@ -4,7 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import se.iths.nextdeparturesl.model.StopTime;
 import se.iths.nextdeparturesl.model.Trip;
-import se.iths.nextdeparturesl.DTO.Departure;
+import se.iths.nextdeparturesl.dto.Departure;
 import se.iths.nextdeparturesl.util.GtfsFileHandler;
 import se.iths.nextdeparturesl.util.MapCreator;
 
