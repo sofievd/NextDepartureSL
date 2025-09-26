@@ -77,7 +77,8 @@ public class ApiDownloader {
                         return response.getEntity().getContent().readAllBytes();
                     } else {
                         log.warn("error downloading file, HTTP Status code: {} ", statusCode);
-                        return null;
+                        byte[] bytes = {};
+                        return bytes;
                     }
                 }
             } catch (IOException e) {
@@ -85,7 +86,8 @@ public class ApiDownloader {
             }
         } else {
             log.warn("API key not available; API_KEY={}", API_KEY_REAL);
-            return null;
+            byte[] bytes = {};
+            return bytes;
         }
     }
 }

@@ -15,7 +15,7 @@ class VehicleTypeConverterTest {
 
     @Test
     void convert() {
-        assertEquals(vehicleTypeConverter.convert("100"),"Railway");
-        assertNotEquals(vehicleTypeConverter.convert("100"), "Metro");
+        assertEquals("Railway",vehicleTypeConverter.convert("100"));
+        assertNotEquals("Metro", vehicleTypeConverter.convert("100"));
     }
 }

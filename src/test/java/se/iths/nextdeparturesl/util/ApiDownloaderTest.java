@@ -24,6 +24,8 @@ class ApiDownloaderTest {
     @Test
     void testDownloadGtfsRealTimeVehiclePosition() {
         byte[] bytes = apiDownloader.downloadGtfsRealTimeVehiclePosition();
-        assertNull(bytes);
+        byte[] wantedBytes = {};
+        assertNotNull(bytes);
+        assertArrayEquals(wantedBytes, bytes);
     }
 }
