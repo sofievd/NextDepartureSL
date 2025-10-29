@@ -26,21 +26,21 @@ public class Controller {
         vehiclePositionLoader.startUpdate();
     }
 
-    @GetMapping("/stationList")
+    @GetMapping("/api/stationList")
     public ResponseEntity<?> stationList() {
         log.info("getting station list");
         return ResponseEntity.ok().body(departureFinder.getStationList());
     }
 
 
-    @GetMapping("/searchStation")
-    public ResponseEntity<?> searchStation(@RequestParam String stationName) {
-        log.info("searching station: {}", stationName);
+    @GetMapping("/api/departure")
+    public ResponseEntity<?> searchStation(@RequestParam String id) {
+        log.info("searching station: {}", id);
         LocalDateTime now = LocalDateTime.now();
-        return ResponseEntity.ok().body(departureFinder.getDeparturesFromStopName(stationName, now));
+        return ResponseEntity.ok().body(departureFinder.getDeparturesFromStopId(id, now));
     }
 
-    @GetMapping("/vehiclePositions")
+    @GetMapping("/api/vehiclePositions")
     public ResponseEntity<?> vehiclePosition() {
         log.info("getting vehicle position");
         return ResponseEntity.ok().body(vehiclePositionLoader.getVehiclePositions());
