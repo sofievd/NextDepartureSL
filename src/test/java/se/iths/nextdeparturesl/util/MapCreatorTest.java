@@ -20,7 +20,7 @@ class MapCreatorTest {
 
     @BeforeEach
     void setUp() {
-        File gtfsRootFolderPath = new File(getClass().getClassLoader().getResource("2025-08-18-sl.zip").getFile());
+        File gtfsRootFolderPath = new File(getClass().getClassLoader().getResource("2025-08-19-sl.zip").getFile());
         GtfsFileHandler fileHandler = new GtfsFileHandler(gtfsRootFolderPath);
         this.mapCreator = new MapCreator();
         mapCreator.setFileHandler(fileHandler);
@@ -76,6 +76,6 @@ class MapCreatorTest {
     void getStopNameList() {
         List<Station> stopNameList = mapCreator.getStopNameList();
         assertFalse(stopNameList.isEmpty());
-        assertEquals(6, stopNameList.size());
+        assertEquals(2, stopNameList.size());
     }
 }

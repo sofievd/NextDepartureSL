@@ -23,7 +23,7 @@ class GtfsDataHolderTest {
 
     @BeforeEach
     void setUp() {
-        File gtfsRootFolderPath = new File(getClass().getClassLoader().getResource("2025-08-18-sl.zip").getFile());
+        File gtfsRootFolderPath = new File(getClass().getClassLoader().getResource("2025-08-19-sl.zip").getFile());
         GtfsFileHandler fileHandler = new GtfsFileHandler(gtfsRootFolderPath);
         MapCreator creator = new MapCreator();
         creator.setFileHandler(fileHandler);
@@ -55,7 +55,7 @@ class GtfsDataHolderTest {
         List<Station> stations = gtfsDataHolder.getStationList();
         assertNotNull(stations);
         assertFalse(stations.isEmpty());
-        assertEquals(6, stations.size());
+        assertEquals(2, stations.size());
 
     }
 
