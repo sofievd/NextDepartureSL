@@ -2,6 +2,7 @@ package se.iths.nextdeparturesl.service;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import se.iths.nextdeparturesl.dto.Station;
 import se.iths.nextdeparturesl.model.CalendarDate;
 import se.iths.nextdeparturesl.model.Route;
 import se.iths.nextdeparturesl.model.StopTime;
@@ -24,7 +25,8 @@ public class GtfsDataHolder {
     private Map<String, List<CalendarDate>> serviceIdToCalendarDates;
     private Map<String, List<String>> stopNameToStopId;
     private Map<String, List<String>> serviceIdToTripId;
-    private List<String> stationList;
+    private Map<String, List<String>> parentStationIdToStops;
+    private List<Station> stationList;
 
     private static GtfsDataHolder gtfsDataHolder;
 
@@ -38,7 +40,7 @@ public class GtfsDataHolder {
         return gtfsDataHolder;
     }
 
-    public List<String> getStationList() {
+    public List<Station> getStationList() {
         return stationList;
     }
 
@@ -66,6 +68,10 @@ public class GtfsDataHolder {
         return tripIdToTrips;
     }
 
+    public Map<String, List<String>> getParentStationIdToStops() {
+        return parentStationIdToStops;
+    }
+
     public void setStopIdToStopTimes(Map<String, List<StopTime>> stopIdToStopTimes) {
         this.stopIdToStopTimes = stopIdToStopTimes;
     }
@@ -90,8 +96,12 @@ public class GtfsDataHolder {
         this.serviceIdToTripId = serviceIdToTripId;
     }
 
-    public void setStationList(List<String> stationList) {
+    public void setStationList(List<Station> stationList) {
         this.stationList = stationList;
+    }
+
+    public void setParentStationIdToStops(Map<String, List<String>> parentStationIdToStops) {
+        this.parentStationIdToStops = parentStationIdToStops;
     }
 
 }

@@ -2,6 +2,7 @@ package se.iths.nextdeparturesl.util;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import se.iths.nextdeparturesl.dto.Station;
 import se.iths.nextdeparturesl.model.CalendarDate;
 import se.iths.nextdeparturesl.model.Route;
 import se.iths.nextdeparturesl.model.StopTime;
@@ -73,7 +74,7 @@ class MapCreatorTest {
 
     @Test
     void getStopNameList() {
-        List<String> stopNameList = mapCreator.getStopNameList();
+        List<Station> stopNameList = mapCreator.getStopNameList();
         assertFalse(stopNameList.isEmpty());
         assertEquals(6, stopNameList.size());
     }

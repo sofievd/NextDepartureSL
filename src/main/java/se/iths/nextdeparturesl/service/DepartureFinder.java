@@ -3,6 +3,7 @@ package se.iths.nextdeparturesl.service;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import se.iths.nextdeparturesl.dto.Departure;
+import se.iths.nextdeparturesl.dto.Station;
 import se.iths.nextdeparturesl.model.CalendarDate;
 import se.iths.nextdeparturesl.model.Route;
 import se.iths.nextdeparturesl.model.StopTime;
@@ -33,7 +34,8 @@ public class DepartureFinder {
     private Map<String, List<CalendarDate>> serviceIdToCalendarDates;
     private Map<String, List<String>> stopNameToStopId;
     private Map<String, List<String>> serviceIdToTripId;
-    private List<String> stationList;
+    private Map<String, List<String>> parentStationIdToStops;
+    private List<Station> stationList;
 
 
     public void setUp() {
@@ -53,6 +55,7 @@ public class DepartureFinder {
             gtfsDataHolder.setServiceIdToCalendarDates(creator.createCalendarDateMapWithServiceId());
             gtfsDataHolder.setStopNameToStopId(creator.createStopIdMapWithStopName());
             gtfsDataHolder.setServiceIdToTripId(creator.createTripIdListMapWithServiceId());
+            gtfsDataHolder.setParentStationIdToStops(creator.createParentStationIdToStops());
             setMaps();
             file.delete();
         }
@@ -65,6 +68,7 @@ public class DepartureFinder {
         serviceIdToCalendarDates = gtfsDataHolder.getServiceIdToCalendarDates();
         stopNameToStopId = gtfsDataHolder.getStopNameToStopId();
         serviceIdToTripId = gtfsDataHolder.getServiceIdToTripId();
+        parentStationIdToStops = gtfsDataHolder.getParentStationIdToStops();
         stationList = gtfsDataHolder.getStationList();
     }
 
@@ -78,12 +82,12 @@ public class DepartureFinder {
         new Timer().scheduleAtFixedRate(task, difference, period);
     }
 
-    public List<String> getStationList() {
+    public List<Station> getStationList() {
         gtfsDataHolder = GtfsDataHolder.getInstance();
         setMaps();
 
         log.info("getting stations list");
-        List<String> stations = new ArrayList<>();
+        List<Station> stations = new ArrayList<>();
         if (stationList == null) {
             return stations;
         } else {
@@ -92,14 +96,13 @@ public class DepartureFinder {
 
     }
 
-    public Set<String> getStationIdWithName(String name) {
-
-        log.debug("getting stations with name {}", name);
+    public Set<String> getStationIdWithId(String id) {
+        log.debug("getting stations with id {}", id);
         Set<String> stationIds = new HashSet<>();
-        if (stopNameToStopId.containsKey(name)) {
-            stationIds.addAll(stopNameToStopId.get(name));
+        if (parentStationIdToStops.containsKey(id)) {
+            stationIds.addAll(parentStationIdToStops.get(id));
         } else {
-            log.debug("no stations found with name {}", name);
+            log.debug("no stations found with id {}", id);
             return stationIds;
         }
         return stationIds;
@@ -226,18 +229,18 @@ public class DepartureFinder {
         return departures;
     }
 
-    public List<Departure> getDeparturesFromStopName(String stopName, LocalDateTime searchDateTime) {
+    public List<Departure> getDeparturesFromStopId(String id, LocalDateTime searchDateTime) {
         gtfsDataHolder = GtfsDataHolder.getInstance();
         setMaps();
 
-        log.info("getting departures from stopName {} and dateTime {}", stopName, searchDateTime);
+        log.info("getting departures from stop ID {} and dateTime {}", id , searchDateTime);
 
         if (stopNameToStopId == null) {
             log.warn("stopNameToStopId is null, no departures found");
             return new ArrayList<>();
         }
 
-        Set<String> StationIdList = getStationIdWithName(stopName);
+        Set<String> StationIdList = getStationIdWithId(id);
         if (StationIdList.isEmpty()) {
             log.warn("no stationIdList is null/ empty, no departures found");
             return new ArrayList<>();

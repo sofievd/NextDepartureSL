@@ -38,6 +38,7 @@ public class GtfsStaticDownloadTask extends TimerTask {
             gtfsDataHolder.setServiceIdToCalendarDates(creator.createCalendarDateMapWithServiceId());
             gtfsDataHolder.setStopNameToStopId(creator.createStopIdMapWithStopName());
             gtfsDataHolder.setServiceIdToTripId(creator.createTripIdListMapWithServiceId());
+            gtfsDataHolder.setParentStationIdToStops(creator.createParentStationIdToStops());
             log.info("done creating maps");
 
             newFile.delete();

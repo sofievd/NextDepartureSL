@@ -3,6 +3,7 @@ package se.iths.nextdeparturesl.service;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import se.iths.nextdeparturesl.dto.Station;
 import se.iths.nextdeparturesl.model.CalendarDate;
 import se.iths.nextdeparturesl.model.Route;
 import se.iths.nextdeparturesl.model.StopTime;
@@ -35,6 +36,7 @@ class GtfsDataHolderTest {
         gtfsDataHolder.setServiceIdToCalendarDates(creator.createCalendarDateMapWithServiceId());
         gtfsDataHolder.setStopNameToStopId(creator.createStopIdMapWithStopName());
         gtfsDataHolder.setServiceIdToTripId(creator.createTripIdListMapWithServiceId());
+        gtfsDataHolder.setParentStationIdToStops(creator.createParentStationIdToStops());
     }
 
     @AfterEach
@@ -50,7 +52,7 @@ class GtfsDataHolderTest {
 
     @Test
     void getStationList() {
-        List<String> stations = gtfsDataHolder.getStationList();
+        List<Station> stations = gtfsDataHolder.getStationList();
         assertNotNull(stations);
         assertFalse(stations.isEmpty());
         assertEquals(6, stations.size());

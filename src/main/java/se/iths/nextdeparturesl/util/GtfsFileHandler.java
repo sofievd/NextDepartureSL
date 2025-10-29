@@ -11,9 +11,8 @@ import se.iths.nextdeparturesl.model.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
+
 
 /**
  * utils to handle files like parse them into objects and maps, or unzipping them.
@@ -29,6 +28,7 @@ public class GtfsFileHandler {
     private List<Route> routeList;
     private List<Calendar> calendarList;
     private List<CalendarDate> calendarDateList;
+
 
     public GtfsFileHandler(File file) {
         parseFilesToObject(file);
@@ -71,10 +71,12 @@ public class GtfsFileHandler {
 
     public List<Stop> getAllStops(GtfsDaoImpl store) {
         List<Stop> stops = new ArrayList<>();
+        logger.info("Starting to read stops.txt file and creating stop list");
         for (org.onebusaway.gtfs.model.Stop stopOneBusAway : store.getAllStops()) {
             Stop stop = createInMemoryStop(stopOneBusAway);
             stops.add(stop);
         }
+        logger.info("Finished reading stops.txt file and creating stop list");
         return stops;
     }
 
@@ -90,11 +92,13 @@ public class GtfsFileHandler {
     }
 
     public List<StopTime> getAllStopTimes(GtfsDaoImpl store) {
+        logger.info("Starting to read stopTimes.txt file and creating stopTime list");
         List<StopTime> stopTimes = new ArrayList<>();
         for (org.onebusaway.gtfs.model.StopTime stopTimeOneBusAway : store.getAllStopTimes()) {
             StopTime stopTime = createInMemoryStopTime(stopTimeOneBusAway);
             stopTimes.add(stopTime);
         }
+        logger.info("Finished reading stopTimes.txt file and creating stopTime list");
         return stopTimes;
     }
 
@@ -112,11 +116,13 @@ public class GtfsFileHandler {
     }
 
     public List<Trip> getAllTrips(GtfsDaoImpl store) {
+        logger.info("Starting to read trips.txt file and creating trip list");
         List<Trip> trips = new ArrayList<>();
         for (org.onebusaway.gtfs.model.Trip tripOneBusAway : store.getAllTrips()) {
             Trip trip = createInMemoryTrip(tripOneBusAway);
             trips.add(trip);
         }
+        logger.info("Finished reading trips.txt file and creating trip list");
         return trips;
     }
 
@@ -130,11 +136,13 @@ public class GtfsFileHandler {
     }
 
     public List<Route> getAllRoutes(GtfsDaoImpl store) {
+        logger.info("Starting to read routes.txt file and creating route list");
         List<Route> routes = new ArrayList<>();
         for (org.onebusaway.gtfs.model.Route routeOneBusAway : store.getAllRoutes()) {
             Route route = createInMemoryRoute(routeOneBusAway);
             routes.add(route);
         }
+        logger.info("Finished reading routes.txt file and creating route list");
         return routes;
     }
 
@@ -148,11 +156,13 @@ public class GtfsFileHandler {
     }
 
     public List<Calendar> getAllCalendars(GtfsDaoImpl store) {
+        logger.info("Starting to read calendars.txt file and creating calendar list");
         List<Calendar> calendars = new ArrayList<>();
         for (ServiceCalendar serviceCalendar : store.getAllCalendars()) {
             Calendar calendar = createInMemoryCalendar(serviceCalendar);
             calendars.add(calendar);
         }
+        logger.info("Finished reading calendars.txt file and creating calendar list");
         return calendars;
     }
 
@@ -170,11 +180,13 @@ public class GtfsFileHandler {
     }
 
     public List<CalendarDate> getAllCalendarDates(GtfsDaoImpl store) {
+        logger.info("Starting to read calendar_dates.txt file and creating calendarDate list");
         List<CalendarDate> calendarDates = new ArrayList<>();
         for (ServiceCalendarDate serviceCalendarDate : store.getAllCalendarDates()) {
             CalendarDate calendarDate = createInMemoryCalendarDate(serviceCalendarDate);
             calendarDates.add(calendarDate);
         }
+        logger.info("Finished reading calendar_dates.txt file and creating calendarDate list");
         return calendarDates;
     }
 
@@ -209,13 +221,4 @@ public class GtfsFileHandler {
         return calendarDateList;
     }
 
-    public List<String> getStopNameList() {
-        logger.info("creating list of stop names");
-        Set<String> stopNameSet = new HashSet<>();
-        List<Stop> stopList = this.stopList;
-        for (Stop stop : stopList) {
-            stopNameSet.add(stop.getStopName());
-        }
-        return stopNameSet.stream().toList();
-    }
 }

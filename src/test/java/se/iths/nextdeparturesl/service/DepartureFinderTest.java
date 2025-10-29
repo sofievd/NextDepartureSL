@@ -2,6 +2,7 @@ package se.iths.nextdeparturesl.service;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import se.iths.nextdeparturesl.dto.Station;
 import se.iths.nextdeparturesl.model.StopTime;
 import se.iths.nextdeparturesl.model.Trip;
 import se.iths.nextdeparturesl.dto.Departure;
@@ -21,7 +22,7 @@ class DepartureFinderTest {
 
     @BeforeEach
     void setUp() {
-        String path = getClass().getClassLoader().getResource("2025-08-18-sl.zip").getPath();
+        String path = getClass().getClassLoader().getResource("2025-08-19-sl.zip").getPath();
         GtfsFileHandler fileHandler = new GtfsFileHandler(new File(path));
         MapCreator creator = new MapCreator();
         creator.setFileHandler(fileHandler);
@@ -34,6 +35,7 @@ class DepartureFinderTest {
         dataHolder.setServiceIdToCalendarDates(creator.createCalendarDateMapWithServiceId());
         dataHolder.setStopNameToStopId(creator.createStopIdMapWithStopName());
         dataHolder.setServiceIdToTripId(creator.createTripIdListMapWithServiceId());
+        dataHolder.setParentStationIdToStops(creator.createParentStationIdToStops());
 
         departureFinder = new DepartureFinder();
         departureFinder.setGtfsDataHolder(dataHolder);
@@ -42,14 +44,14 @@ class DepartureFinderTest {
 
     @Test
     void getStationList() {
-        List<String> stations = departureFinder.getStationList();
+        List<Station> stations = departureFinder.getStationList();
         assertNotNull(stations);
-        assertEquals(6, stations.size());
+        assertEquals(2, stations.size());
     }
 
     @Test
-    void getStationIdWithName() {
-        Set<String> stationIds = departureFinder.getStationIdWithName("Styrsvik");
+    void getStationIdWithId() {
+        Set<String> stationIds = departureFinder.getStationIdWithId("9021001000102000");
         assertNotNull(stationIds);
         assertEquals(1, stationIds.size());
 
@@ -100,8 +102,8 @@ class DepartureFinderTest {
     }
 
     @Test
-    void getDeparturesFromStopName() {
-        List<Departure> departures = departureFinder.getDeparturesFromStopName("Stavsnäs",
+    void getDeparturesFromStopId() {
+        List<Departure> departures = departureFinder.getDeparturesFromStopId("9021001000101000",
                 LocalDateTime.of(2025,2,2,19,30,0));
         assertNotNull(departures);
         for (Departure departure : departures) {

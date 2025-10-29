@@ -2,6 +2,7 @@ package se.iths.nextdeparturesl.util;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import se.iths.nextdeparturesl.dto.Station;
 import se.iths.nextdeparturesl.model.*;
 
 import java.util.*;
@@ -10,6 +11,7 @@ public class MapCreator {
     private static final Logger log = LogManager.getLogger();
 
     private GtfsFileHandler gtfsFileHandler;
+    private static final String GTFS_LOCATION_TYPE_STATION = "1";
 
 
     /**
@@ -109,6 +111,17 @@ public class MapCreator {
         return map;
     }
 
+    public Map<String, List<String>> createParentStationIdToStops() {
+        log.info("creating ParentStationIdToStops");
+        Map<String, List<String>> map = new HashMap<>();
+        List<Station> parentIdList = getStopNameList();
+        for (Station parentId : parentIdList) {
+            List<String> stopIdList = getStopIdWithParentId(parentId.getId());
+            map.put(parentId.getId(), stopIdList);
+        }
+        return map;
+    }
+
 
     private List<String> getServiceIDListFromTripList(List<Trip> tripList) {
         log.info("creating list of service Ids from a list of trips");
@@ -132,8 +145,26 @@ public class MapCreator {
         return resultList;
     }
 
-    public List<String> getStopNameList(){
-        return gtfsFileHandler.getStopNameList();
+    private List<String> getStopIdWithParentId(String stopId) {
+        List<String> stopIdList = new ArrayList<>();
+        for (Stop stop : gtfsFileHandler.getStopList()) {
+            if(stop.getParentStation() != null && stop.getParentStation().equals(stopId)){
+                stopIdList.add(stop.getStopId());
+            }
+        }
+        return stopIdList;
+    }
+
+    public List<Station> getStopNameList() {
+        log.info("creating list of stop names");
+        List<Station> stationList = new ArrayList<>();
+        for (Stop stop : gtfsFileHandler.getStopList()) {
+            if (String.valueOf(stop.getLocationType()).equals(GTFS_LOCATION_TYPE_STATION)) {
+                Station station = new Station(stop.getStopId(), stop.getStopName());
+                stationList.add(station);
+            }
+        }
+        return stationList;
     }
 
     public void setFileHandler(GtfsFileHandler fileHandler) {
