@@ -37,6 +37,7 @@ class GtfsDataHolderTest {
         gtfsDataHolder.setStopNameToStopId(creator.createStopIdMapWithStopName());
         gtfsDataHolder.setServiceIdToTripId(creator.createTripIdListMapWithServiceId());
         gtfsDataHolder.setParentStationIdToStops(creator.createParentStationIdToStops());
+        gtfsDataHolder.setTripIdToStopTimes(creator.createTripIdToStopTimes());
     }
 
     @AfterEach
@@ -48,6 +49,7 @@ class GtfsDataHolderTest {
         gtfsDataHolder.setServiceIdToTripId(Collections.emptyMap());
         gtfsDataHolder.setStopIdToStopTimes(Collections.emptyMap());
         gtfsDataHolder.setStopNameToStopId(Collections.emptyMap());
+        gtfsDataHolder.setTripIdToStopTimes(Collections.emptyMap());
     }
 
     @Test
@@ -106,6 +108,14 @@ class GtfsDataHolderTest {
         assertFalse(map.isEmpty());
         assertEquals(32, map.size());
         assertNotNull(map);
+        assertNotNull(map);
+    }
+
+    @Test
+    void getTripIdToStopTimes() {
+        Map<String, List<StopTime>> map = gtfsDataHolder.getTripIdToStopTimes();
+        assertFalse(map.isEmpty());
+        assertEquals(32, map.size());
         assertNotNull(map);
     }
 }

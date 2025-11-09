@@ -20,7 +20,8 @@ public class GtfsVehiclePositionHandler {
                             entity.getVehicle().getPosition().getLatitude(),
                             entity.getVehicle().getPosition().getLongitude(),
                             entity.getVehicle().getPosition().getBearing(),
-                            entity.getVehicle().getPosition().getSpeed()
+                            entity.getVehicle().getPosition().getSpeed(),
+                            entity.getVehicle().getTimestamp()
                     );
                     vehicles.add(vehicle);
                 }

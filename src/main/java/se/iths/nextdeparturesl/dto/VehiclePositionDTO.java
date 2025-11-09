@@ -1,18 +1,17 @@
 package se.iths.nextdeparturesl.dto;
 
 public class VehiclePositionDTO {
-    private String id;
+    private String tripId;
     private double latitude;
     private double longitude;
     private double bearing;
     private double speed;
     private int type;
-    private String routeName;
-    private String routeDescription;
     private String lineNumber;
+    private long timestamp;
 
     public VehiclePositionDTO(String id, double latitude, double longitude, double bearing, double speed) {
-        this.id = id;
+        this.tripId = id;
         this.latitude = latitude;
         this.longitude = longitude;
         this.bearing = bearing;
@@ -20,11 +19,11 @@ public class VehiclePositionDTO {
     }
 
     public String getId() {
-        return id;
+        return tripId;
     }
 
     public void setId(String id) {
-        this.id = id;
+        this.tripId = id;
     }
 
     public double getLatitude() {
@@ -68,23 +67,6 @@ public class VehiclePositionDTO {
     }
 
 
-
-    public String getRouteName() {
-        return routeName;
-    }
-
-    public void setRouteName(String routeName) {
-        this.routeName = routeName;
-    }
-
-    public String getRouteDescription() {
-        return routeDescription;
-    }
-
-    public void setRouteDescription(String routeDescription) {
-        this.routeDescription = routeDescription;
-    }
-
     public String getLineNumber() {
         return lineNumber;
     }
@@ -93,17 +75,23 @@ public class VehiclePositionDTO {
         this.lineNumber = lineNumber;
     }
 
+    public long getTimestamp() {
+        return timestamp;
+    }
+    public void setTimestamp(long timestamp) {
+        this.timestamp = timestamp;
+    }
+
+
     @Override
     public String toString() {
         return "VehiclePosition{" +
-                "id='" + id + '\'' +
+                "id='" + tripId + '\'' +
                 ", latitude=" + latitude +
                 ", longitude=" + longitude +
                 ", bearing=" + bearing +
                 ", speed=" + speed +
                 ", type=" + type +
-                ", routeName='" + routeName + '\'' +
-                ", routeDescription='" + routeDescription + '\'' +
                 ", lineNumber=" + lineNumber +
                 '}';
     }

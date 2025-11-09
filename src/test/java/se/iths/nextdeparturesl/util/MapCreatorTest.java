@@ -78,4 +78,11 @@ class MapCreatorTest {
         assertFalse(stopNameList.isEmpty());
         assertEquals(2, stopNameList.size());
     }
+
+    @Test
+    void createTripIdToStopTimes() {
+        Map<String, List<StopTime>> map = mapCreator.createTripIdToStopTimes();
+        assertFalse(map.isEmpty());
+        assertEquals(32, map.size());
+    }
 }

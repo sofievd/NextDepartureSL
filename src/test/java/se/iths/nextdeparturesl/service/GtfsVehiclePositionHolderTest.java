@@ -20,16 +20,16 @@ class GtfsVehiclePositionHolderTest {
 
     @Test
     void setVehiclePositionBytes() {
-        List<VehiclePosition> testPositions = List.of(new VehiclePosition("1", 12.2, 12.5, 11.2, 10.0),
-                new VehiclePosition("2", 12.3, 12.5, 11.5, 10.0));
+        List<VehiclePosition> testPositions = List.of(new VehiclePosition("1", 12.2, 12.5, 11.2, 10.0, 1754663867L),
+                new VehiclePosition("2", 12.3, 12.5, 11.5, 10.0, 1754663867L));
 
         gtfsVehiclePositionHolder.setVehiclePositions(testPositions);
         List<VehiclePosition> vehiclePositionList = gtfsVehiclePositionHolder.getPositions();
         assertNotNull(vehiclePositionList);
         assertEquals(2, vehiclePositionList.size());
 
-        testPositions = List.of(new VehiclePosition("3", 12.2, 12.5, 11.2, 10.0),
-                new VehiclePosition("4", 12.3, 12.5, 11.5, 10.0));
+        testPositions = List.of(new VehiclePosition("3", 12.2, 12.5, 11.2, 10.0, 1754663867L),
+                new VehiclePosition("4", 12.3, 12.5, 11.5, 10.0, 1754663867L));
 
         gtfsVehiclePositionHolder.setVehiclePositions(testPositions);
         vehiclePositionList = gtfsVehiclePositionHolder.getPositions();

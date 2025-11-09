@@ -21,7 +21,7 @@ public class ApiDownloader {
     private String API_KEY_STATIC = System.getenv("API_KEY");
     private final String URL_GTFS_REAL_VEHICLE = "https://opendata.samtrafiken.se/gtfs-rt/sl/VehiclePositions.pb?key=";
 
-    private String API_KEY_REAL = System.getenv("API_KEY_REAL");
+    private String API_KEY_REAL = System.getenv("API_KEY_RT");
 
     FileUtil fileUtil = new FileUtil();
 

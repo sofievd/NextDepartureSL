@@ -6,13 +6,15 @@ public class VehiclePosition {
     private double longitude;
     private double bearing;
     private double speed;
+    private long time;
 
-    public VehiclePosition(String id, double latitude, double longitude, double bearing, double speed) {
+    public VehiclePosition(String id, double latitude, double longitude, double bearing, double speed, long time) {
         this.id = id;
         this.latitude = latitude;
         this.longitude = longitude;
         this.bearing = bearing;
         this.speed = speed;
+        this.time = time;
     }
 
     public String getId() {
@@ -53,6 +55,14 @@ public class VehiclePosition {
 
     public void setSpeed(double speed) {
         this.speed = speed;
+    }
+
+    public long getTime() {
+        return time;
+    }
+
+    public void setTime(long time) {
+        this.time = time;
     }
 
     @Override

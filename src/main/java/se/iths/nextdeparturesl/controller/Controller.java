@@ -45,4 +45,11 @@ public class Controller {
         log.info("getting vehicle position");
         return ResponseEntity.ok().body(vehiclePositionLoader.getVehiclePositions());
     }
+
+    @GetMapping("/api/VehicleNextStops")
+    public ResponseEntity<?> vehicleNextStop(@RequestParam String id, String timestamp) {
+        long timeStampLong = Long.parseLong(timestamp);
+        return ResponseEntity.ok().body(vehiclePositionLoader.getNextStops(id, timeStampLong));
+
+    }
 }

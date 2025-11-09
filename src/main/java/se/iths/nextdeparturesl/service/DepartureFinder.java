@@ -56,6 +56,8 @@ public class DepartureFinder {
             gtfsDataHolder.setStopNameToStopId(creator.createStopIdMapWithStopName());
             gtfsDataHolder.setServiceIdToTripId(creator.createTripIdListMapWithServiceId());
             gtfsDataHolder.setParentStationIdToStops(creator.createParentStationIdToStops());
+            gtfsDataHolder.setTripIdToStopTimes(creator.createTripIdToStopTimes());
+            gtfsDataHolder.setStopIdToStopName(creator.createStopNameWithStopId());
             setMaps();
             file.delete();
         }

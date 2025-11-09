@@ -20,12 +20,14 @@ import java.util.Map;
 public class GtfsDataHolder {
     private static final Logger log = LogManager.getLogger();
     private Map<String, List<StopTime>> stopIdToStopTimes;
+    private Map<String, String> stopIdToStopName;
     private Map<String, Trip> tripIdToTrips;
     private Map<String, Route> routeIdToRoutes;
     private Map<String, List<CalendarDate>> serviceIdToCalendarDates;
     private Map<String, List<String>> stopNameToStopId;
     private Map<String, List<String>> serviceIdToTripId;
     private Map<String, List<String>> parentStationIdToStops;
+    private Map<String, List<StopTime>> tripIdToStopTimes;
     private List<Station> stationList;
 
     private static GtfsDataHolder gtfsDataHolder;
@@ -71,7 +73,13 @@ public class GtfsDataHolder {
     public Map<String, List<String>> getParentStationIdToStops() {
         return parentStationIdToStops;
     }
+    public Map<String, List<StopTime>> getTripIdToStopTimes() {
+        return tripIdToStopTimes;
+    }
 
+    public Map<String, String> getStopIdToStopName() {
+        return stopIdToStopName;
+    }
     public void setStopIdToStopTimes(Map<String, List<StopTime>> stopIdToStopTimes) {
         this.stopIdToStopTimes = stopIdToStopTimes;
     }
@@ -104,4 +112,11 @@ public class GtfsDataHolder {
         this.parentStationIdToStops = parentStationIdToStops;
     }
 
+    public void setTripIdToStopTimes(Map<String, List<StopTime>> tripIdToStopTimes) {
+        this.tripIdToStopTimes = tripIdToStopTimes;
+    }
+
+    public void setStopIdToStopName(Map<String, String> stopIdToStopName) {
+        this.stopIdToStopName = stopIdToStopName;
+    }
 }
