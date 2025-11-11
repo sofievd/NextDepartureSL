@@ -82,17 +82,17 @@ public class VehiclePositionDTO {
         this.timestamp = timestamp;
     }
 
-
     @Override
     public String toString() {
-        return "VehiclePosition{" +
-                "id='" + tripId + '\'' +
+        return "VehiclePositionDTO{" +
+                "tripId='" + tripId + '\'' +
                 ", latitude=" + latitude +
                 ", longitude=" + longitude +
                 ", bearing=" + bearing +
                 ", speed=" + speed +
                 ", type=" + type +
-                ", lineNumber=" + lineNumber +
+                ", lineNumber='" + lineNumber + '\'' +
+                ", timestamp=" + timestamp +
                 '}';
     }
 }

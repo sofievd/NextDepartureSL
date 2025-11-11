@@ -58,9 +58,7 @@ public class VehiclePositionLoader {
         String routeId = trip.getRouteId();
         Route route = routeIdToRoutes.get(routeId);
         int type = route.getType();
-        String routeName = route.getLongName();
         String lineNumber = route.getShortName();
-        String description = route.getDesc();
         VehiclePositionDTO vehiclePositionDTO = new VehiclePositionDTO(vehicle.getId(),
                 vehicle.getLatitude(), vehicle.getLongitude(), vehicle.getBearing(), vehicle.getSpeed());
         vehiclePositionDTO.setType(type);
@@ -91,7 +89,7 @@ public class VehiclePositionLoader {
     }
 
     public VehicleStopsDTO getNextStops(String tripId, long searchDateTime) {
-
+        log.info("Finding next stops");
         GtfsDataHolder gtfsDataHolder = GtfsDataHolder.getInstance();
         tripIdToTrips = gtfsDataHolder.getTripIdToTrips();
         routeIdToRoutes = gtfsDataHolder.getRouteIdToRoutes();

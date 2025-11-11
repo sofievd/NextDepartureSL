@@ -67,12 +67,13 @@ public class VehiclePosition {
 
     @Override
     public String toString() {
-        return "Vehicle{" +
+        return "VehiclePosition{" +
                 "id='" + id + '\'' +
                 ", latitude=" + latitude +
                 ", longitude=" + longitude +
                 ", bearing=" + bearing +
                 ", speed=" + speed +
+                ", time=" + time +
                 '}';
     }
 }
